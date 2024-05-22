@@ -50,18 +50,16 @@ function Post(props: PostProps) {
 export default function Home() {
 
   return (
-    <div>
+    <div className="h-full">
       <Header></Header>
-      <main className="pt-20 min-h-screen flex-col items-center justify-between m-2">
+      <main className="h-full pt-20 flex-col items-center justify-between m-2">
 
-        <NewPost onAddPost={{}}></NewPost>
+        {/* <NewPost onAddPost={{}}></NewPost> */}
 
         <Post user={leslie} likes={13} postText="I wanna apologize for what I said earlier"></Post>
         <Post user={andy} likes={2} postText="the shop will be closed thursday due to me being sad and tired"></Post>
         <Post user={ashley} likes={1} postText="has anyone seen my bible"></Post>
         <Post user={leslie} likes={1209} postText="I think that the left has gone too far sometimes"></Post>
-
-        {/* <TwitterPost likes="1200000 likes" username="Leslie" postText="I wanna go to branson so bad I wanna kiss girls"></TwitterPost> */}
 
         <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
         </div>
@@ -70,11 +68,7 @@ export default function Home() {
           {/* what could happen next hmm? */}
         </div>
 
-        <div className="mt-10 w-fit max-w-5xl items-stretch justify-between font-mono text-sm lg:flex">
-          <div className="fixed bottom-0 left-0 flex h-48 w-full items-stretch  bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-            <header>branson branson branson branson branson branson branson branson branson branson branson branson </header>
-          </div>
-        </div>
+        <footer className="">branson branson branson branson branson branson branson branson branson branson branson branson </footer>
       </main>
     </div>
   );

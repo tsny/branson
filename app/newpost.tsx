@@ -8,14 +8,15 @@ const NewPost = () => {
     const handleSubmit = (e: Event) => {
         e.preventDefault();
         if (content.trim()) {
-            onAddPost(content);
+            // onAddPost(content);
             setContent('');
         }
     };
 
     return (
         <div className="max-w-md mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-4 mb-4">
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit}> */}
+            <form>
                 <textarea
                     className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Write something nice about someone"
