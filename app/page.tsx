@@ -1,21 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import BFooter from "./footer";
 import BNavbar from "./navbar";
-import UpBoins from "./upboin";
-
-interface User {
-  username: string;
-  firstName: string;
-  lastName: string;
-  profilePicURL: string;
-}
-
-interface PostProps {
-  user: User;
-  postText: string;
-  likes: Number;
-  hoursSincePost: Number;
-}
+import UpBoins, { User } from "./upboin";
+import Post from "./upboin";
 
 const leslie: User = {
   username: "lsymonds",
@@ -39,95 +28,65 @@ const ashley: User = {
     "https://theimprovshop.com/wp-content/uploads/2022/06/Ashley.jpg",
 };
 
-function Post(props: PostProps) {
-  return (
-    <div className="w-full bg-white bordeBr border-gray-300 rounded-lg shadow-md p-2 m-2">
-      <div className="flex items-start">
-        <img
-          src={props.user.profilePicURL}
-          alt="Profile"
-          className="w-12 h-12 rounded-full"
-        />
-        <div className="ml-4 flex-1">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="font-bold text-gray-800">
-                {props.user.firstName}
-              </span>
-              <span className="text-sm text-gray-500 ml-2">
-                @{props.user.username}
-              </span>
-              <span className="text-sm text-gray-500 ml-2">· {props.hoursSincePost.toString()}h</span>
-            </div>
-          </div>
-          <p className="mt-2 text-gray-800">{props.postText}</p>
-          <UpBoins></UpBoins>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function randHours() {
-  return Math.floor(Math.random() * (20 - 1 + 1)) + 1;
-}
-
 export default function Home() {
-  let boins = 100;
+
+  const [boins, setBoins] = useState(100);
+  let upBoinOnClick = () => setBoins(boins - 1)
+
   return (
     <div className="h-full w-full">
       <BNavbar></BNavbar>
-      <main className="w-full h-full pt-5 flex-col items-center justify-between">
+      <main className="w-full h-full pt-3 flex-col items-center justify-between">
         <Post
           user={leslie}
-          likes={13}
+          boins={13}
           postText="I wanna apologize for what I said earlier"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
-          likes={13}
-          postText="I wanna apologize for what I said earlier"
-          hoursSincePost={randHours()}
+          boins={13}
+          postText="heehehehehehehehe"
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
-          likes={13}
+          boins={13}
           postText="I wanna apologize for what I said earlier"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
-          likes={13}
+          boins={13}
           postText="I wanna apologize for what I said earlier"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={andy}
-          likes={2}
+          boins={2}
           postText="the shop will be closed thursday due to me being sad and tired"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={ashley}
-          likes={1}
+          boins={1}
           postText="has anyone seen my bible"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
-          likes={1209}
+          boins={1209}
           postText="I think that the left has gone too far sometimes"
-          hoursSincePost={randHours()}
+          hoursSincePost={14}
+          onUpBoinsClicked={upBoinOnClick}
         ></Post>
-
-        <footer className="mt-40 bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-          <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-            <p className="text-sm text-center text-gray-500">
-              You have {boins} Bitboins
-            </p>
-          </div>
-        </footer>
+        <BFooter boins={boins}></BFooter>
       </main>
     </div>
   );

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react';
-import Header from '../header'
 import BNavbar from '../navbar';
 
 const RulesPage = () => {
