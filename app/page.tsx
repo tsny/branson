@@ -1,28 +1,47 @@
-'use client'
-import NewPost from "./newpost";
-import Header from "./header";
+"use client";
+
+import BNavbar from "./navbar";
 import UpBoins from "./upboin";
 
 interface User {
-  username: string
-  firstName: string
-  lastName: string
-  profilePicURL: string
+  username: string;
+  firstName: string;
+  lastName: string;
+  profilePicURL: string;
 }
 
 interface PostProps {
-  user: User
-  postText: string
-  likes: Number
+  user: User;
+  postText: string;
+  likes: Number;
+  hoursSincePost: Number;
 }
 
-const leslie: User = { username: "lsymonds", firstName: "Leslie", lastName: "S", profilePicURL: "https://theimprovshop.com/wp-content/uploads/2022/06/Leslie-Symonds-2048x2048.jpg" }
-const andy: User = { username: "asloey", firstName: "Andy", lastName: "S", profilePicURL: "https://theimprovshop.com/wp-content/uploads/2018/09/andy.jpg" }
-const ashley: User = { username: "arube", firstName: "Ashley", lastName: "S", profilePicURL: "https://theimprovshop.com/wp-content/uploads/2022/06/Ashley.jpg" }
+const leslie: User = {
+  username: "lsymonds",
+  firstName: "Leslie",
+  lastName: "S",
+  profilePicURL:
+    "https://theimprovshop.com/wp-content/uploads/2022/06/Leslie-Symonds-2048x2048.jpg",
+};
+const andy: User = {
+  username: "asloey",
+  firstName: "Andy",
+  lastName: "S",
+  profilePicURL:
+    "https://theimprovshop.com/wp-content/uploads/2018/09/andy.jpg",
+};
+const ashley: User = {
+  username: "arube",
+  firstName: "Ashley",
+  lastName: "S",
+  profilePicURL:
+    "https://theimprovshop.com/wp-content/uploads/2022/06/Ashley.jpg",
+};
 
 function Post(props: PostProps) {
   return (
-    <div className="max-w-md mx-auto bg-white border border-gray-300 rounded-lg shadow-md p-4 mb-4">
+    <div className="w-full bg-white bordeBr border-gray-300 rounded-lg shadow-md p-2 m-2">
       <div className="flex items-start">
         <img
           src={props.user.profilePicURL}
@@ -32,43 +51,83 @@ function Post(props: PostProps) {
         <div className="ml-4 flex-1">
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-bold text-gray-800">{props.user.firstName}</span>
-              <span className="text-sm text-gray-500 ml-2">@{props.user.username}</span>
-              <span className="text-sm text-gray-500 ml-2">· 1h</span>
+              <span className="font-bold text-gray-800">
+                {props.user.firstName}
+              </span>
+              <span className="text-sm text-gray-500 ml-2">
+                @{props.user.username}
+              </span>
+              <span className="text-sm text-gray-500 ml-2">· {props.hoursSincePost.toString()}h</span>
             </div>
           </div>
-          <p className="mt-2 text-gray-800">
-            {props.postText}
-          </p>
+          <p className="mt-2 text-gray-800">{props.postText}</p>
           <UpBoins></UpBoins>
         </div>
       </div>
     </div>
   );
-};
+}
+
+function randHours() {
+  return Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+}
 
 export default function Home() {
-
+  let boins = 100;
   return (
-    <div className="h-full">
-      <Header></Header>
-      <main className="h-full pt-20 flex-col items-center justify-between m-2">
+    <div className="h-full w-full">
+      <BNavbar></BNavbar>
+      <main className="w-full h-full pt-5 flex-col items-center justify-between">
+        <Post
+          user={leslie}
+          likes={13}
+          postText="I wanna apologize for what I said earlier"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={leslie}
+          likes={13}
+          postText="I wanna apologize for what I said earlier"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={leslie}
+          likes={13}
+          postText="I wanna apologize for what I said earlier"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={leslie}
+          likes={13}
+          postText="I wanna apologize for what I said earlier"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={andy}
+          likes={2}
+          postText="the shop will be closed thursday due to me being sad and tired"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={ashley}
+          likes={1}
+          postText="has anyone seen my bible"
+          hoursSincePost={randHours()}
+        ></Post>
+        <Post
+          user={leslie}
+          likes={1209}
+          postText="I think that the left has gone too far sometimes"
+          hoursSincePost={randHours()}
+        ></Post>
 
-        {/* <NewPost onAddPost={{}}></NewPost> */}
-
-        <Post user={leslie} likes={13} postText="I wanna apologize for what I said earlier"></Post>
-        <Post user={andy} likes={2} postText="the shop will be closed thursday due to me being sad and tired"></Post>
-        <Post user={ashley} likes={1} postText="has anyone seen my bible"></Post>
-        <Post user={leslie} likes={1209} postText="I think that the left has gone too far sometimes"></Post>
-
-        <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        </div>
-
-        <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-          {/* what could happen next hmm? */}
-        </div>
-
-        <footer className="">branson branson branson branson branson branson branson branson branson branson branson branson </footer>
+        <footer className="mt-40 bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+          <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <p className="text-sm text-center text-gray-500">
+              You have {boins} Bitboins
+            </p>
+          </div>
+        </footer>
       </main>
     </div>
   );

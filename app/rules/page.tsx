@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import Header from '../header'
+import BNavbar from '../navbar';
 
 const RulesPage = () => {
     const [rules, setRules] = useState<string[]>([
-        'Thou shalt not lie',
-        'Thou shalt not steal',
+        'Middle names only',
+        'friends ALWAYS go south',
         'Thou shalt not kill'
     ]);
     const [newRule, setNewRule] = useState('');
@@ -29,9 +30,9 @@ const RulesPage = () => {
 
     return (
         <div>
-            <Header></Header>
+            <BNavbar></BNavbar>
             <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
-                <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">The 10 Commandments of Our Rules</h1>
+                <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">Branson Rules</h1>
                 <ul className="bg-white rounded-lg shadow-md w-full max-w-2xl p-8">
                     {rules.map((rule, index) => (
                         <li key={index} className="mb-4 flex items-center justify-between">
