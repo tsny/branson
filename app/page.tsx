@@ -12,20 +12,6 @@ const leslie: User = {
   profilePicURL:
     "https://theimprovshop.com/wp-content/uploads/2022/06/Leslie-Symonds-2048x2048.jpg",
 };
-const andy: User = {
-  username: "asloey",
-  firstName: "Andy",
-  lastName: "S",
-  profilePicURL:
-    "https://theimprovshop.com/wp-content/uploads/2018/09/andy.jpg",
-};
-const ashley: User = {
-  username: "arube",
-  firstName: "Ashley",
-  lastName: "S",
-  profilePicURL:
-    "https://theimprovshop.com/wp-content/uploads/2022/06/Ashley.jpg",
-};
 
 export default function Home() {
 

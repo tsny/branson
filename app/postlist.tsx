@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client"
+import prisma from "@/lib/prisma"
 import Post from "./post"
-
-const prisma = new PrismaClient()
 
 export default async function PostList() {
     let posts: any[] = []
     try {
-        const posts = await prisma.post.findMany()
+        posts = await prisma.post.findMany()
     } catch (e) {
         return <>get posts err</>
     }
@@ -22,9 +20,9 @@ export default async function PostList() {
                         lastName: "",
                         profilePicURL: "",
                     }}
-                    boins={post.boins}
+                    boins={post.likes}
                     postText={post.content}
-                    hoursSincePost={post.hoursSincePost}
+                    hoursSincePost={1}
                     onUpBoinsClick={() => { return true }}
                 ></Post>
             ))}

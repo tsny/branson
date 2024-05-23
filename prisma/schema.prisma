@@ -16,30 +16,26 @@ datasource db {
 model Post {
     id        Int      @id @default(sequence())
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    content   String?
-    published Boolean  @default(false)
-    author    User     @relation(fields: [authorId], references: [id])
-    authorId  Int
-}
+    likes     Int      @default(0)
+    author    User     @relation(fields: [authorID], references: [id])
+    authorID  Int
 
-model Profile {
-    id     Int     @id @default(sequence())
-    bio    String?
-    user   User    @relation(fields: [userId], references: [id])
-    userId Int     @unique
+    content String?
 }
 
 model User {
-    id      Int      @id @default(sequence())
-    boins   Int
-    email   String   @unique
-    name    String?
-    posts   Post[]
-    profile Profile?
+    id        Int     @id @default(sequence())
+    boins     Int     @default(0)
+    email     String  @unique
+    firstName String?
+    lastName  String?
+    posts     Post[]
+    rules     Rule[]
 }
 
 model Rule {
-    id      Int    @id @default(sequence())
-    content String
+    id       Int    @id @default(sequence())
+    content  String
+    author   User   @relation(fields: [authorID], references: [id])
+    authorID Int
 }
