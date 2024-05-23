@@ -1,4 +1,6 @@
+import { Button } from 'flowbite-react';
 import React from 'react';
+import { HiOutlineTrash } from "react-icons/hi";
 
 export interface User {
     username: string;
@@ -15,11 +17,8 @@ export interface PostProps {
     onUpBoinsClick: () => boolean;
 }
 
-export default function Post(props: PostProps) {
-    let onClick = () => {
-        if (props.onUpBoinsClick()) {
-        }
-    }
+export default async function Post(props: PostProps) {
+
     return (
         <div className="w-full bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
             <div className="flex items-start">
@@ -43,7 +42,13 @@ export default function Post(props: PostProps) {
                         </div>
                     </div>
                     <p className="mt-2 text-gray-800">{props.postText}</p>
-                    <UpBoins onClick={onClick} boins={props.boins}></UpBoins>
+
+                    <div className="flex justify-between">
+                        <UpBoins onClick={props.onUpBoinsClick} boins={props.boins}></UpBoins>
+                        <Button className='w-20 mr-3'>
+                            <HiOutlineTrash className="h-6 w-6" />
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>

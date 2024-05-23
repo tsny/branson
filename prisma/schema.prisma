@@ -32,6 +32,7 @@ model Profile {
 
 model User {
     id      Int      @id @default(sequence())
+    boins   Int
     email   String   @unique
     name    String?
     posts   Post[]
