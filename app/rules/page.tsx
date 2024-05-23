@@ -39,7 +39,7 @@ const RulesPage = () => {
                                 type="text"
                                 value={rule}
                                 onChange={(e) => updateRule(index, e.target.value)}
-                                className="border border-gray-300 rounded-lg px-4 py-2 w-full mr-4"
+                                className="border text-black border-gray-300 rounded-lg px-4 py-2 w-full mr-4"
                             />
                             <button
                                 onClick={() => removeRule(index)}
@@ -55,7 +55,7 @@ const RulesPage = () => {
                             value={newRule}
                             onChange={(e) => setNewRule(e.target.value)}
                             placeholder="New rule"
-                            className="border border-gray-300 rounded-lg px-4 py-2 w-full mr-4"
+                            className="border text-black border-gray-300 rounded-lg px-4 py-2 w-full mr-4"
                         />
                         <button
                             onClick={addRule}

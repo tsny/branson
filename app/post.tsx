@@ -1,7 +1,4 @@
-'use client '
-
 import React from 'react';
-import { useState } from 'react';
 
 export interface User {
     username: string;
@@ -13,12 +10,16 @@ export interface User {
 export interface PostProps {
     user: User;
     postText: string;
-    boins: Number;
+    boins: number;
     hoursSincePost: Number;
-    onUpBoinsClicked: () => void;
+    onUpBoinsClick: () => boolean;
 }
 
 export default function Post(props: PostProps) {
+    let onClick = () => {
+        if (props.onUpBoinsClick()) {
+        }
+    }
     return (
         <div className="w-full bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
             <div className="flex items-start">
@@ -42,7 +43,7 @@ export default function Post(props: PostProps) {
                         </div>
                     </div>
                     <p className="mt-2 text-gray-800">{props.postText}</p>
-                    <UpBoins onClick={props.onUpBoinsClicked} boins={props.boins}></UpBoins>
+                    <UpBoins onClick={onClick} boins={props.boins}></UpBoins>
                 </div>
             </div>
         </div>
@@ -58,7 +59,6 @@ interface IUpBoin {
 function UpBoins(props: IUpBoin) {
     return (
         <button
-            onClick={props.onClick}
             className="flex items-center justify-between mt-4 text-gray-500 hover:text-blue-500 transition duration-200 ease-in-out"
         >
             <div className="flex items-center space-x-1">

@@ -1,10 +1,9 @@
-"use client";
-
-import { useState } from "react";
 import BFooter from "./footer";
 import BNavbar from "./navbar";
-import UpBoins, { User } from "./upboin";
-import Post from "./upboin";
+import UpBoins, { PostProps, User } from "./post";
+import Post from "./post";
+import PostForm from "./postform";
+import PostList from "./postlist";
 
 const leslie: User = {
   username: "lsymonds",
@@ -30,61 +29,48 @@ const ashley: User = {
 
 export default function Home() {
 
-  const [boins, setBoins] = useState(100);
-  let upBoinOnClick = () => setBoins(boins - 1)
+  const boins = 0;
+  let upBoinOnClick = () => {
+    if (boins == 0) {
+      return false
+    }
+    // setBoins(boins - 1)
+    return true
+  }
 
   return (
     <div className="h-full w-full">
       <BNavbar></BNavbar>
       <main className="w-full h-full pt-3 flex-col items-center justify-between">
+        <PostForm></PostForm>
+        <PostList></PostList>
         <Post
           user={leslie}
           boins={13}
           postText="I wanna apologize for what I said earlier"
           hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
+          onUpBoinsClick={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
           boins={13}
           postText="heehehehehehehehe"
           hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
+          onUpBoinsClick={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
           boins={13}
           postText="I wanna apologize for what I said earlier"
           hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
+          onUpBoinsClick={upBoinOnClick}
         ></Post>
         <Post
           user={leslie}
           boins={13}
           postText="I wanna apologize for what I said earlier"
           hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
-        ></Post>
-        <Post
-          user={andy}
-          boins={2}
-          postText="the shop will be closed thursday due to me being sad and tired"
-          hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
-        ></Post>
-        <Post
-          user={ashley}
-          boins={1}
-          postText="has anyone seen my bible"
-          hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
-        ></Post>
-        <Post
-          user={leslie}
-          boins={1209}
-          postText="I think that the left has gone too far sometimes"
-          hoursSincePost={14}
-          onUpBoinsClicked={upBoinOnClick}
+          onUpBoinsClick={upBoinOnClick}
         ></Post>
         <BFooter boins={boins}></BFooter>
       </main>
