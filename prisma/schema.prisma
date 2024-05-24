@@ -29,6 +29,7 @@ model User {
     email     String  @unique
     firstName String?
     lastName  String?
+    isAdmin   Boolean @default(false)
     posts     Post[]
     rules     Rule[]
 }
@@ -38,4 +39,5 @@ model Rule {
     content  String
     author   User   @relation(fields: [authorID], references: [id])
     authorID Int
+    fine     Int    @default(1)
 }

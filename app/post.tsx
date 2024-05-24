@@ -1,4 +1,4 @@
-import { Button } from 'flowbite-react';
+import { Avatar, Button } from 'flowbite-react';
 import React from 'react';
 import { HiOutlineTrash } from "react-icons/hi";
 
@@ -13,19 +13,19 @@ export interface PostProps {
     user: User;
     postText: string;
     boins: number;
-    hoursSincePost: Number;
+    createdTime: string;
     onUpBoinsClick: () => boolean;
 }
 
 export default async function Post(props: PostProps) {
 
+
+
     return (
         <div className="w-full bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
             <div className="flex items-start">
-                <img
-                    src={props.user.profilePicURL}
-                    alt="Profile"
-                    className="w-12 h-12 rounded-full"
+                <Avatar
+                    img={props.user.profilePicURL}
                 />
                 <div className="ml-4 flex-1">
                     <div className="flex items-center justify-between">
@@ -37,7 +37,7 @@ export default async function Post(props: PostProps) {
                                 @{props.user.username}
                             </span>
                             <span className="text-sm text-gray-500 ml-2">
-                                {props.hoursSincePost.toString()}h
+                                {props.createdTime}
                             </span>
                         </div>
                     </div>

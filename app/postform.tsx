@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Label, Textarea } from "flowbite-react";
+import { Button, Textarea } from "flowbite-react";
 import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export default function PostForm() {
     const addPost = async (formData: FormData) => {
@@ -13,11 +14,13 @@ export default function PostForm() {
                 content: content,
             }
         })
+
+        revalidatePath("/")
     }
     return (
-        <form action={addPost} className="m-3 max-w-md">
-            <Textarea name="textbox" maxLength={400} id="comment" placeholder="Say something nice bout someone" required rows={4} />
-            <Button className="mt-2" type="submit">Submit</Button>
+        <form action={addPost} className="flex w-full m-3 ">
+            <Textarea name="textbox" maxLength={400} id="comment" placeholder="Say something nice bout someone" required rows={2} />
+            <Button type="submit">Submit</Button>
         </form>
     );
 }
