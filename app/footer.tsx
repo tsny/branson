@@ -7,7 +7,7 @@ interface FooterProps {
 export default function BFooter(props: FooterProps) {
 
     return (
-        <Footer container className="sticky bottom-0 border-2 border-gray">
+        <Footer container className="sticky bottom w-2/3 border-2 border-gray">
             <Footer.LinkGroup>
                 You have {props.boins.toString()} Bitboins
             </Footer.LinkGroup>
