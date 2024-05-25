@@ -30,7 +30,7 @@ export default async function PostList() {
                     }}
                     boins={post.likes}
                     postText={post.content}
-                    createdTime={post.createdAt.toString()}
+                    createdTime={post.createdAt.toLocaleString()}
                     onUpBoinsClick={() => { return true }}
                 ></Post>
             ))}
