@@ -20,6 +20,9 @@ export default function BNavbar() {
         <Navbar.Link as={Link} href="/profile">
           Profile
         </Navbar.Link>
+        <Navbar.Link as={Link} href="/boygirl">
+          BoyGirl
+        </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
   );
