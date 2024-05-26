@@ -1,6 +1,8 @@
+"use server";
+
 import { Avatar, Button } from "flowbite-react";
 import React from "react";
-import { HiOutlineTrash } from "react-icons/hi";
+import DeletePostButton from "./deletePostButton";
 
 export interface User {
   username: string;
@@ -12,6 +14,7 @@ export interface User {
 export interface PostProps {
   user: User;
   postText: string;
+  postID: number;
   boins: number;
   createdTime: string;
   onUpBoinsClick: () => boolean;
@@ -19,7 +22,7 @@ export interface PostProps {
 
 export default async function Post(props: PostProps) {
   return (
-    <div className="w-full bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
+    <div className="w-10/12 bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
       <div className="flex items-start">
         <Avatar img={props.user.profilePicURL} />
         <div className="ml-4 flex-1">
@@ -43,9 +46,7 @@ export default async function Post(props: PostProps) {
               onClick={props.onUpBoinsClick}
               boins={props.boins}
             ></UpBoins>
-            <Button color="gray" className="w-20 mr-3">
-              <HiOutlineTrash className="h-6 w-6" />
-            </Button>
+            <DeletePostButton postID={props.postID}></DeletePostButton>
           </div>
         </div>
       </div>

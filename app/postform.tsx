@@ -1,24 +1,20 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
 import { Button, Textarea } from "flowbite-react";
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { submitPost } from "./actions";
 
 export default function PostForm() {
-  const addPost = async (formData: FormData) => {
-    "use server";
-
-    let content = formData.get("textbox") as string;
-    await prisma.post.create({
-      data: {
-        authorID: 1,
-        content: content,
-      },
-    });
-
-    revalidatePath("/");
-  };
+  const ref = useRef<HTMLFormElement>(null);
   return (
-    <form action={addPost} className="flex justify-center w-full m-3 ">
+    <form
+      ref={ref}
+      action={async (formData) => {
+        await submitPost(formData);
+        ref.current?.reset();
+      }}
+      className="flex justify-center w-full "
+    >
       <Textarea
         className="w-3/4"
         name="textbox"

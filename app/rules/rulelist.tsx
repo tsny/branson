@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Button, Card } from "flowbite-react";
+import DeleteRuleButton from "./deleteRuleButton";
 
 export default async function RuleList() {
   let rules: any[];
@@ -26,24 +27,12 @@ export default async function RuleList() {
             </h5>
             <div className="flex justify-between">
               <p className="tracking-tight text-gray-900 dark:text-white">
-                Fine: {rule.fine}
+                Fine: {rule.fine} boin
               </p>
-              <Button color="failure">Delete</Button>
+              <DeleteRuleButton ruleID={rule.id}></DeleteRuleButton>
             </div>
           </Card>
         </>
-        // <Rule key={post.id}
-        //     user={{
-        //         username: post.id,
-        //         firstName: post?.author?.id,
-        //         lastName: "",
-        //         profilePicURL: "https://icons.iconarchive.com/icons/iconarchive/fish-illustration/256/Small-3-Tiny-Fish-icon.png",
-        //     }}
-        //     boins={post.likes}
-        //     postText={post.content}
-        //     createdTime={post.createdAt.toString()}
-        //     onUpBoinsClick={() => { return true }}
-        // ></Post>
       ))}
     </>
   );

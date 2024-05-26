@@ -39,7 +39,7 @@ export default function RuleForm() {
         <TextInput
           className="mb-1"
           name="textbox"
-          placeholder="Example"
+          placeholder="Enter your rule here"
           required
           shadow
         />
@@ -52,9 +52,9 @@ export default function RuleForm() {
         <input
           type="number"
           id="number-input"
+          defaultValue={1}
           aria-describedby="helper-text-explanation"
           className="bg-gray-50 w-1/3 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="1"
           required
         />
         <Button className="mt-3 w-1/3" type="submit">
