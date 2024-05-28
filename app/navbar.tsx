@@ -13,7 +13,7 @@ export default function BNavbar() {
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
-        <Navbar.Link href="/">Login</Navbar.Link>
+        <Navbar.Link href="/api/auth/signin">Login</Navbar.Link>
         <Navbar.Link as={Link} href="/rules">
           Rules
         </Navbar.Link>
