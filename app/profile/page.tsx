@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Profile() {
   return (
-    <Card className="max-w-sm">
+    <Card className="w-full h-full">
       <div className="flex justify-end px-4 pt-4">
         <Dropdown inline label="">
           <Dropdown.Item>

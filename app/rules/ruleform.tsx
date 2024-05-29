@@ -1,13 +1,6 @@
 import React from "react";
 import { HiOutlineArrowRight, HiShoppingCart } from "react-icons/hi";
-import {
-  Button,
-  Card,
-  Label,
-  RangeSlider,
-  TextInput,
-  Textarea,
-} from "flowbite-react";
+import { Button, Card, Label, TextInput } from "flowbite-react";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 

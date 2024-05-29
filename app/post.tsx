@@ -3,38 +3,57 @@
 import { Avatar, Button } from "flowbite-react";
 import React from "react";
 import DeletePostButton from "./deletePostButton";
+import UpBoins from "./upboin";
+import { getCurrentDBUser } from "./actions";
+import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export interface User {
+  id: number;
   username: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
   profilePicURL: string;
 }
 
 export interface PostProps {
-  user: User;
+  author: User;
   postText: string;
   postID: number;
   boins: number;
   createdTime: string;
-  onUpBoinsClick: () => boolean;
 }
 
 export default async function Post(props: PostProps) {
+  let dbUser = await getCurrentDBUser();
+  let upBoinBtnDisabled = dbUser ? false : true;
+  if (dbUser && dbUser.boins <= 0) {
+    upBoinBtnDisabled = true;
+  }
+  if (dbUser && dbUser.id == props.author.id) {
+    upBoinBtnDisabled = true;
+  }
+
+  let post = await prisma.post.findFirst({
+    where: {
+      id: props.postID,
+    },
+  });
+  if (!post) {
+    return <div>post {props.postID} not found</div>;
+  }
+  const upBoins = post ? post.likes : 0;
+
   return (
-    <div className="w-10/12 bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
+    <div className="w-11/12 bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
       <div className="flex items-start">
-        <Avatar img={props.user.profilePicURL} />
+        <Avatar img={props.author.profilePicURL} />
         <div className="ml-4 flex-1">
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-bold text-gray-800">
-                {props.user.firstName}
+              <span className="text-xs text-gray-500">
+                @{props.author.username}
               </span>
-              <span className="text-sm text-gray-500 ml-2">
-                @{props.user.username}
-              </span>
-              <span className="text-sm text-gray-500 ml-2">
+              <span className="text-xs text-gray-500 ml-2">
                 {props.createdTime}
               </span>
             </div>
@@ -43,28 +62,17 @@ export default async function Post(props: PostProps) {
 
           <div className="flex justify-between">
             <UpBoins
-              onClick={props.onUpBoinsClick}
-              boins={props.boins}
+              disabled={upBoinBtnDisabled}
+              authorID={props.author.id}
+              postID={props.postID}
+              upboins={upBoins}
             ></UpBoins>
-            <DeletePostButton postID={props.postID}></DeletePostButton>
+            {dbUser && dbUser.id == props.author.id && (
+              <DeletePostButton postID={props.postID}></DeletePostButton>
+            )}
           </div>
         </div>
       </div>
     </div>
-  );
-}
-
-interface IUpBoin {
-  boins: Number;
-  onClick: () => void;
-}
-
-function UpBoins(props: IUpBoin) {
-  return (
-    <button className="flex items-center justify-between mt-4 text-gray-500 hover:text-blue-500 transition duration-200 ease-in-out">
-      <div className="flex items-center space-x-1">
-        <span>{props.boins.toString()} up-boins</span>
-      </div>
-    </button>
   );
 }

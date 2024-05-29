@@ -15,7 +15,7 @@ export default function DeletePostButton(props: DeletePostButtonProps) {
         deletePost(props.postID);
       }}
       color="gray"
-      className="w-20 mr-3"
+      className="w-15 h-15 mr-3"
     >
       <HiOutlineTrash className="h-6 w-6" />
     </Button>

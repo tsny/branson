@@ -38,11 +38,6 @@ export default async function BNavbar() {
           branson.mom
         </span>
       </NavbarBrand>
-      {loggedIn && (
-        <NavbarLink className="text-center text-sm " disabled={true} href="/">
-          Signed in as {session?.user?.name}
-        </NavbarLink>
-      )}
       <NavbarToggle />
       <NavbarCollapse>
         {loginSection}
@@ -54,9 +49,9 @@ export default async function BNavbar() {
             Profile
           </NavbarLink>
         )}
-        <NavbarLink as={Link} href="/boygirl">
+        {/* <NavbarLink as={Link} href="/boygirl">
           BoyGirl
-        </NavbarLink>
+        </NavbarLink> */}
       </NavbarCollapse>
     </Navbar>
   );

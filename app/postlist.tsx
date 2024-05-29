@@ -4,11 +4,34 @@ import Post from "./post";
 export const dynamic = "force-dynamic";
 
 export default async function PostList() {
-  let posts: any[];
   try {
-    posts = await prisma.post.findMany({
+    let posts = await prisma.post.findMany({
       orderBy: [{ id: "desc" }],
+      include: {
+        author: true,
+      },
     });
+
+    return (
+      <div className="grid justify-items-center">
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            author={{
+              username: post.author.firstName
+                ? post.author.firstName
+                : "unknown user",
+              profilePicURL: "",
+              id: post.authorID,
+            }}
+            boins={post.likes}
+            postText={post.content ? post.content : "na"}
+            postID={post.id}
+            createdTime={post.createdAt.toLocaleString()}
+          ></Post>
+        ))}
+      </div>
+    );
   } catch (e) {
     if (typeof e === "string") {
       return <>{e}</>;
@@ -17,27 +40,4 @@ export default async function PostList() {
     }
     return <>get posts err</>;
   }
-
-  return (
-    <div className="grid justify-items-center">
-      {posts.map((post) => (
-        <Post
-          key={post.id}
-          user={{
-            username: post.id,
-            firstName: post?.author?.id,
-            lastName: "",
-            profilePicURL: "",
-          }}
-          boins={post.likes}
-          postText={post.content}
-          postID={post.id}
-          createdTime={post.createdAt.toLocaleString()}
-          onUpBoinsClick={() => {
-            return true;
-          }}
-        ></Post>
-      ))}
-    </div>
-  );
 }
