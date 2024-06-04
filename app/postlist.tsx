@@ -12,26 +12,22 @@ export default async function PostList() {
       },
     });
 
-    return (
-      <div className="grid justify-items-center">
-        {posts.map((post) => (
-          <Post
-            key={post.id}
-            author={{
-              username: post.author.firstName
-                ? post.author.firstName
-                : "unknown user",
-              profilePicURL: "",
-              id: post.authorID,
-            }}
-            boins={post.likes}
-            postText={post.content ? post.content : "na"}
-            postID={post.id}
-            createdTime={post.createdAt.toLocaleString()}
-          ></Post>
-        ))}
-      </div>
-    );
+    return posts.map((post) => (
+      <Post
+        key={post.id}
+        author={{
+          username: post.author.firstName
+            ? post.author.firstName
+            : "unknown user",
+          profilePicURL: "",
+          id: post.authorID,
+        }}
+        boins={post.likes}
+        postText={post.content ? post.content : "na"}
+        postID={post.id}
+        createdTime={post.createdAt.toLocaleString()}
+      ></Post>
+    ));
   } catch (e) {
     if (typeof e === "string") {
       return <>{e}</>;

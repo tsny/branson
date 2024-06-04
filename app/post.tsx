@@ -44,7 +44,7 @@ export default async function Post(props: PostProps) {
   const upBoins = post ? post.likes : 0;
 
   return (
-    <div className="w-11/12 bg-white  border-black-300 rounded-lg shadow-md p-2 m-2">
+    <div className="w-11/12 bg-white border-black-300 rounded-lg shadow-md p-2 m-2">
       <div className="flex items-start">
         <Avatar img={props.author.profilePicURL} />
         <div className="ml-4 flex-1">

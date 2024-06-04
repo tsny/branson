@@ -17,20 +17,20 @@ export default async function BFooter() {
   let bitboins = dbUser ? dbUser.boins : 0;
 
   let loginLink = isw ? (
-    <Link className="underline text-red" href="/api/auth/signin">
+    <Link className="underline text-red" href="">
       Use chrome or safari to login
     </Link>
   ) : (
     <Link className="underline text-blue" href="/api/auth/signin">
-      Login to see your upboin and see your boins
+      Login to see your boins
     </Link>
   );
 
   return (
-    <Footer container className="sticky bottom w-2/3 border-2 border-gray">
+    <Footer container className="sticky bottom border-2 border-gray">
       {loggedIn ? (
         <Footer.LinkGroup className="text-black">
-          You have {bitboins} Bitboins
+          You have {bitboins} Bitboins... Ya lil scoundrel
         </Footer.LinkGroup>
       ) : (
         <Footer.LinkGroup>{loginLink}</Footer.LinkGroup>

@@ -20,7 +20,7 @@ export default async function RuleList() {
   return (
     <>
       {rules.map((rule) => (
-        <Card key={rule.id} className="w-3/4 mb-2">
+        <Card key={rule.id} className="w-11/12 mb-2">
           <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {rule.content}
           </h5>

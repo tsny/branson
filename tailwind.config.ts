@@ -10,15 +10,15 @@ const config: Config = {
     // "./node_modules/flowbite-react/lib/**/*.js",
     flowbite.content(),
   ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
-    },
-  },
+  // theme: {
+  //   extend: {
+  //     backgroundImage: {
+  //       "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+  //       "gradient-conic":
+  //         "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+  //     },
+  //   },
+  // },
   plugins: [
     require('flowbite/plugin')
   ],

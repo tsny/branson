@@ -24,14 +24,25 @@ model Post {
 }
 
 model User {
+    id            Int             @id @default(sequence())
+    boins         Int             @default(0)
+    email         String          @unique
+    profilePicURL String?
+    firstName     String?
+    lastName      String?
+    isAdmin       Boolean         @default(false)
+    posts         Post[]
+    rules         Rule[]
+    CardOwnership CardOwnership[]
+    CardHistory   CardHistory[]
+}
+
+model Business {
     id        Int     @id @default(sequence())
-    boins     Int     @default(0)
-    email     String  @unique
-    firstName String?
-    lastName  String?
-    isAdmin   Boolean @default(false)
-    posts     Post[]
-    rules     Rule[]
+    name      String
+    location  String  @default("branson")
+    service   String?
+    memberIDs Int[]
 }
 
 model Rule {
@@ -40,4 +51,33 @@ model Rule {
     author   User   @relation(fields: [authorID], references: [id])
     authorID Int
     fine     Int    @default(1)
+}
+
+model Card {
+    id            Int             @id @default(sequence())
+    rarity        String          @default("common")
+    type          String
+    title         String
+    desc          String
+    quote         String?
+    imageURL      String?
+    CardOwnership CardOwnership[]
+    CardHistory   CardHistory[]
+}
+
+model CardOwnership {
+    id     Int  @id @default(sequence())
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+    card   Card @relation(fields: [cardId], references: [id])
+    cardId Int
+}
+
+model CardHistory {
+    id     Int    @id @default(sequence())
+    user   User   @relation(fields: [userId], references: [id])
+    userId Int
+    card   Card   @relation(fields: [cardId], references: [id])
+    cardId Int
+    action String
 }

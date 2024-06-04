@@ -50,6 +50,14 @@ export async function getUserByID(id: number) {
   });
 }
 
+export async function getUserByEmail(email: string) {
+  return await prisma.user.findFirst({
+    where: {
+      email: { equals: email },
+    },
+  });
+}
+
 export async function submitPost(formData: FormData) {
   let content = formData.get("textbox") as string;
 
@@ -121,4 +129,15 @@ export async function getCurrentDBUser() {
       },
     },
   });
+}
+
+export async function createNewDBUser(email: string, name: string) {
+  let newUser = await prisma.user.create({
+    data: {
+      email: email,
+      firstName: name,
+      boins: 5,
+    },
+  });
+  console.log("new user! ", newUser);
 }

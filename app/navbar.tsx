@@ -1,5 +1,7 @@
 import { authConfig } from "@/lib/auth";
 import {
+  Dropdown,
+  DropdownItem,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
@@ -34,7 +36,7 @@ export default async function BNavbar() {
           alt="boin"
           src={"/boin.png"}
         ></Image>
-        <span className="self-center text-black whitespace-nowrap text-xl font-semibold">
+        <span className="self-center dark:text-white whitespace-nowrap text-xl font-bold">
           branson.mom
         </span>
       </NavbarBrand>
@@ -44,10 +46,23 @@ export default async function BNavbar() {
         <NavbarLink as={Link} href="/rules">
           Rules
         </NavbarLink>
-        {loggedIn && (
+        {/* {loggedIn && (
           <NavbarLink as={Link} href="/profile">
             Profile
           </NavbarLink>
+        )} */}
+        {loggedIn && (
+          <Dropdown inline label={<h1 className="pl-3">Cards</h1>}>
+            <DropdownItem>
+              <Link href={"/inventory"}>Inventory</Link>
+            </DropdownItem>
+            <DropdownItem>
+              <Link href={"/inventory/catalog"}>Catalog</Link>
+            </DropdownItem>
+            <DropdownItem>
+              <Link href={"/inventory/editor"}>Editor</Link>
+            </DropdownItem>
+          </Dropdown>
         )}
         {/* <NavbarLink as={Link} href="/boygirl">
           BoyGirl
