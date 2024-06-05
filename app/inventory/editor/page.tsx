@@ -1,47 +1,17 @@
-import {
-  Button,
-  ButtonGroup,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from "flowbite-react";
-import { EditCardModal } from "./edit_card";
+import prisma from "@/lib/prisma";
+import EditorMain from "./EditorMain";
+import { Card } from "@prisma/client";
 
 export default async function Home() {
+  const cards: Card[] = await prisma.card.findMany();
   return (
     <div className="overflow-x-auto">
-      <Button className="m-2">+ Add New Card</Button>
-      <EditCardModal show={false}></EditCardModal>
-      <Table>
-        <TableBody className="divide-y">
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Baby Murphy
-            </TableCell>
-            <TableCell>
-              <ButtonGroup>
-                <Button>Edit</Button>
-                <Button color={"red"}>Delete</Button>
-              </ButtonGroup>
-            </TableCell>
-            <TableCell></TableCell>
-          </TableRow>
-          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-              Microsoft Surface Pro
-            </TableCell>
-            <TableCell>
-              <ButtonGroup>
-                <Button>Edit</Button>
-                <Button color={"red"}>Delete</Button>
-              </ButtonGroup>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <h1 className="text-2xl font-bold text-center text-gray-800 pt-8 mb-8">
+        Card Editor
+      </h1>
+      {/* <EditCardModal show={false}></EditCardModal>
+      <CardTable cards={cards}></CardTable> */}
+      <EditorMain cards={cards}></EditorMain>
     </div>
   );
 }

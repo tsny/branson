@@ -4,8 +4,12 @@ import { Button, Modal } from "flowbite-react";
 import { useState } from "react";
 import BransonCard from "./card";
 
-export function CardModal() {
-  const [openModal, setOpenModal] = useState(true);
+interface ViewCardProps {
+  show: boolean;
+}
+
+export function CardModal(props: ViewCardProps) {
+  const [openModal, setOpenModal] = useState(props.show);
 
   return (
     <>

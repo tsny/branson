@@ -11,6 +11,7 @@ import {
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+import { isUserSuperAdmin } from "./actions";
 
 export default async function BNavbar() {
   const session = await getServerSession(authConfig);
@@ -46,12 +47,12 @@ export default async function BNavbar() {
         <NavbarLink as={Link} href="/rules">
           Rules
         </NavbarLink>
-        {/* {loggedIn && (
-          <NavbarLink as={Link} href="/profile">
-            Profile
+        {(await isUserSuperAdmin()) && (
+          <NavbarLink as={Link} href="/admin">
+            Admin
           </NavbarLink>
-        )} */}
-        {loggedIn && (
+        )}
+        {(await isUserSuperAdmin()) && (
           <Dropdown inline label={<h1 className="pl-3">Cards</h1>}>
             <DropdownItem>
               <Link href={"/inventory"}>Inventory</Link>

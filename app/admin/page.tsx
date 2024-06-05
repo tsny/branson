@@ -1,7 +1,13 @@
-import { authConfig } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import BNavbar from "../navbar";
-import { Card } from "flowbite-react";
+import {
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from "flowbite-react";
 import prisma from "@/lib/prisma";
 import { getSessionUser } from "../actions";
 
@@ -9,9 +15,16 @@ export default async function Page() {
   let user = await getSessionUser();
 
   let users = (await prisma.user.findMany()).map((u) => (
-    <div key={u.id}>
-      {u.id} -- {u.email} -- {u.firstName} -- {u.boins} boins
-    </div>
+    <TableRow
+      className="bg-white dark:border-gray-700 dark:bg-gray-800"
+      key={u.id}
+    >
+      <TableCell>{u.id}</TableCell>
+      <TableCell>{u.email}</TableCell>
+      <TableCell>{u.firstName}</TableCell>
+      <TableCell>{u.boins}</TableCell>
+      <TableCell>{u.role}</TableCell>
+    </TableRow>
   ));
 
   return (
@@ -19,9 +32,20 @@ export default async function Page() {
       <BNavbar></BNavbar>
       <main className="w-full h-full pt-3 flex-col items-center justify-between">
         <Card className="text-black">You are {user?.email}</Card>
-        <Card className="text-black">
-          <h1 className="text-2xl font-bold">Users</h1>
-          {users}
+        <Card className="overflow-x-auto text-black w-full">
+          <Table>
+            <TableHead>
+              <TableHeadCell>ID</TableHeadCell>
+              <TableHeadCell>Email</TableHeadCell>
+              <TableHeadCell>Name</TableHeadCell>
+              <TableHeadCell>Boins</TableHeadCell>
+              <TableHeadCell>Role</TableHeadCell>
+              <TableHeadCell>
+                <span className="sr-only">Edit</span>
+              </TableHeadCell>
+            </TableHead>
+            <TableBody className="divide-y">{users}</TableBody>
+          </Table>
         </Card>
       </main>
     </div>

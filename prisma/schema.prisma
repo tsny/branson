@@ -31,10 +31,12 @@ model User {
     firstName     String?
     lastName      String?
     isAdmin       Boolean         @default(false)
+    role          String?         @default("user")
     posts         Post[]
     rules         Rule[]
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
+    Business      Business[]
 }
 
 model Business {
@@ -43,6 +45,8 @@ model Business {
     location  String  @default("branson")
     service   String?
     memberIDs Int[]
+    founder   User    @relation(fields: [userId], references: [id])
+    userId    Int
 }
 
 model Rule {
@@ -80,4 +84,10 @@ model CardHistory {
     card   Card   @relation(fields: [cardId], references: [id])
     cardId Int
     action String
+}
+
+model CardPack {
+    id        Int @id @default(sequence())
+    cost      Int @default(1)
+    cardCount Int @default(3)
 }
