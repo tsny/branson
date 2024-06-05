@@ -53,17 +53,17 @@ export default async function BNavbar() {
           </NavbarLink>
         )}
         {(await isUserSuperAdmin()) && (
-          <Dropdown inline label={<h1 className="pl-3">Cards</h1>}>
-            <DropdownItem>
-              <Link href={"/inventory"}>Inventory</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={"/inventory/catalog"}>Catalog</Link>
-            </DropdownItem>
-            <DropdownItem>
-              <Link href={"/inventory/editor"}>Editor</Link>
-            </DropdownItem>
-          </Dropdown>
+          <div>
+            <NavbarLink as={Link} href={"/inventory"}>
+              Inventory
+            </NavbarLink>
+            <NavbarLink as={Link} href={"/inventory/catalog"}>
+              Catalog
+            </NavbarLink>
+            <NavbarLink as={Link} href={"/inventory/editor"}>
+              Editor
+            </NavbarLink>
+          </div>
         )}
         {/* <NavbarLink as={Link} href="/boygirl">
           BoyGirl

@@ -1,7 +1,9 @@
 "use server";
 
 import { authConfig } from "@/lib/auth";
+import { getRandomCard } from "@/lib/cards";
 import prisma from "@/lib/prisma";
+import { Card } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -170,13 +172,15 @@ export async function deleteCard(formData: FormData) {
   revalidatePath("/");
 }
 
-export async function createNewCard(formData: FormData) {
+export async function createOrUpdateCard(formData: FormData) {
   const title = formData.get("cardtitle") as string;
   const rarity = formData.get("rarity") as string;
   const type = formData.get("type") as string;
   const desc = formData.get("desc") as string;
   const quote = formData.get("quote") as string;
   const imageURL = formData.get("img") as string;
+  const weight = formData.get("weight") as string;
+  let weightNum: number = +weight;
 
   let card = await prisma.card.findFirst({
     where: {
@@ -187,20 +191,33 @@ export async function createNewCard(formData: FormData) {
   });
   if (card) {
     console.log("card already exists");
-    return;
+    await prisma.card.update({
+      where: {
+        id: card.id,
+      },
+      data: {
+        title: title,
+        rarity: rarity,
+        type: type,
+        desc: desc,
+        quote: quote,
+        imageURL: imageURL,
+        weight: weightNum,
+      },
+    });
+  } else {
+    await prisma.card.create({
+      data: {
+        title: title,
+        rarity: rarity,
+        type: type,
+        desc: desc,
+        quote: quote,
+        imageURL: imageURL,
+      },
+    });
   }
-  let response = await prisma.card.create({
-    data: {
-      title: title,
-      rarity: rarity,
-      type: type,
-      desc: desc,
-      quote: quote,
-      imageURL: imageURL,
-    },
-  });
   revalidatePath("/");
-  return response;
 }
 
 export async function createNewDBUser(
@@ -217,4 +234,14 @@ export async function createNewDBUser(
     },
   });
   console.log("new user! ", newUser);
+}
+
+export async function unwrapPack() {
+  let cards: Card[] = await prisma.card.findMany();
+  let outputCards: Card[] = [];
+  for (let index = 0; index < 3; index++) {
+    let card = getRandomCard(cards);
+    outputCards.push(card);
+  }
+  return outputCards;
 }

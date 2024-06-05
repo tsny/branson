@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import CardTable from "./CardTable";
+import CardEditorTable from "./CardTable";
 import { EditCardModal } from "./EditCard";
 import AddCardButton from "./AddCardButton";
 import { Card } from "@prisma/client";
@@ -25,13 +25,13 @@ export default function EditorMain(props: EditorMainProps) {
         }}
         show={showModal}
       ></EditCardModal>
-      <CardTable
+      <CardEditorTable
         onEditClick={(id) => {
           setShowModal(true);
           setCardToEdit(props.cards.find((c) => c.id == id));
         }}
         cards={props.cards}
-      ></CardTable>
+      ></CardEditorTable>
     </div>
   );
 }

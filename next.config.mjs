@@ -9,6 +9,11 @@ const nextConfig = {
         hostname: "**.imgur.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "preview.redd.it",
+        port: "",
+      },
     ],
   },
 };

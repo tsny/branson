@@ -1,5 +1,5 @@
 "use client";
-import { createNewCard } from "@/app/actions";
+import { createOrUpdateCard } from "@/app/actions";
 import { Button, Card, Label, Modal, TextInput } from "flowbite-react";
 import { Card as BCard } from "@prisma/client";
 
@@ -18,12 +18,7 @@ export function EditCardModal(props: EditCardModalProps) {
           <Card className="max-w-sm">
             <form
               action={async (formData) => {
-                if (props.card?.title) {
-                  alert("should update");
-                } else {
-                  alert("Should submit");
-                }
-                await createNewCard(formData);
+                await createOrUpdateCard(formData);
                 props.onClose();
               }}
               className="flex flex-col gap-4"
@@ -66,7 +61,6 @@ export function EditCardModal(props: EditCardModalProps) {
                 <TextInput
                   defaultValue={props.card?.quote || ""}
                   name="quote"
-                  required
                 />
               </div>
               <div>
@@ -86,6 +80,18 @@ export function EditCardModal(props: EditCardModalProps) {
                 <TextInput
                   defaultValue={props.card?.type}
                   name="type"
+                  required
+                />
+              </div>
+              <div>
+                <div className="mb-2 block">
+                  <Label htmlFor="weight" value="Weight" />
+                </div>
+                <TextInput
+                  min={1}
+                  defaultValue={props.card?.weight}
+                  name="weight"
+                  type="number"
                   required
                 />
               </div>

@@ -65,15 +65,17 @@ model Card {
     desc          String
     quote         String?
     imageURL      String?
+    weight        Int             @default(50)
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
 }
 
 model CardOwnership {
-    id     Int  @id @default(sequence())
-    user   User @relation(fields: [userId], references: [id])
+    id     Int     @id @default(sequence())
+    isFoil Boolean @default(false)
+    user   User    @relation(fields: [userId], references: [id])
     userId Int
-    card   Card @relation(fields: [cardId], references: [id])
+    card   Card    @relation(fields: [cardId], references: [id])
     cardId Int
 }
 

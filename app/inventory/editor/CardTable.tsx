@@ -9,7 +9,7 @@ interface CardTableProps {
   onEditClick: (id: number) => void;
 }
 
-export default function CardTable(props: CardTableProps) {
+export default function CardEditorTable(props: CardTableProps) {
   let body = props.cards.map((card) => (
     <CardRow
       onEditClick={props.onEditClick}

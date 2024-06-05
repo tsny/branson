@@ -1,22 +1,19 @@
+import { Card } from "@prisma/client";
 import BFooter from "../footer";
-import BransonCard from "./card";
+import prisma from "@/lib/prisma";
 import CardPreview from "./card_preview";
-import { CardModal } from "./view_card";
+import CardRevealer from "./CardReveal";
+import { unwrapPack } from "../actions";
+import CatalogMain from "./catalog/catalog_main";
 
-export default function Home() {
+export default async function Home() {
+  let newCards: Card[] = await unwrapPack();
+  let cards: Card[] = await prisma.card.findMany();
+
   return (
     <div>
-      <CardModal show={true}></CardModal>
-      <div className="m-2 grid grid-cols-3 gap-2">
-        <CardPreview></CardPreview>
-        <CardPreview></CardPreview>
-        <CardPreview></CardPreview>
-        <CardPreview></CardPreview>
-        <CardPreview></CardPreview>
-      </div>
-      <div className="sticky bottom-0 pb-2">
-        <BFooter></BFooter>
-      </div>
+      <CardRevealer cards={newCards}></CardRevealer>
+      <CatalogMain cards={cards}></CatalogMain>
     </div>
   );
 }
