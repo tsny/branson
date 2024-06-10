@@ -15,7 +15,7 @@ export function EditCardModal(props: EditCardModalProps) {
       <Modal onClose={props.onClose} show={props.show} size="md" popup>
         <Modal.Header />
         <Modal.Body>
-          <Card className="max-w-sm">
+          <div className="max-w-sm">
             <form
               action={async (formData) => {
                 await createOrUpdateCard(formData);
@@ -24,7 +24,7 @@ export function EditCardModal(props: EditCardModalProps) {
               className="flex flex-col gap-4"
             >
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="email1" value="Card title" />
                 </div>
                 <TextInput
@@ -34,7 +34,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="desc" value="Description" />
                 </div>
                 <TextInput
@@ -44,7 +44,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="url" value="Image URL" />
                 </div>
                 <TextInput
@@ -55,7 +55,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="quote" value="Quote" />
                 </div>
                 <TextInput
@@ -64,7 +64,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="rarity" value="Rarity" />
                 </div>
                 <TextInput
@@ -74,7 +74,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="email1" value="Type" />
                 </div>
                 <TextInput
@@ -84,7 +84,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 />
               </div>
               <div>
-                <div className="mb-2 block">
+                <div className="mb-1 block">
                   <Label htmlFor="weight" value="Weight" />
                 </div>
                 <TextInput
@@ -99,7 +99,7 @@ export function EditCardModal(props: EditCardModalProps) {
                 {props.card?.title === "" ? "Update" : "Submit"}{" "}
               </Button>
             </form>
-          </Card>
+          </div>
         </Modal.Body>
       </Modal>
     </>

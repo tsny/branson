@@ -3,7 +3,7 @@
 import { authConfig } from "@/lib/auth";
 import { getRandomCard } from "@/lib/cards";
 import prisma from "@/lib/prisma";
-import { Card } from "@prisma/client";
+import { Card, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -101,6 +101,52 @@ export async function submitPost(formData: FormData) {
   revalidatePath("/");
 }
 
+function getIntFromFormdata(formData: FormData, val: string) {
+  const str = formData.get(val) as string;
+  let numBoins = +str;
+  if (numBoins <= 0) {
+    numBoins = 1;
+  }
+  return numBoins;
+}
+
+export async function setUserBoins(id: number, boins: number) {
+  await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      boins: boins,
+    },
+  });
+}
+
+export async function setUserBoinsFromForm(formData: FormData) {
+  let boins = getIntFromFormdata(formData, "boins");
+  let userID = getIntFromFormdata(formData, "userid");
+  await setUserBoins(userID, boins);
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
+export async function giveAllUsersBoins(formData: FormData) {
+  let boins = getIntFromFormdata(formData, "boins");
+  let users = await prisma.user.findMany();
+  for (const u of users) {
+    await prisma.user.update({
+      where: {
+        id: u.id,
+      },
+      data: {
+        boins: u.boins + boins,
+      },
+    });
+  }
+  revalidatePath("/");
+  revalidatePath("/admin");
+}
+
 export async function deletePost(postID: number) {
   await prisma.post.delete({
     where: {
@@ -109,6 +155,29 @@ export async function deletePost(postID: number) {
   });
   console.log("deleted post " + postID);
   revalidatePath("/");
+}
+
+export async function createRule(formData: FormData) {
+  let content = formData.get("ruleText") as string;
+  let author = formData.get("author") as string;
+  let fine = formData.get("fine") as string;
+  let fineAmount: number = +fine;
+  if (fineAmount < 1) {
+    fineAmount = 1;
+  }
+  let user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  await prisma.rule.create({
+    data: {
+      content: content,
+      fine: fineAmount,
+      authorName: author,
+    },
+  });
+
+  revalidatePath("/rules");
 }
 
 export async function deleteRule(ruleID: number) {
@@ -121,12 +190,21 @@ export async function deleteRule(ruleID: number) {
   revalidatePath("/rules");
 }
 
-export async function isUserSuperAdmin(): Promise<boolean> {
-  const user = await getSessionUser();
+export async function isAdmin(): Promise<boolean> {
+  const user = await getCurrentDBUser();
   if (!user) {
     return false;
   }
-  return user.email === "tsny700@gmail.com";
+  const role = user.role?.toLowerCase();
+  return role == "admin" || role == "super";
+}
+
+export async function isUserSuperAdmin(): Promise<boolean> {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return false;
+  }
+  return user.role?.toLowerCase() == "super";
 }
 
 export async function getSessionUser() {
@@ -135,6 +213,22 @@ export async function getSessionUser() {
     return;
   }
   return session.user;
+}
+
+export async function getCurrentUserCards() {
+  let seshUser = await getSessionUser();
+  if (!seshUser || !seshUser.email) {
+    return null;
+  }
+
+  return await prisma.user.findFirst({
+    where: {
+      email: { equals: seshUser.email },
+    },
+    include: {
+      CardOwnership: true,
+    },
+  });
 }
 
 export async function getCurrentDBUser() {
@@ -236,6 +330,51 @@ export async function createNewDBUser(
   console.log("new user! ", newUser);
 }
 
+export async function buyPackFromForm(formData: FormData) {
+  const userid = Number(formData.get("userid"));
+  return buyPack(userid);
+}
+
+export async function buyPack(userid: number) {
+  const user = await findUserByID(userid);
+  if (!user) {
+    return;
+  }
+  if (user.boins < 1) {
+    return;
+  }
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      boins: user.boins - 1,
+      numPacks: user.numPacks + 1,
+    },
+  });
+  revalidatePath("/");
+  revalidatePath("/inventory");
+}
+
+export async function unwrapPack2(userid: number) {
+  const user = await findUserByID(userid);
+  if (!user) {
+    return;
+  }
+  let cards: Card[] = await prisma.card.findMany();
+  let outputCards: CardOwnership[] = [];
+  for (let index = 0; index < 3; index++) {
+    let card = getRandomCard(cards);
+    const ownership = await prisma.cardOwnership.create({
+      data: {
+        cardId: card.id,
+        isFoil: false,
+        userId: user.id,
+      },
+    });
+    outputCards.push(ownership);
+  }
+  return outputCards;
+}
+
 export async function unwrapPack() {
   let cards: Card[] = await prisma.card.findMany();
   let outputCards: Card[] = [];
@@ -244,4 +383,24 @@ export async function unwrapPack() {
     outputCards.push(card);
   }
   return outputCards;
+}
+
+export interface CardStats {
+  id: number;
+  title: string;
+  chance: number;
+  card: Card;
+}
+
+export async function getCardChances(): Promise<CardStats[]> {
+  let cards: Card[] = await prisma.card.findMany({
+    orderBy: { weight: "desc" },
+  });
+  const totalWeight = cards.reduce((sum, card) => sum + card.weight, 0);
+  return cards.map((card) => ({
+    title: card.title,
+    chance: +((card.weight / totalWeight) * 100).toFixed(2),
+    id: card.id,
+    card: card,
+  }));
 }

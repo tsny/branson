@@ -17,7 +17,7 @@ export default function PostForm() {
         className="flex justify-center w-full "
       >
         <Textarea
-          className="w-3/4"
+          className="w-3/4 resize-none"
           name="textbox"
           minLength={3}
           maxLength={400}

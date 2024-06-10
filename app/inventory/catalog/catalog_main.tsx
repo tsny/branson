@@ -7,6 +7,7 @@ import { useState } from "react";
 
 interface CatalogMainProps {
   cards: Card[];
+  showCheckboxes: boolean;
 }
 
 export default function CatalogMain(props: CatalogMainProps) {
@@ -23,6 +24,7 @@ export default function CatalogMain(props: CatalogMainProps) {
         }}
         key={c.id}
         card={c}
+        showCheckbox={props.showCheckboxes}
       ></CardPreview>
     );
   });
@@ -34,7 +36,7 @@ export default function CatalogMain(props: CatalogMainProps) {
         show={showModal}
         card={selectedCard}
       ></CardModal>
-      <div className="m-2 grid grid-cols-3 gap-2">{body}</div>;
+      <form className="m-2 grid grid-cols-3 gap-2">{body}</form>
     </div>
   );
 }

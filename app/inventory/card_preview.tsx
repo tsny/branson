@@ -42,24 +42,28 @@ export default function CardPreview(props: CardPreviewProps) {
     imgUrl = hiddenCardImageURL;
   }
   return (
-    <Card
-      className={cardBg + " "}
-      href="#"
-      imgSrc={imgUrl}
-      // renderImage={() => (
-      //   <Image
-      //     width={200}
-      //     height={200}
-      //     src={props.card.imageURL || ""}
-      //     alt="image 1"
-      //   />
-      // )}
-      onClick={props.onClick}
-    >
-      {props.showCheckbox && <Checkbox checked={checked} id="accept" />}
-      <h1 className="text-xs text-left font-bold">
+    <div className={cardBg + " rounded border border-gray-600"}>
+      <div className="w-full mb-4">
+        <img
+          className="w-full"
+          onClick={props.onClick}
+          src={imgUrl}
+          alt="test"
+        ></img>
+      </div>
+      {props.showCheckbox && (
+        <Checkbox
+          className="ml-3"
+          onClick={() => {
+            setChecked(!checked);
+          }}
+          checked={checked}
+          id="accept"
+        />
+      )}
+      <h1 className="mb-4 text-xs text-center font-bold">
         {hidden ? "???" : props.card.title}
       </h1>
-    </Card>
+    </div>
   );
 }

@@ -5,9 +5,11 @@ import CardEditorTable from "./CardTable";
 import { EditCardModal } from "./EditCard";
 import AddCardButton from "./AddCardButton";
 import { Card } from "@prisma/client";
+import { CardStats } from "@/app/actions";
 
 interface EditorMainProps {
   cards: Card[];
+  stats: CardStats[];
 }
 
 export default function EditorMain(props: EditorMainProps) {
@@ -31,6 +33,7 @@ export default function EditorMain(props: EditorMainProps) {
           setCardToEdit(props.cards.find((c) => c.id == id));
         }}
         cards={props.cards}
+        stat={props.stats}
       ></CardEditorTable>
     </div>
   );

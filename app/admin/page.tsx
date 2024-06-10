@@ -1,6 +1,8 @@
 import BNavbar from "../navbar";
 import {
+  Button,
   Card,
+  Label,
   Table,
   TableBody,
   TableCell,
@@ -9,7 +11,12 @@ import {
   TableRow,
 } from "flowbite-react";
 import prisma from "@/lib/prisma";
-import { getSessionUser } from "../actions";
+import {
+  getSessionUser,
+  giveAllUsersBoins,
+  setUserBoins,
+  setUserBoinsFromForm,
+} from "../actions";
 
 export default async function Page() {
   let user = await getSessionUser();
@@ -22,7 +29,15 @@ export default async function Page() {
       <TableCell>{u.id}</TableCell>
       <TableCell>{u.email}</TableCell>
       <TableCell>{u.firstName}</TableCell>
-      <TableCell>{u.boins}</TableCell>
+      <TableCell>
+        <form action={setUserBoinsFromForm}>
+          <input name="boins" defaultValue={u.boins} type="number"></input>
+          <input name="userid" defaultValue={u.id} hidden></input>
+          <Button color="success" className="ml-2 inline" type="submit">
+            Save
+          </Button>
+        </form>
+      </TableCell>
       <TableCell>{u.role}</TableCell>
     </TableRow>
   ));
@@ -32,6 +47,25 @@ export default async function Page() {
       <BNavbar></BNavbar>
       <main className="w-full h-full pt-3 flex-col items-center justify-between">
         <Card className="text-black">You are {user?.email}</Card>
+        <div>
+          <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
+            Admin
+          </h1>
+        </div>
+        <Card>
+          <form action={giveAllUsersBoins}>
+            <Label>Give All Users Daily Allowance</Label>
+            <input
+              className="ml-2 "
+              name="boins"
+              defaultValue={5}
+              type="number"
+            ></input>
+            <Button className="ml-2 inline" type="submit">
+              Submit
+            </Button>
+          </form>
+        </Card>
         <Card className="overflow-x-auto text-black w-full">
           <Table>
             <TableHead>

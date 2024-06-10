@@ -26,35 +26,38 @@ model Post {
 model User {
     id            Int             @id @default(sequence())
     boins         Int             @default(0)
+    upboinsGiven  Int             @default(0)
+    dust          Int             @default(0)
     email         String          @unique
     profilePicURL String?
     firstName     String?
     lastName      String?
     isAdmin       Boolean         @default(false)
     role          String?         @default("user")
+    numPacks      Int             @default(0)
     posts         Post[]
-    rules         Rule[]
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
     Business      Business[]
 }
 
 model Business {
-    id        Int     @id @default(sequence())
-    name      String
-    location  String  @default("branson")
-    service   String?
-    memberIDs Int[]
-    founder   User    @relation(fields: [userId], references: [id])
-    userId    Int
+    id       Int      @id @default(sequence())
+    name     String
+    location String   @default("branson")
+    service  String?
+    members  String[]
+    founder  User     @relation(fields: [userId], references: [id])
+    userId   Int
+    bio      String?
+    logoURL  String?
 }
 
 model Rule {
-    id       Int    @id @default(sequence())
-    content  String
-    author   User   @relation(fields: [authorID], references: [id])
-    authorID Int
-    fine     Int    @default(1)
+    id         Int    @id @default(sequence())
+    content    String
+    authorName String @default("unknown")
+    fine       Int    @default(1)
 }
 
 model Card {
@@ -68,6 +71,11 @@ model Card {
     weight        Int             @default(50)
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
+}
+
+model Achievement {
+    id   Int    @id @default(sequence())
+    desc String
 }
 
 model CardOwnership {

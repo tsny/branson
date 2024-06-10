@@ -1,3 +1,4 @@
+import { isAdmin } from "../actions";
 import BNavbar from "../navbar";
 import RuleForm from "./ruleform";
 import RuleList from "./rulelist";
@@ -5,6 +6,7 @@ import RuleList from "./rulelist";
 export const dynamic = "force-dynamic";
 
 export default async function RulesPage() {
+  let isUserAdmin = await isAdmin();
   return (
     <div>
       <BNavbar></BNavbar>
@@ -12,7 +14,7 @@ export default async function RulesPage() {
         <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
           Branson Rules
         </h1>
-        <RuleForm></RuleForm>
+        {isUserAdmin && <RuleForm></RuleForm>}
         <RuleList></RuleList>
       </div>
     </div>

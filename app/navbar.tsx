@@ -16,6 +16,7 @@ import { isUserSuperAdmin } from "./actions";
 export default async function BNavbar() {
   const session = await getServerSession(authConfig);
   let loggedIn = session != undefined;
+  const isSuper = await isUserSuperAdmin();
 
   const loginSection = loggedIn ? (
     <NavbarLink as={Link} href="/api/auth/signout">
@@ -47,23 +48,28 @@ export default async function BNavbar() {
         <NavbarLink as={Link} href="/rules">
           Rules
         </NavbarLink>
-        {(await isUserSuperAdmin()) && (
+        <NavbarLink as={Link} href="/business">
+          Businesses
+        </NavbarLink>
+        {isSuper && (
+          <NavbarLink as={Link} href="/profile">
+            Profile
+          </NavbarLink>
+        )}
+        {isSuper && (
           <NavbarLink as={Link} href="/admin">
             Admin
           </NavbarLink>
         )}
-        {(await isUserSuperAdmin()) && (
-          <div>
-            <NavbarLink as={Link} href={"/inventory"}>
-              Inventory
-            </NavbarLink>
-            <NavbarLink as={Link} href={"/inventory/catalog"}>
-              Catalog
-            </NavbarLink>
-            <NavbarLink as={Link} href={"/inventory/editor"}>
-              Editor
-            </NavbarLink>
-          </div>
+        {isSuper && (
+          <NavbarLink as={Link} href="/inventory">
+            Inventory
+          </NavbarLink>
+        )}
+        {isSuper && (
+          <NavbarLink as={Link} href="/inventory/editor">
+            Editor
+          </NavbarLink>
         )}
         {/* <NavbarLink as={Link} href="/boygirl">
           BoyGirl
