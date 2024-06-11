@@ -1,13 +1,16 @@
 "use client";
 
-import { Card } from "@prisma/client";
+import { Card, CardOwnership } from "@prisma/client";
 import CardPreview from "../card_preview";
 import { CardModal } from "../ViewCardModal";
 import { useState } from "react";
 
 interface CatalogMainProps {
   cards: Card[];
+  cardOwnerships?: CardOwnership[];
+
   showCheckboxes: boolean;
+  onCheckBoxClick?: (b: boolean, card: Card) => void;
 }
 
 export default function CatalogMain(props: CatalogMainProps) {
@@ -15,16 +18,22 @@ export default function CatalogMain(props: CatalogMainProps) {
   let [showModal, setShowModal] = useState(false);
 
   const cards = props.cards;
-  let body = cards.map((c) => {
+
+  let body = cards.map((c, i) => {
     return (
       <CardPreview
         onClick={() => {
           setSelectedCard(c);
           setShowModal(true);
         }}
-        key={c.id}
+        key={i}
         card={c}
         showCheckbox={props.showCheckboxes}
+        onCheckBoxClick={(b, card) => {
+          if (props.onCheckBoxClick) {
+            props.onCheckBoxClick(card, b);
+          }
+        }}
       ></CardPreview>
     );
   });

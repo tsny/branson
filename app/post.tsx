@@ -16,6 +16,8 @@ export default async function Post(props: PostProps) {
 
   let dbUser = await getCurrentDBUser();
 
+  const userHasNoBoins = dbUser?.boins ? false : true;
+
   const upBoins = post ? post.likes : 0;
   const userOwnsPost = dbUser && dbUser.id == post.author.id ? true : false;
   const avatarURL = post.author?.profilePicURL ? post.author.profilePicURL : "";
@@ -39,7 +41,7 @@ export default async function Post(props: PostProps) {
 
           <div className="flex justify-between">
             <UpBoins
-              disabled={userOwnsPost}
+              disabled={userOwnsPost || userHasNoBoins}
               authorID={post.author.id}
               postID={props.postID}
               upboins={upBoins}

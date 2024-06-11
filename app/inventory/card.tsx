@@ -23,13 +23,13 @@ export default function BransonCard(props: BrandonCardProps) {
 
   return (
     <div className={cardBg + " p-3 rounded border-gray-600 border"}>
-      <div className=" bg-gray-100/90 border-2 border-gray-600 rounded">
+      <div className=" bg-gray-100/90 border-4 border-gray-400 rounded mb-1">
         <h1 className="text-2xl pl-1 font-bold tracking-tight text-gray-900 dark:text-white">
           {hidden ? "???" : card?.title}
         </h1>
       </div>
       <img
-        className="shadow-lg center border-2 border-gray-900 rounded aspect-square"
+        className="shadow-lg center border-4 border-gray-500 rounded aspect-square"
         alt={hidden ? "???" : card?.title}
         src={imgSrc}
       />
@@ -43,9 +43,12 @@ export default function BransonCard(props: BrandonCardProps) {
           </span>
         )}
       </div>
-      <p className="text-right text-bold text-sm m-0">
-        {hidden ? "???" : card?.rarity.toUpperCase()}
-      </p>
+      <div className="flex justify-between pt-3">
+        <p className="text-left text-bold text-xs m-0">2024 The Agency©</p>
+        <p className="text-right text-bold text-sm m-0">
+          {hidden ? "???" : card?.rarity.toUpperCase()}
+        </p>
+      </div>
     </div>
   );
 }

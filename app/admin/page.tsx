@@ -1,5 +1,6 @@
 import BNavbar from "../navbar";
 import {
+  Avatar,
   Button,
   Card,
   Label,
@@ -27,10 +28,13 @@ export default async function Page() {
       key={u.id}
     >
       <TableCell>{u.id}</TableCell>
-      <TableCell>{u.email}</TableCell>
+      <TableCell className="flex gap-2">
+        <Avatar className="inline" img={u.profilePicURL || ""}></Avatar>
+        <p className="inline"> {u.email} </p>
+      </TableCell>
       <TableCell>{u.firstName}</TableCell>
       <TableCell>
-        <form action={setUserBoinsFromForm}>
+        <form className="flex" action={setUserBoinsFromForm}>
           <input name="boins" defaultValue={u.boins} type="number"></input>
           <input name="userid" defaultValue={u.id} hidden></input>
           <Button color="success" className="ml-2 inline" type="submit">

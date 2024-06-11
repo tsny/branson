@@ -10,7 +10,7 @@ export interface CatalogCard {
   known: Boolean;
 }
 
-export default async function Home() {
+export default async function CatalogPage() {
   let cards: Card[] = await prisma.card.findMany({
     orderBy: { weight: "desc" },
   });
@@ -24,6 +24,9 @@ export default async function Home() {
     where: {
       userId: user.id,
     },
+    include: {
+      card: true,
+    },
   });
 
   // let knownCards = cards.map(c => {
@@ -35,11 +38,12 @@ export default async function Home() {
   return (
     <div>
       <InvLinkHeader catalogSelected={true}></InvLinkHeader>
-      {/* <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
-        Catalog
-      </h1> */}
 
-      <CatalogMain showCheckboxes={false} cards={cards}></CatalogMain>
+      <CatalogMain
+        cardOwnerships={ownedCards}
+        showCheckboxes={false}
+        cards={cards}
+      ></CatalogMain>
     </div>
   );
 }

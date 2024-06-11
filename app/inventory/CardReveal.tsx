@@ -1,33 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card as BCard } from "@prisma/client";
-import BransonCard from "./card";
 import CardPreview from "./card_preview";
 
 interface CardRevealerProps {
   cards: BCard[];
+  start: boolean;
+  onRevealFinished: () => void;
 }
 
 export default function CardRevealer(props: CardRevealerProps) {
-  const [visibleCards, setVisibleCards] = useState([true, true, true]);
+  let body = props.cards?.map((c, i) => {
+    return (
+      <CardPreview
+        key={i}
+        card={c}
+        hidden={true}
+        revealSelf={true}
+        revealPauseInSeconds={i + 2}
+        onRevealFinished={
+          i == props.cards.length - 1 ? props.onRevealFinished : () => {}
+        }
+      />
+    );
+  });
 
-  useEffect(() => {
-    const revealCards = () => {
-      setTimeout(() => setVisibleCards([false, true, true]), 1000);
-      setTimeout(() => setVisibleCards([false, false, true]), 2000);
-      setTimeout(() => setVisibleCards([false, false, false]), 3000);
-    };
-
-    revealCards();
-  }, []);
-
-  return (
-    <div className="m-2 grid grid-cols-3 gap-2">
-      {/* <CardPreview card={props.cards[0]}></CardPreview> */}
-      <CardPreview card={props.cards[0]} hidden={visibleCards[0]} />
-      <CardPreview card={props.cards[1]} hidden={visibleCards[1]} />
-      <CardPreview card={props.cards[2]} hidden={visibleCards[2]} />
-    </div>
-  );
+  return <div className="m-2 grid grid-cols-3 gap-2">{body}</div>;
 }

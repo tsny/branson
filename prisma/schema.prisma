@@ -69,6 +69,7 @@ model Card {
     quote         String?
     imageURL      String?
     weight        Int             @default(50)
+    dustValue     Int             @default(10)
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
 }

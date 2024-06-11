@@ -1,7 +1,7 @@
 "use client";
 import { Card as BCard } from "@prisma/client";
-import { Card, Checkbox } from "flowbite-react";
-import { useState } from "react";
+import { Checkbox } from "flowbite-react";
+import { useEffect, useState } from "react";
 import { hiddenCardImageURL } from "./card";
 
 interface CardPreviewProps {
@@ -9,7 +9,67 @@ interface CardPreviewProps {
   isFoil?: boolean;
   showCheckbox?: boolean;
   hidden?: boolean;
+  revealSelf?: boolean;
+  revealPauseInSeconds?: number;
   onClick?: () => void;
+  onCheckBoxClick?: (c: BCard, selected: boolean) => void;
+  onRevealFinished?: (c: BCard) => void;
+}
+
+export default function CardPreview(props: CardPreviewProps) {
+  let [checked, setChecked] = useState(false);
+  let [hidden, setHidden] = useState(props.hidden);
+  let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
+
+  let cardBg = rarityToBG(props.card.rarity);
+  if (props.isFoil) {
+    cardBg += " bg-holographic";
+  }
+  let imgUrl = props.card.imageURL || "";
+
+  useEffect(() => {
+    if (props.revealSelf) {
+      setHidden(true);
+      setTimeout(() => {
+        setHidden(false);
+        setCardImgURL(imgUrl);
+        console.log("reveal");
+        if (props.onRevealFinished) {
+          props.onRevealFinished(props.card);
+        }
+      }, 1000 * (props.revealPauseInSeconds || 1));
+    }
+  }, [props.card]);
+
+  return (
+    <div className={cardBg + " rounded border border-gray-600"}>
+      <div className="w-full mb-4">
+        <img
+          className="w-full"
+          onClick={props.onClick}
+          src={hidden ? hiddenCardImageURL : imgUrl}
+          alt="test"
+        ></img>
+      </div>
+      {props.showCheckbox && (
+        <Checkbox
+          className="ml-3"
+          onClick={() => {
+            setChecked(!checked);
+            if (props.onCheckBoxClick) {
+              props.onCheckBoxClick(props.card, checked);
+            }
+          }}
+          checked={checked}
+          onChange={() => {}}
+          id="accept"
+        />
+      )}
+      <h1 className="mb-4 text-xs text-center font-bold">
+        {hidden ? "???" : props.card.title}
+      </h1>
+    </div>
+  );
 }
 
 export function rarityToBG(rarity: string) {
@@ -26,44 +86,8 @@ export function rarityToBG(rarity: string) {
       cardBg +=
         "bg-gradient-to-r from-yellow-100 to-yellow-200 border-yellow-500";
       break;
+    default:
+      cardBg += "bg-gradient-to-r from-gray-100 to-gray-200 border-gray-500";
   }
   return cardBg;
-}
-
-export default function CardPreview(props: CardPreviewProps) {
-  let [checked, setChecked] = useState(false);
-  let hidden = props.hidden;
-  let cardBg = rarityToBG(props.card.rarity);
-  if (props.isFoil) {
-    cardBg += " bg-holographic";
-  }
-  let imgUrl = props.card.imageURL || "";
-  if (props.hidden) {
-    imgUrl = hiddenCardImageURL;
-  }
-  return (
-    <div className={cardBg + " rounded border border-gray-600"}>
-      <div className="w-full mb-4">
-        <img
-          className="w-full"
-          onClick={props.onClick}
-          src={imgUrl}
-          alt="test"
-        ></img>
-      </div>
-      {props.showCheckbox && (
-        <Checkbox
-          className="ml-3"
-          onClick={() => {
-            setChecked(!checked);
-          }}
-          checked={checked}
-          id="accept"
-        />
-      )}
-      <h1 className="mb-4 text-xs text-center font-bold">
-        {hidden ? "???" : props.card.title}
-      </h1>
-    </div>
-  );
 }

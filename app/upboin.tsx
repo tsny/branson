@@ -1,8 +1,6 @@
 "use client";
 
-import prisma from "@/lib/prisma";
 import { Button } from "flowbite-react";
-import { revalidatePath } from "next/cache";
 import { useRef } from "react";
 import { getCurrentDBUser, getSessionUser, upvote } from "./actions";
 
@@ -23,7 +21,7 @@ export default function UpBoins(props: UpBoinsProps) {
         if (!currUser || !currUser.email) {
           return;
         }
-        await upvote(currUser.id, props.postID, props.upboins);
+        await upvote(currUser.id, props.postID);
         ref.current?.reset();
       }}
     >
