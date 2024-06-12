@@ -10,6 +10,8 @@ interface EditCardModalProps {
 }
 
 export function EditCardModal(props: EditCardModalProps) {
+  let card = props.card;
+
   return (
     <>
       <Modal onClose={props.onClose} show={props.show} size="md" popup>
@@ -27,8 +29,9 @@ export function EditCardModal(props: EditCardModalProps) {
                 <div className="mb-1 block">
                   <Label htmlFor="email1" value="Card title" />
                 </div>
+                <input hidden name="cardid" value={card?.id} />
                 <TextInput
-                  defaultValue={props?.card?.title}
+                  defaultValue={card?.title}
                   name="cardtitle"
                   required
                 />
@@ -37,18 +40,14 @@ export function EditCardModal(props: EditCardModalProps) {
                 <div className="mb-1 block">
                   <Label htmlFor="desc" value="Description" />
                 </div>
-                <TextInput
-                  defaultValue={props.card?.desc}
-                  name="desc"
-                  required
-                />
+                <TextInput defaultValue={card?.desc} name="desc" required />
               </div>
               <div>
                 <div className="mb-1 block">
                   <Label htmlFor="url" value="Image URL" />
                 </div>
                 <TextInput
-                  defaultValue={props.card?.imageURL || ""}
+                  defaultValue={card?.imageURL || ""}
                   type="url"
                   name="img"
                   required
@@ -58,30 +57,19 @@ export function EditCardModal(props: EditCardModalProps) {
                 <div className="mb-1 block">
                   <Label htmlFor="quote" value="Quote" />
                 </div>
-                <TextInput
-                  defaultValue={props.card?.quote || ""}
-                  name="quote"
-                />
+                <TextInput defaultValue={card?.quote || ""} name="quote" />
               </div>
               <div>
                 <div className="mb-1 block">
                   <Label htmlFor="rarity" value="Rarity" />
                 </div>
-                <TextInput
-                  defaultValue={props.card?.rarity}
-                  name="rarity"
-                  required
-                />
+                <TextInput defaultValue={card?.rarity} name="rarity" required />
               </div>
               <div>
                 <div className="mb-1 block">
                   <Label htmlFor="email1" value="Type" />
                 </div>
-                <TextInput
-                  defaultValue={props.card?.type}
-                  name="type"
-                  required
-                />
+                <TextInput defaultValue={card?.type} name="type" required />
               </div>
               <div>
                 <div className="mb-1 block">
@@ -89,14 +77,14 @@ export function EditCardModal(props: EditCardModalProps) {
                 </div>
                 <TextInput
                   min={1}
-                  defaultValue={props.card?.weight}
+                  defaultValue={card?.weight}
                   name="weight"
                   type="number"
                   required
                 />
               </div>
               <Button type="submit">
-                {props.card?.title === "" ? "Update" : "Submit"}{" "}
+                {card?.title === "" ? "Update" : "Submit"}{" "}
               </Button>
             </form>
           </div>

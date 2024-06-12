@@ -79,6 +79,11 @@ model Achievement {
     desc String
 }
 
+model Config {
+    name  String @id
+    value String
+}
+
 model CardOwnership {
     id     Int     @id @default(sequence())
     isFoil Boolean @default(false)

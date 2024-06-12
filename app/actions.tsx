@@ -254,15 +254,20 @@ export async function findCardByID(id: number) {
 }
 
 export async function deleteCard(formData: FormData) {
-  const id = formData.get("button") as string;
-  const idNumber: number = +id;
-  if (!idNumber) {
+  const id = getNumFromForm(formData, "cardid");
+  if (!id) {
     console.log("couldn't find id in page", id);
     return;
   }
+
+  await prisma.cardOwnership.deleteMany({
+    where: {
+      cardId: id,
+    },
+  });
   const output = await prisma.card.delete({
     where: {
-      id: idNumber,
+      id: id,
     },
   });
   console.log("deleted ", output);
@@ -270,6 +275,7 @@ export async function deleteCard(formData: FormData) {
 }
 
 export async function createOrUpdateCard(formData: FormData) {
+  const id = getNumFromForm(formData, "cardid");
   const title = formData.get("cardtitle") as string;
   const rarity = formData.get("rarity") as string;
   const type = formData.get("type") as string;
@@ -278,15 +284,10 @@ export async function createOrUpdateCard(formData: FormData) {
   const imageURL = formData.get("img") as string;
   const weight = getNumFromForm(formData, "weight");
 
-  let card = await prisma.card.findFirst({
-    where: {
-      title: {
-        equals: title,
-      },
-    },
-  });
+  let card = await findCardByID(id);
+
   if (card) {
-    console.log("card already exists");
+    console.log("updating %s -- already exists", card.title);
     await prisma.card.update({
       where: {
         id: card.id,

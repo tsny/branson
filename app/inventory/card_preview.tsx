@@ -11,7 +11,7 @@ interface CardPreviewProps {
   hidden?: boolean;
   revealSelf?: boolean;
   revealPauseInSeconds?: number;
-  onClick?: () => void;
+  onClick?: (B: BCard) => void;
   onCheckBoxClick?: (c: BCard, selected: boolean) => void;
   onRevealFinished?: (c: BCard) => void;
 }
@@ -46,7 +46,9 @@ export default function CardPreview(props: CardPreviewProps) {
       <div className="w-full mb-4">
         <img
           className="w-full"
-          onClick={props.onClick}
+          onClick={() => {
+            if (props.onClick) props.onClick(props.card);
+          }}
           src={hidden ? hiddenCardImageURL : imgUrl}
           alt="test"
         ></img>

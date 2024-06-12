@@ -1,5 +1,6 @@
 import { Card as BCard } from "@prisma/client";
 import { rarityToBG } from "./card_preview";
+import { FaRobot } from "react-icons/fa";
 
 interface BrandonCardProps {
   card?: BCard;
@@ -29,11 +30,16 @@ export default function BransonCard(props: BrandonCardProps) {
         </h1>
       </div>
       <img
-        className="shadow-lg center border-4 border-gray-500 rounded aspect-square"
+        className="shadow-lgtext-bold center border-4 text-bold border-gray-500 rounded aspect-square"
         alt={hidden ? "???" : card?.title}
         src={imgSrc}
       />
-      <p className="p-1 mb-2 text-xs">{hidden ? "???" : card?.type}</p>
+      <div className="flex justify-center">
+        <div className="flex w-11/12 justify-between my-1 bg-gray-100/70 border border-gray-600 shadow-lg rounded">
+          <p className="p-1 text-xs">{hidden ? "???" : card?.type}</p>
+          <FaRobot className="h-full mr-2"></FaRobot>
+        </div>
+      </div>
       <div className="bg-gray-100 border border-gray-600 shadow-lg rounded p-1">
         <h1 className="p-1 mb-5 text-sm">{hidden ? "???" : card?.desc}</h1>
         {card?.quote && (

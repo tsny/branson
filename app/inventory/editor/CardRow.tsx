@@ -32,7 +32,7 @@ export default function CardRow(props: CardRowProps) {
           </Button>
           <form action={deleteCard}>
             <Button
-              name="button"
+              name="cardid"
               value={props.id}
               type="submit"
               color="failure"

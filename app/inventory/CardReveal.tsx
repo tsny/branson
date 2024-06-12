@@ -7,6 +7,7 @@ interface CardRevealerProps {
   cards: BCard[];
   start: boolean;
   onRevealFinished: () => void;
+  onPreviewClick?: (card: BCard) => void;
 }
 
 export default function CardRevealer(props: CardRevealerProps) {
@@ -17,8 +18,10 @@ export default function CardRevealer(props: CardRevealerProps) {
         card={c}
         hidden={true}
         revealSelf={true}
+        onClick={props.onPreviewClick}
         revealPauseInSeconds={i + 2}
         onRevealFinished={
+          // Only do the reveal finished function on the final preview finishing
           i == props.cards.length - 1 ? props.onRevealFinished : () => {}
         }
       />

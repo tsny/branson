@@ -5,6 +5,7 @@ import { Button } from "flowbite-react";
 import CardRevealer from "../CardReveal";
 import { useState } from "react";
 import { Card } from "@prisma/client";
+import { CardModal } from "../ViewCardModal";
 
 interface UnwrapperProps {
   unpackBtnDisabled: boolean;
@@ -14,6 +15,8 @@ export default function Unwrapper(props: UnwrapperProps) {
   let [unwrappedCards, setUnwrappedCards] = useState<Card[]>([]);
   let [revealCards, setRevealCards] = useState(false);
   let [revealOngoing, setRevealOngoing] = useState(false);
+  let [showModal, setShowModal] = useState(false);
+  let [selectedCard, setSelectedCard] = useState<Card>();
 
   let onRevealFinished = () => {
     setRevealOngoing(false);
@@ -21,6 +24,11 @@ export default function Unwrapper(props: UnwrapperProps) {
 
   return (
     <div>
+      <CardModal
+        onClose={() => setShowModal(false)}
+        show={showModal}
+        card={selectedCard}
+      ></CardModal>
       <form
         action={async (formData) => {
           let cards = await unwrapPack(formData);
@@ -44,6 +52,10 @@ export default function Unwrapper(props: UnwrapperProps) {
         onRevealFinished={onRevealFinished}
         cards={unwrappedCards}
         start={revealCards}
+        onPreviewClick={(c) => {
+          setSelectedCard(c);
+          setShowModal(true);
+        }}
       ></CardRevealer>
     </div>
   );
