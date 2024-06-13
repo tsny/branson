@@ -47,45 +47,42 @@ export default async function Page() {
   ));
 
   return (
-    <div>
-      <BNavbar></BNavbar>
-      <main className="w-full h-full pt-3 flex-col items-center justify-between">
-        <Card className="text-black">You are {user?.email}</Card>
-        <div>
-          <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
-            Admin
-          </h1>
-        </div>
-        <Card>
-          <form action={giveAllUsersBoins}>
-            <Label>Give All Users Daily Allowance</Label>
-            <input
-              className="ml-2 "
-              name="boins"
-              defaultValue={5}
-              type="number"
-            ></input>
-            <Button className="ml-2 inline" type="submit">
-              Submit
-            </Button>
-          </form>
-        </Card>
-        <Card className="overflow-x-auto text-black w-full">
-          <Table>
-            <TableHead>
-              <TableHeadCell>ID</TableHeadCell>
-              <TableHeadCell>Email</TableHeadCell>
-              <TableHeadCell>Name</TableHeadCell>
-              <TableHeadCell>Boins</TableHeadCell>
-              <TableHeadCell>Role</TableHeadCell>
-              <TableHeadCell>
-                <span className="sr-only">Edit</span>
-              </TableHeadCell>
-            </TableHead>
-            <TableBody className="divide-y">{users}</TableBody>
-          </Table>
-        </Card>
-      </main>
-    </div>
+    <main className="w-full h-full pt-3 flex-col items-center justify-between">
+      <Card className="text-black">You are {user?.email}</Card>
+      <div>
+        <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
+          Admin
+        </h1>
+      </div>
+      <Card>
+        <form action={giveAllUsersBoins}>
+          <Label>Give All Users Daily Allowance</Label>
+          <input
+            className="ml-2 "
+            name="boins"
+            defaultValue={5}
+            type="number"
+          ></input>
+          <Button className="ml-2 inline" type="submit">
+            Submit
+          </Button>
+        </form>
+      </Card>
+      <Card className="overflow-x-auto text-black w-full">
+        <Table>
+          <TableHead>
+            <TableHeadCell>ID</TableHeadCell>
+            <TableHeadCell>Email</TableHeadCell>
+            <TableHeadCell>Name</TableHeadCell>
+            <TableHeadCell>Boins</TableHeadCell>
+            <TableHeadCell>Role</TableHeadCell>
+            <TableHeadCell>
+              <span className="sr-only">Edit</span>
+            </TableHeadCell>
+          </TableHead>
+          <TableBody className="divide-y">{users}</TableBody>
+        </Table>
+      </Card>
+    </main>
   );
 }
