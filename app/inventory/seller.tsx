@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from "react";
 import CatalogMain from "./catalog/catalog_main";
 import { Cord } from "@/lib/cards";
 import { sellCards } from "../actions";
+import HelpButton from "../helpButton";
 
 interface SellerPanelProps {
   cords: Cord[];
+  userDust: number;
 }
 
 export default function SellerPanel(props: SellerPanelProps) {
@@ -44,18 +46,24 @@ export default function SellerPanel(props: SellerPanelProps) {
       }}
       ref={ref}
     >
-      <Button
-        className="ml-2"
-        type="submit"
-        disabled={selectedCards?.length === 0}
-      >
-        Sell Selected for {dust} dust
-      </Button>
-      {props.cords.length == 0 && (
-        <div className="text-xl text-bold">
-          No cards!! Go open some packs in the store!!
+      <div className="sticky p-2 mx-2 text-xs text-justify top-2 bg-white border-gray-600 rounded border">
+        <div className="flex gap-1 justify-between">
+          <div className="text-justify self-center font-bold">
+            You have {props.cords.length} cards and {props.userDust} dust!
+          </div>
+          <Button
+            size={"sm"}
+            type="submit"
+            disabled={selectedCards?.length === 0}
+          >
+            Sell for {dust} dust
+          </Button>
+          <HelpButton
+            title="What?"
+            content="Tap the card's image to view more details! Tap the name of the card to select it. You can select multiple"
+          ></HelpButton>
         </div>
-      )}
+      </div>
       <CatalogMain
         onChecked={onCheck}
         showCheckboxes={true}

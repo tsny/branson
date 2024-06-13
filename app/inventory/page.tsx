@@ -12,10 +12,7 @@ export default async function InventoryPage() {
   return (
     <div>
       <InvLinkHeader invSelected={true}></InvLinkHeader>
-      <div className="font-bold text-center mb-3">
-        You have {cords.length} cards and {user.dust} dust!
-      </div>
-      <SellerPanel cords={cords}></SellerPanel>
+      <SellerPanel userDust={user.dust} cords={cords}></SellerPanel>
     </div>
   );
 }

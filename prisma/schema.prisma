@@ -29,6 +29,7 @@ model User {
     upboinsGiven  Int             @default(0)
     dust          Int             @default(0)
     email         String          @unique
+    lastSpin      DateTime        @default(now())
     profilePicURL String?
     firstName     String?
     lastName      String?

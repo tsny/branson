@@ -1,15 +1,7 @@
-import BNavbar from "../navbar";
-
-export default function Layout({
+export default function BusinessLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <body>
-      <BNavbar></BNavbar>
-      <div className="mb-2"></div>
-      {children}
-    </body>
-  );
+  return <section>{children}</section>;
 }

@@ -27,8 +27,8 @@ export default async function BFooter() {
   );
 
   return (
-    <div className="flex justify-center sticky bottom-2">
-      <Footer container className="flex justify-center border-2">
+    <div className="flex justify-center sticky bottom-2 mx-3">
+      <Footer container className="flex justify-center border-2 bg-white/90">
         {loggedIn ? (
           <Footer.LinkGroup className="text-black text-center font-bold">
             You have {bitboins} Bitboins... Ya lil scoundrel

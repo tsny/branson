@@ -6,8 +6,14 @@ import { CardModal } from "../ViewCardModal";
 import { ReactNode, useState } from "react";
 import { Cord } from "@/lib/cards";
 
+export interface CatalogCard {
+  card: Card;
+  hidden: boolean;
+}
+
 interface CatalogMainProps {
   cards?: Card[];
+  catalogCards?: CatalogCard[];
   cords?: Cord[];
 
   showCheckboxes: boolean;
@@ -18,19 +24,19 @@ interface CatalogMainProps {
 export default function CatalogMain(props: CatalogMainProps) {
   let [selectedCard, setSelectedCard] = useState<Card>();
   let [showModal, setShowModal] = useState(false);
-  const cards = props.cards;
 
   let body: ReactNode;
-  if (cards) {
-    body = cards.map((c, i) => {
+  if (props.catalogCards) {
+    body = props.catalogCards.map((c, i) => {
       return (
         <CardPreview
           onImgClick={() => {
-            setSelectedCard(c);
+            setSelectedCard(c.card);
             setShowModal(true);
           }}
           key={i}
-          card={c}
+          card={c.card}
+          hidden={c.hidden}
         ></CardPreview>
       );
     });
