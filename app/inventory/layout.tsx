@@ -14,9 +14,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <BNavbar></BNavbar>
         {children}
-        <div className="sticky bottom-0 pb-2">
-          <BFooter></BFooter>
-        </div>
+        {/* <div className="sticky bottom-0 pb-2"> */}
+        <BFooter></BFooter>
+        {/* </div> */}
       </body>
     </html>
   );

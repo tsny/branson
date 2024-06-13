@@ -1,6 +1,16 @@
 import { Card as BCard } from "@prisma/client";
 import { rarityToBG } from "./card_preview";
-import { FaRobot } from "react-icons/fa";
+import {
+  FaCat,
+  FaSkull,
+  FaUser,
+  FaPhoenixSquadron,
+  FaBuilding,
+  FaBone,
+  FaRobot,
+  FaBiohazard,
+  FaGem,
+} from "react-icons/fa";
 
 interface BrandonCardProps {
   card?: BCard;
@@ -22,6 +32,8 @@ export default function BransonCard(props: BrandonCardProps) {
     imgSrc = props.card?.imageURL;
   }
 
+  let icon = CardTypeToIcon(card?.type);
+
   return (
     <div className={cardBg + " p-3 rounded border-gray-600 border"}>
       <div className=" bg-gray-100/90 border-4 border-gray-400 rounded mb-1">
@@ -35,9 +47,9 @@ export default function BransonCard(props: BrandonCardProps) {
         src={imgSrc}
       />
       <div className="flex justify-center">
-        <div className="flex w-11/12 justify-between my-1 bg-gray-100/70 border border-gray-600 shadow-lg rounded">
+        <div className="flex w-full justify-between my-1 bg-gray-100/70 border border-gray-600 shadow-lg rounded">
           <p className="p-1 text-xs">{hidden ? "???" : card?.type}</p>
-          <FaRobot className="h-full mr-2"></FaRobot>
+          {icon}
         </div>
       </div>
       <div className="bg-gray-100 border border-gray-600 shadow-lg rounded p-1">
@@ -51,10 +63,37 @@ export default function BransonCard(props: BrandonCardProps) {
       </div>
       <div className="flex justify-between pt-3">
         <p className="text-left text-bold text-xs m-0">2024 The Agency©</p>
-        <p className="text-right text-bold text-sm m-0">
+        <p className="text-right text-bold text-xs m-0">
           {hidden ? "???" : card?.rarity.toUpperCase()}
         </p>
       </div>
     </div>
   );
+}
+
+function CardTypeToIcon(type?: string | undefined) {
+  if (!type) {
+    return <FaRobot className="h-full mr-2"></FaRobot>;
+  }
+  type = type.toLowerCase();
+  if (type.includes("zombie")) {
+    return <FaBiohazard className="h-full mr-2" />;
+  } else if (type.includes("human")) {
+    return <FaUser className="h-full mr-2" />;
+  } else if (type.includes("bone")) {
+    return <FaBone className="h-full mr-2" />;
+  } else if (type.includes("struct")) {
+    return <FaBuilding className="h-full mr-2" />;
+  } else if (type.includes("location")) {
+    return <FaBuilding className="h-full mr-2" />;
+  } else if (type.includes("creature")) {
+    return <FaSkull className="h-full mr-2" />;
+  } else if (type.includes("spell")) {
+    return <FaPhoenixSquadron className="h-full mr-2" />;
+  } else if (type.includes("event")) {
+    return <FaGem className="h-full mr-2" />;
+  } else if (type.includes("cat")) {
+    return <FaCat className="h-full mr-2" />;
+  }
+  return <FaRobot className="h-full mr-2"></FaRobot>;
 }

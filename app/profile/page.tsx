@@ -6,7 +6,7 @@ export default async function ProfilePage() {
   let user = await getCurrentDBUser();
 
   return (
-    <div>
+    <div className="p-1">
       <Card className="w-full h-full border border-slate-500">
         <div className="flex justify-end px-4 pt-4"></div>
         <div className="flex flex-col items-center pb-10">

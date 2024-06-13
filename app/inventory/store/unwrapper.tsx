@@ -30,6 +30,7 @@ export default function Unwrapper(props: UnwrapperProps) {
         card={selectedCard}
       ></CardModal>
       <form
+        className="flex justify-center"
         action={async (formData) => {
           let cards = await unwrapPack(formData);
           if (!cards) {

@@ -7,17 +7,17 @@ import { hiddenCardImageURL } from "./card";
 interface CardPreviewProps {
   card: BCard;
   isFoil?: boolean;
-  showCheckbox?: boolean;
   hidden?: boolean;
   revealSelf?: boolean;
   revealPauseInSeconds?: number;
-  onClick?: (B: BCard) => void;
-  onCheckBoxClick?: (c: BCard, selected: boolean) => void;
+  onImgClick?: (B: BCard) => void;
+
+  onChecked?: (c: BCard) => void;
+  checked?: boolean;
   onRevealFinished?: (c: BCard) => void;
 }
 
 export default function CardPreview(props: CardPreviewProps) {
-  let [checked, setChecked] = useState(false);
   let [hidden, setHidden] = useState(props.hidden);
   let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
 
@@ -26,6 +26,9 @@ export default function CardPreview(props: CardPreviewProps) {
     cardBg += " bg-holographic";
   }
   let imgUrl = props.card.imageURL || "";
+  let borderCSS = props.checked
+    ? "border-4 border-blue-600"
+    : "border border-gray-600";
 
   useEffect(() => {
     if (props.revealSelf) {
@@ -41,35 +44,32 @@ export default function CardPreview(props: CardPreviewProps) {
     }
   }, [props.card]);
 
+  let handleLowerHalfClick = () => {
+    if (props.onChecked) {
+      props.onChecked(props.card);
+    }
+  };
+
   return (
-    <div className={cardBg + " rounded border border-gray-600"}>
+    <div className={cardBg + " rounded " + borderCSS}>
       <div className="w-full mb-4">
         <img
           className="w-full"
           onClick={() => {
-            if (props.onClick) props.onClick(props.card);
+            if (props.onImgClick) props.onImgClick(props.card);
           }}
           src={hidden ? hiddenCardImageURL : imgUrl}
-          alt="test"
+          alt={props.card.title}
         ></img>
       </div>
-      {props.showCheckbox && (
-        <Checkbox
-          className="ml-3"
-          onClick={() => {
-            setChecked(!checked);
-            if (props.onCheckBoxClick) {
-              props.onCheckBoxClick(props.card, checked);
-            }
-          }}
-          checked={checked}
-          onChange={() => {}}
-          id="accept"
-        />
-      )}
-      <h1 className="mb-4 text-xs text-center font-bold">
-        {hidden ? "???" : props.card.title}
-      </h1>
+      <div onClick={handleLowerHalfClick} className="flex justify-center">
+        <h1
+          // onClick={handleLowerHalfClick}
+          className="mb-4 text-xs text-center font-bold"
+        >
+          {hidden ? "???" : props.card.title}
+        </h1>
+      </div>
     </div>
   );
 }

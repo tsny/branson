@@ -1,9 +1,10 @@
 import BFooter from "@/app/footer";
-import { Card } from "@prisma/client";
+import { Card, CardOwnership } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import CatalogMain from "./catalog_main";
 import InvLinkHeader from "../linkHeader";
-import { getCurrentDBUser } from "@/app/actions";
+import { getCordsForUser, getCurrentDBUser } from "@/app/actions";
+import { Cord } from "@/lib/cards";
 
 export interface CatalogCard {
   card: Card;
@@ -20,14 +21,7 @@ export default async function CatalogPage() {
     return <>error </>;
   }
 
-  let ownedCards = await prisma.cardOwnership.findMany({
-    where: {
-      userId: user.id,
-    },
-    include: {
-      card: true,
-    },
-  });
+  let cords: Cord[] = await getCordsForUser(user.id);
 
   // let knownCards = cards.map(c => {
   //   if (ownedCards.includes(c2 => {
@@ -40,7 +34,7 @@ export default async function CatalogPage() {
       <InvLinkHeader catalogSelected={true}></InvLinkHeader>
 
       <CatalogMain
-        cardOwnerships={ownedCards}
+        cords={cords}
         showCheckboxes={false}
         cards={cards}
       ></CatalogMain>

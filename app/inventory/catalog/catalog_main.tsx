@@ -1,42 +1,64 @@
 "use client";
 
-import { Card, CardOwnership } from "@prisma/client";
+import { Card } from "@prisma/client";
 import CardPreview from "../card_preview";
 import { CardModal } from "../ViewCardModal";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+import { Cord } from "@/lib/cards";
 
 interface CatalogMainProps {
-  cards: Card[];
-  cardOwnerships?: CardOwnership[];
+  cards?: Card[];
+  cords?: Cord[];
 
   showCheckboxes: boolean;
-  onCheckBoxClick?: (b: boolean, card: Card) => void;
+  selectedIDs?: number[];
+  onChecked?: (card: Card, ownershipID: number) => void;
 }
 
 export default function CatalogMain(props: CatalogMainProps) {
   let [selectedCard, setSelectedCard] = useState<Card>();
   let [showModal, setShowModal] = useState(false);
-
   const cards = props.cards;
 
-  let body = cards.map((c, i) => {
-    return (
-      <CardPreview
-        onClick={() => {
-          setSelectedCard(c);
-          setShowModal(true);
-        }}
-        key={i}
-        card={c}
-        showCheckbox={props.showCheckboxes}
-        onCheckBoxClick={(b, card) => {
-          if (props.onCheckBoxClick) {
-            props.onCheckBoxClick(card, b);
+  let body: ReactNode;
+  if (cards) {
+    body = cards.map((c, i) => {
+      return (
+        <CardPreview
+          onImgClick={() => {
+            setSelectedCard(c);
+            setShowModal(true);
+          }}
+          key={i}
+          card={c}
+        ></CardPreview>
+      );
+    });
+  }
+
+  if (props.cords) {
+    body = props.cords.map((c, i) => {
+      // console.log(c.id, props.selectedCards?.indexOf(c.id));
+      return (
+        <CardPreview
+          onImgClick={() => {
+            setSelectedCard(c.card);
+            setShowModal(true);
+          }}
+          key={i}
+          checked={
+            props.selectedIDs ? props.selectedIDs?.indexOf(c.id) > -1 : false
           }
-        }}
-      ></CardPreview>
-    );
-  });
+          card={c.card}
+          onChecked={(card) => {
+            if (props.onChecked) {
+              props.onChecked(card, c.id);
+            }
+          }}
+        ></CardPreview>
+      );
+    });
+  }
 
   return (
     <div>
@@ -45,7 +67,7 @@ export default function CatalogMain(props: CatalogMainProps) {
         show={showModal}
         card={selectedCard}
       ></CardModal>
-      <form className="m-2 grid grid-cols-3 gap-2">{body}</form>
+      <div className="m-2 grid grid-cols-3 gap-2">{body}</div>
     </div>
   );
 }

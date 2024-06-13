@@ -1,9 +1,12 @@
 import { Button, Card } from "flowbite-react";
 import InvLinkHeader from "../linkHeader";
-import { buyPackFromForm, getCurrentDBUser } from "@/app/actions";
+import {
+  buyPackFromForm,
+  convertDustToPack,
+  getCurrentDBUser,
+} from "@/app/actions";
 import HelpButton from "@/app/helpButton";
 import Unwrapper from "./unwrapper";
-import NumberSpin from "@/app/random";
 import WheelSpinner from "./wheel";
 
 export default async function Store() {
@@ -43,14 +46,14 @@ export default async function Store() {
           <div className="underline">Dust</div>
           <div className="text-xs">Convert 100 Dust to 1 Bitboin</div>
           <div className="text-xs">You have {user.dust || 0} dust</div>
-          <form className="flex justify-between" action={buyPackFromForm}>
+          <form className="flex justify-between" action={convertDustToPack}>
             <Button
               size={"sm"}
-              disabled={true}
+              disabled={user.dust < 100}
               gradientDuoTone="cyanToBlue"
               type="submit"
             >
-              Purchase
+              Convert
             </Button>
             <HelpButton
               title="What is dust"
@@ -60,10 +63,10 @@ export default async function Store() {
         </Card>
       </div>
 
-      <Card className="mt-2 rounded border border-gray-800">
-        <div>You have {user.numPacks} packs you can open</div>
+      <div className="mt-2 p-1 bg-white text-center font-bold rounded border border-gray-800">
+        <div className="mb-4">You have {user.numPacks} packs you can open</div>
         <Unwrapper unpackBtnDisabled={user.numPacks == 0}></Unwrapper>
-      </Card>
+      </div>
     </div>
   );
 }

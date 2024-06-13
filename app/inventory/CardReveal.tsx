@@ -18,7 +18,7 @@ export default function CardRevealer(props: CardRevealerProps) {
         card={c}
         hidden={true}
         revealSelf={true}
-        onClick={props.onPreviewClick}
+        onImgClick={props.onPreviewClick}
         revealPauseInSeconds={i + 2}
         onRevealFinished={
           // Only do the reveal finished function on the final preview finishing

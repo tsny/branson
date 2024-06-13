@@ -1,7 +1,7 @@
 "use server";
 
 import { authConfig } from "@/lib/auth";
-import { getRandomCard } from "@/lib/cards";
+import { Cord, getRandomCard } from "@/lib/cards";
 import prisma from "@/lib/prisma";
 import { Card, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -217,21 +217,38 @@ export async function getCurrentUserCards() {
     return null;
   }
 
-  return await prisma.user.findFirst({
+  let user = await prisma.user.findFirst({
     where: {
       email: { equals: seshUser.email },
     },
-    include: {
-      CardOwnership: {
-        include: {
-          card: true,
-        },
-        orderBy: {
-          id: "desc",
-        },
+  });
+  if (!user) return;
+
+  return getCordsForUser(user.id);
+}
+
+export async function sellCards(dust: number, ownershipIDs: number[]) {
+  const user = await getCurrentDBUser();
+  if (!user) return;
+  await prisma.cardOwnership.deleteMany({
+    where: {
+      id: {
+        in: ownershipIDs,
       },
     },
   });
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      dust: {
+        increment: dust,
+      },
+    },
+  });
+  revalidatePath("/inventory");
 }
 
 export async function getCurrentDBUser() {
@@ -294,7 +311,7 @@ export async function createOrUpdateCard(formData: FormData) {
       },
       data: {
         title: title,
-        rarity: rarity,
+        rarity: rarity.toUpperCase(),
         type: type,
         desc: desc,
         quote: quote,
@@ -306,7 +323,7 @@ export async function createOrUpdateCard(formData: FormData) {
     await prisma.card.create({
       data: {
         title: title,
-        rarity: rarity,
+        rarity: rarity.toUpperCase(),
         type: type,
         desc: desc,
         quote: quote,
@@ -334,11 +351,30 @@ export async function createNewDBUser(
   console.log("new user! ", newUser);
 }
 
+export async function convertDustToPack() {
+  let user = await getCurrentDBUser();
+  if (!user) return;
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      dust: {
+        increment: -100,
+      },
+      boins: {
+        increment: 1,
+      },
+    },
+  });
+  revalidatePath("/inventory");
+  revalidatePath("/inventory/store");
+}
+
 export async function buyPackFromForm(formData: FormData) {
   let user = await getCurrentDBUser();
-  if (!user) {
-    return;
-  }
+  if (!user) return;
   return buyPack(user.id);
 }
 
@@ -413,4 +449,18 @@ export async function getCardChances(): Promise<CardStats[]> {
     id: card.id,
     card: card,
   }));
+}
+
+export async function getCordsForUser(userid: number): Promise<Cord[]> {
+  return await prisma.cardOwnership.findMany({
+    where: {
+      userId: userid,
+    },
+    include: {
+      card: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
 }

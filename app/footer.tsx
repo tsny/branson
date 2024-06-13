@@ -27,14 +27,16 @@ export default async function BFooter() {
   );
 
   return (
-    <Footer container className="sticky bottom border-2 border-gray">
-      {loggedIn ? (
-        <Footer.LinkGroup className="text-black">
-          You have {bitboins} Bitboins... Ya lil scoundrel
-        </Footer.LinkGroup>
-      ) : (
-        <Footer.LinkGroup>{loginLink}</Footer.LinkGroup>
-      )}
-    </Footer>
+    <div className="flex justify-center sticky bottom-2">
+      <Footer container className="flex justify-center border-2">
+        {loggedIn ? (
+          <Footer.LinkGroup className="text-black text-center font-bold">
+            You have {bitboins} Bitboins... Ya lil scoundrel
+          </Footer.LinkGroup>
+        ) : (
+          <Footer.LinkGroup>{loginLink}</Footer.LinkGroup>
+        )}
+      </Footer>
+    </div>
   );
 }
