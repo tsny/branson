@@ -3,22 +3,19 @@ import React from "react";
 import DeletePostButton from "./deletePostButton";
 import UpBoins from "./upboin";
 import { getCurrentDBUser, findPostByID } from "./actions";
+import { Post as BPost } from "@prisma/client";
+import { PostExt } from "@/lib/prisma";
 
 export interface PostProps {
-  postID: number;
+  post: PostExt;
 }
 
 export default async function Post(props: PostProps) {
-  let post = await findPostByID(props.postID);
-  if (!post) {
-    return <div>post {props.postID} not found</div>;
-  }
-
   let dbUser = await getCurrentDBUser();
 
+  const post = props.post;
   const userHasNoBoins = dbUser?.boins ? false : true;
 
-  const upBoins = post ? post.likes : 0;
   const userOwnsPost = dbUser && dbUser.id == post.author.id ? true : false;
   const avatarURL = post.author?.profilePicURL ? post.author.profilePicURL : "";
 
@@ -43,11 +40,11 @@ export default async function Post(props: PostProps) {
             <UpBoins
               disabled={userOwnsPost || userHasNoBoins}
               authorID={post.author.id}
-              postID={props.postID}
-              upboins={upBoins}
+              postID={post.id}
+              upboins={post.likes}
             ></UpBoins>
             {userOwnsPost && (
-              <DeletePostButton postID={props.postID}></DeletePostButton>
+              <DeletePostButton postID={post.id}></DeletePostButton>
             )}
           </div>
         </div>

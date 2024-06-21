@@ -6,6 +6,7 @@ import { EditCardModal } from "./EditCard";
 import AddCardButton from "./AddCardButton";
 import { Card } from "@prisma/client";
 import { CardStats } from "@/app/actions";
+import { CardModal } from "../ViewCardModal";
 
 interface EditorMainProps {
   cards: Card[];
@@ -13,24 +14,37 @@ interface EditorMainProps {
 }
 
 export default function EditorMain(props: EditorMainProps) {
-  let [showModal, setShowModal] = useState(false);
+  let [showEditModal, setShowEditModal] = useState(false);
+  let [showViewModal, setViewShowModal] = useState(false);
   let [cardToEdit, setCardToEdit] = useState<Card>();
+  let [viewedCard, setViewedCard] = useState<Card>();
 
   return (
     <div>
-      <AddCardButton onClick={() => setShowModal(true)}></AddCardButton>
+      <div className="ml-3">{props.cards.length} Cards</div>
+      <AddCardButton onClick={() => setShowEditModal(true)}></AddCardButton>
+      <CardModal
+        onClose={() => setViewShowModal(false)}
+        show={showViewModal}
+        card={viewedCard}
+      ></CardModal>
       <EditCardModal
         card={cardToEdit}
         onClose={() => {
           setCardToEdit(undefined);
-          setShowModal(false);
+          setShowEditModal(false);
         }}
-        show={showModal}
+        show={showEditModal}
       ></EditCardModal>
+
       <CardEditorTable
         onEditClick={(id) => {
-          setShowModal(true);
+          setShowEditModal(true);
           setCardToEdit(props.cards.find((c) => c.id == id));
+        }}
+        onViewClick={(id) => {
+          setViewedCard(props.cards.find((c) => c.id == id));
+          setViewShowModal(true);
         }}
         cards={props.cards}
         stat={props.stats}

@@ -1,5 +1,5 @@
 import { Card as BCard } from "@prisma/client";
-import { rarityToBG } from "./card_preview";
+import { rarityToBGColor } from "./card_preview";
 import {
   FaCat,
   FaSkull,
@@ -11,6 +11,7 @@ import {
   FaBiohazard,
   FaGem,
 } from "react-icons/fa";
+import CardFormatter from "@/lib/CardFormatter";
 
 interface BrandonCardProps {
   card?: BCard;
@@ -23,7 +24,7 @@ export const hiddenCardImageURL = "https://i.imgur.com/5dW0nSj.png";
 
 export default function BransonCard(props: BrandonCardProps) {
   let card = props.card;
-  let cardBg = rarityToBG(props.card?.rarity || "");
+  let cardBg = rarityToBGColor(props.card?.rarity || "");
   let imgSrc = missingCardImageURL;
   let hidden = props.hidden;
   if (props.hidden) {
@@ -45,6 +46,7 @@ export default function BransonCard(props: BrandonCardProps) {
         className="shadow-lgtext-bold center border-4 text-bold border-gray-500 rounded aspect-square"
         alt={hidden ? "???" : card?.title}
         src={imgSrc}
+        draggable={false}
       />
       <div className="flex justify-center">
         <div className="flex w-full justify-between my-1 bg-gray-100/70 border border-gray-600 shadow-lg rounded">
@@ -53,7 +55,9 @@ export default function BransonCard(props: BrandonCardProps) {
         </div>
       </div>
       <div className="bg-gray-100 border border-gray-600 shadow-lg rounded p-1">
-        <h1 className="p-1 mb-5 text-sm">{hidden ? "???" : card?.desc}</h1>
+        <div className="p-1 mb-5 text-sm">
+          <CardFormatter text={hidden ? "???" : card?.desc}></CardFormatter>
+        </div>
         {card?.quote && (
           <span className="text-xs text-gray-500 dark:text-gray-400">
             <hr className="h-px text-xs w-fill bg-gray-200 border-5 dark:bg-gray-700" />

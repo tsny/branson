@@ -4,6 +4,7 @@ import { deleteCard } from "@/app/actions";
 import { Card } from "@prisma/client";
 import { TableRow, TableCell, Button } from "flowbite-react";
 import { HiPencil, HiTrash } from "react-icons/hi";
+import { rarityToBGColor } from "../card_preview";
 
 interface CardRowProps {
   card: Card;
@@ -11,11 +12,16 @@ interface CardRowProps {
   id: number;
   title: string;
   onEditClick: (id: number) => void;
+  onViewClick: (id: number) => void;
 }
 
-export default function CardRow(props: CardRowProps) {
+export default function CardEditorRow(props: CardRowProps) {
+  const bg = rarityToBGColor(props.card.rarity);
+
   return (
-    <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
+    <TableRow
+      className={"bg-white dark:border-gray-700 dark:bg-gray-800 " + bg}
+    >
       <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
         {props.card.title}
       </TableCell>
@@ -26,7 +32,14 @@ export default function CardRow(props: CardRowProps) {
         {props.chance}%
       </TableCell>
       <TableCell>
-        <div className="flex flex-wrap items-start gap-1">
+        <div className={"flex flex-wrap items-start gap-1 "}>
+          <Button
+            size={"xs"}
+            color={"green"}
+            onClick={() => props.onViewClick(props.id)}
+          >
+            View
+          </Button>
           <Button size={"xs"} onClick={() => props.onEditClick(props.id)}>
             Edit
           </Button>

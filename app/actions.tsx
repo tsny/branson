@@ -1,8 +1,9 @@
 "use server";
 
 import { authConfig } from "@/lib/auth";
-import { Cord, getRandomCard } from "@/lib/cards";
+import { getRandomCard, rarityToDust } from "@/lib/cards";
 import prisma from "@/lib/prisma";
+import { Cord } from "@/lib/prisma";
 import { Card, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
@@ -324,6 +325,7 @@ export async function createOrUpdateCard(formData: FormData) {
       data: {
         title: title,
         rarity: rarity.toUpperCase(),
+        dustValue: rarityToDust(rarity),
         type: type,
         desc: desc,
         quote: quote,
@@ -333,6 +335,29 @@ export async function createOrUpdateCard(formData: FormData) {
     });
   }
   revalidatePath("/");
+}
+
+export async function spinTheWheel(maxNum: number) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const randomNumber = Math.floor(Math.random() * maxNum) + 1;
+  console.log("%s spun a %s", user.id, randomNumber);
+  await prisma.user.update({
+    data: {
+      boins: {
+        increment: randomNumber,
+      },
+      lastSpin: new Date(),
+    },
+    where: {
+      id: user.id,
+    },
+  });
+  await incrementBoin(user.id, randomNumber);
+  revalidatePath("/");
+  revalidatePath("/inventory");
 }
 
 export async function createNewDBUser(
@@ -381,6 +406,7 @@ export async function buyPackFromForm(formData: FormData) {
 export async function buyPack(userid: number) {
   const user = await findUserByID(userid);
   if (!user || user.boins < 1) {
+    revalidatePath("/");
     return;
   }
   await prisma.user.update({
@@ -396,7 +422,8 @@ export async function buyPack(userid: number) {
 
 export async function unwrapPack(formData: FormData) {
   const user = await getCurrentDBUser();
-  if (!user) {
+  if (!user || user.numPacks <= 0) {
+    revalidatePath("/");
     return;
   }
   let allCards: Card[] = await prisma.card.findMany();

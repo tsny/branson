@@ -14,15 +14,26 @@ export function getRandomCard(cards: Card[]): Card {
   return cards[cards.length - 1];
 }
 
-// 1: Define a type that includes the relation to `Post`
-// const userWithPosts = Prisma.validator<Prisma.UserDefaultArgs>()({
-//   include: { posts: true },
-// });
+export function rarityToDust(rarity: string): number {
+  switch (rarity.toLowerCase()) {
+    case "common":
+      return 10;
+    case "rare":
+      return 30;
+    case "epic":
+      return 50;
+    case "legendary":
+      return 100;
+    default:
+      return 10;
+  }
+}
 
-// 2: Define a type that only contains a subset of the scalar fields
-const userPersonalData = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
-  include: { card: true },
-});
-
-// 3: This type will include a user and all their posts
-export type Cord = Prisma.CardOwnershipGetPayload<typeof userPersonalData>;
+export function getMinutes(date1: Date, date2: Date): number {
+  const differenceInMillis = date1.getTime() - date2.getTime();
+  if (differenceInMillis <= 0) {
+    return 0;
+  }
+  const minutesDifference = Math.floor(differenceInMillis / (1000 * 60));
+  return minutesDifference;
+}

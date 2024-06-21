@@ -10,11 +10,9 @@ export default async function Home() {
   const stats = await getCardChances();
   return (
     <div className="overflow-x-auto">
-      <h1 className="text-2xl font-bold text-center text-gray-800 pt-8 mb-8">
+      <h1 className="text-2xl font-bold text-center text-gray-800 pt-4 ">
         Card Editor
       </h1>
-      {/* <EditCardModal show={false}></EditCardModal>
-      <CardTable cards={cards}></CardTable> */}
       <EditorMain stats={stats} cards={cards}></EditorMain>
     </div>
   );

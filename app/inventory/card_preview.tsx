@@ -21,7 +21,7 @@ export default function CardPreview(props: CardPreviewProps) {
   let [hidden, setHidden] = useState(props.hidden);
   let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
 
-  let cardBg = rarityToBG(props.card.rarity);
+  let cardBg = rarityToBGColor(props.card.rarity);
   if (props.isFoil) {
     cardBg += " bg-holographic";
   }
@@ -51,7 +51,7 @@ export default function CardPreview(props: CardPreviewProps) {
   };
 
   return (
-    <div className={cardBg + " rounded " + borderCSS}>
+    <div className={cardBg + " rounded cursor-pointer " + borderCSS}>
       <div className="w-full mb-4">
         <img
           className="w-full"
@@ -63,10 +63,7 @@ export default function CardPreview(props: CardPreviewProps) {
         ></img>
       </div>
       <div onClick={handleLowerHalfClick} className="flex justify-center">
-        <h1
-          // onClick={handleLowerHalfClick}
-          className="mb-4 text-xs text-center font-bold"
-        >
+        <h1 className="mb-4 text-xs text-center font-bold">
           {hidden ? "???" : props.card.title}
         </h1>
       </div>
@@ -74,7 +71,7 @@ export default function CardPreview(props: CardPreviewProps) {
   );
 }
 
-export function rarityToBG(rarity: string) {
+export function rarityToBGColor(rarity: string) {
   let cardBg = "p-0 ";
   switch (rarity.toUpperCase()) {
     case "EPIC":

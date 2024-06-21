@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Modal } from "flowbite-react";
+import { Modal } from "flowbite-react";
 import BransonCard from "./card";
 import { Card as BCard } from "@prisma/client";
+import SwipeableModal from "./editor/swiper";
 
 interface ViewCardProps {
   show: boolean;
@@ -11,6 +12,12 @@ interface ViewCardProps {
 }
 
 export function CardModal(props: ViewCardProps) {
+  return (
+    <SwipeableModal show={props.show} onClose={props.onClose}>
+      <BransonCard card={props.card}></BransonCard>
+    </SwipeableModal>
+  );
+
   return (
     <Modal
       dismissible={true}

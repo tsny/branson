@@ -1,28 +1,42 @@
-import { buyPackFromForm } from "@/app/actions";
+import { spinTheWheel } from "@/app/actions";
 import HelpButton from "@/app/helpButton";
-import NumberSpin from "@/app/random";
 import { Card, Button } from "flowbite-react";
+import WheelProgress from "./wheen-progress";
+import { getMinutes } from "@/lib/cards";
 
-export default function WheelSpinner() {
+interface WheelSpinnerProps {
+  lastSpin: Date;
+  spinDisabled: boolean;
+}
+
+export default async function WheelSpinner(props: WheelSpinnerProps) {
+  let nextSpin = props.lastSpin;
+  nextSpin.setHours(nextSpin.getHours() + 1);
+  let now = new Date();
+  const minutesTillSpin = getMinutes(nextSpin, now);
+
   return (
     <Card className="rounded border border-gray-800">
       <div className="underline">Spin The Wheel</div>
-      <div className="text-xs">
-        The next time you can spin the wheel is blank
-      </div>
-      <NumberSpin val={3} delay={8}></NumberSpin>
-      <form className="flex justify-between" action={buyPackFromForm}>
+      <WheelProgress nextSpin={nextSpin}></WheelProgress>
+      <form
+        className="flex justify-between"
+        action={async (formData) => {
+          "use server";
+          await spinTheWheel(10);
+        }}
+      >
         <Button
           size={"sm"}
-          disabled={true}
+          disabled={props.spinDisabled || minutesTillSpin > 0}
           gradientDuoTone="cyanToBlue"
           type="submit"
         >
           Spin
         </Button>
         <HelpButton
-          title="What is dust"
-          content="In your inventory, sell cards to get dust"
+          title="Spin the wheel"
+          content="Every hour you can spin the wheel for some extra boins"
         ></HelpButton>
       </form>
     </Card>

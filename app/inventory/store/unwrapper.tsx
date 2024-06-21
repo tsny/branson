@@ -22,6 +22,7 @@ export default function Unwrapper(props: UnwrapperProps) {
   let onRevealFinished = () => {
     setRevealOngoing(false);
   };
+  console.log(unwrappedCards.length);
 
   return (
     <div>
@@ -32,14 +33,16 @@ export default function Unwrapper(props: UnwrapperProps) {
       ></CardModal>
       <form
         className="flex justify-center"
+        onSubmit={() => setRevealOngoing(true)}
         action={async (formData) => {
           let cards = await unwrapPack(formData);
           if (!cards) {
+            console.log("err unwrapping pack");
             return;
           }
           setUnwrappedCards(cards);
+          console.log("setting unwrapped cards to " + cards);
           setRevealCards(true);
-          setRevealOngoing(true);
         }}
       >
         <Button
@@ -55,15 +58,17 @@ export default function Unwrapper(props: UnwrapperProps) {
           content="Buy a pack and see what's inside! Tap the card's image to view more details!"
         ></HelpButton>
       </form>
-      <CardRevealer
-        onRevealFinished={onRevealFinished}
-        cards={unwrappedCards}
-        start={revealCards}
-        onPreviewClick={(c) => {
-          setSelectedCard(c);
-          setShowModal(true);
-        }}
-      ></CardRevealer>
+      {unwrappedCards.length > 0 && (
+        <CardRevealer
+          onRevealFinished={onRevealFinished}
+          cards={unwrappedCards}
+          start={revealCards}
+          onPreviewClick={(c) => {
+            setSelectedCard(c);
+            setShowModal(true);
+          }}
+        ></CardRevealer>
+      )}
     </div>
   );
 }
