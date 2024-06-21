@@ -4,7 +4,7 @@ import { Card } from "@prisma/client";
 import { Button } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import CatalogMain from "./catalog/catalog_main";
-import { Cord } from "@/lib/cards";
+import { Cord } from "@/lib/prisma";
 import { sellCards } from "../actions";
 import HelpButton from "../helpButton";
 

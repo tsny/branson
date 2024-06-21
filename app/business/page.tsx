@@ -11,7 +11,7 @@ export default function Page() {
 
 function HeaderBlock() {
   return (
-    <div className="rounded bg-white p-2 m-2">
+    <div className="rounded border-gray-300 border-2 bg-white p-2 m-2">
       <p className="text-xl text-bold mb-1">Business</p>
       <p className="text-sm text-bold mb-2">
         Business is the best thing on the planet

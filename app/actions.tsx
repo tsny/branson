@@ -154,6 +154,18 @@ export async function deletePost(postID: number) {
   revalidatePath("/");
 }
 
+export async function setUserRole(userID: number, role: string) {
+  await prisma.user.update({
+    data: {
+      role: role,
+    },
+    where: {
+      id: userID,
+    },
+  });
+  revalidatePath("/");
+}
+
 export async function createRule(formData: FormData) {
   let content = formData.get("ruleText") as string;
   let author = formData.get("author") as string;

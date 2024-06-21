@@ -7,6 +7,7 @@ import { getMinutes } from "@/lib/cards";
 interface WheelSpinnerProps {
   lastSpin: Date;
   spinDisabled: boolean;
+  maxBoins: number;
 }
 
 export default async function WheelSpinner(props: WheelSpinnerProps) {
@@ -23,7 +24,7 @@ export default async function WheelSpinner(props: WheelSpinnerProps) {
         className="flex justify-between"
         action={async (formData) => {
           "use server";
-          await spinTheWheel(10);
+          await spinTheWheel(props.maxBoins);
         }}
       >
         <Button

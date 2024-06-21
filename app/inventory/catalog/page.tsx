@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import CatalogMain, { CatalogCard } from "./catalog_main";
 import InvLinkHeader from "../linkHeader";
 import { getCordsForUser, getCurrentDBUser } from "@/app/actions";
-import { Cord } from "@/lib/cards";
+import { Cord } from "@/lib/prisma";
 
 export default async function CatalogPage() {
   let allCards: Card[] = await prisma.card.findMany({
@@ -34,6 +34,7 @@ export default async function CatalogPage() {
       <CatalogMain
         showCheckboxes={false}
         catalogCards={catalogCards}
+        titleTapViewsCard={true}
       ></CatalogMain>
     </div>
   );

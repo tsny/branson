@@ -4,7 +4,7 @@ import { Card } from "@prisma/client";
 import CardPreview from "../card_preview";
 import { CardModal } from "../ViewCardModal";
 import { ReactNode, useState } from "react";
-import { Cord } from "@/lib/cards";
+import { Cord } from "@/lib/prisma";
 
 export interface CatalogCard {
   card: Card;
@@ -19,24 +19,32 @@ interface CatalogMainProps {
   showCheckboxes: boolean;
   selectedIDs?: number[];
   onChecked?: (card: Card, ownershipID: number) => void;
+  titleTapViewsCard?: boolean;
 }
 
 export default function CatalogMain(props: CatalogMainProps) {
   let [selectedCard, setSelectedCard] = useState<Card>();
   let [showModal, setShowModal] = useState(false);
 
+  const viewCard = (c: Card) => {
+    setSelectedCard(c);
+    setShowModal(true);
+  };
+
   let body: ReactNode;
   if (props.catalogCards) {
     body = props.catalogCards.map((c, i) => {
       return (
         <CardPreview
-          onImgClick={() => {
-            setSelectedCard(c.card);
-            setShowModal(true);
-          }}
+          onImgClick={() => viewCard(c.card)}
           key={i}
           card={c.card}
           hidden={c.hidden}
+          onChecked={() => {
+            if (props.titleTapViewsCard) {
+              viewCard(c.card);
+            }
+          }}
         ></CardPreview>
       );
     });
@@ -44,7 +52,6 @@ export default function CatalogMain(props: CatalogMainProps) {
 
   if (props.cords) {
     body = props.cords.map((c, i) => {
-      // console.log(c.id, props.selectedCards?.indexOf(c.id));
       return (
         <CardPreview
           onImgClick={() => {
@@ -73,7 +80,7 @@ export default function CatalogMain(props: CatalogMainProps) {
         show={showModal}
         card={selectedCard}
       ></CardModal>
-      <div className="m-2 grid grid-cols-3 gap-2">{body}</div>
+      <div className="m-2 grid grid-cols-4 gap-1">{body}</div>
     </div>
   );
 }

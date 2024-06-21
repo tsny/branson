@@ -5,12 +5,15 @@ import HelpButton from "@/app/helpButton";
 import Unwrapper from "./unwrapper";
 import WheelSpinner from "./wheel";
 import PurchaseCard from "./purchase";
+import { getConfigAsNumber } from "@/lib/prisma";
 
 export default async function Store() {
   const user = await getCurrentDBUser();
   if (!user) {
     return <div>not logged in!</div>;
   }
+  const packDustCost = await getConfigAsNumber("pack.dust.cost");
+  const maxSpinBoins = await getConfigAsNumber("spin.max.boins");
 
   return (
     <div className="p-1">
@@ -22,13 +25,16 @@ export default async function Store() {
 
       <div className="grid grid-cols-2 gap-2 mt-2">
         <WheelSpinner
+          maxBoins={maxSpinBoins}
           spinDisabled={false}
           lastSpin={user.lastSpin || new Date()}
         ></WheelSpinner>
 
         <Card className="rounded border border-gray-800">
           <div className="underline">Dust</div>
-          <div className="text-xs">Convert 100 Dust to 1 Bitboin</div>
+          <div className="text-xs">
+            Convert {packDustCost} Dust to 1 Bitboin
+          </div>
           <div className="text-xs">You have {user.dust} dust</div>
           <form className="flex justify-between" action={convertDustToPack}>
             <Button

@@ -20,6 +20,7 @@ interface CardPreviewProps {
 export default function CardPreview(props: CardPreviewProps) {
   let [hidden, setHidden] = useState(props.hidden);
   let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
+  const card = props.card;
 
   let cardBg = rarityToBGColor(props.card.rarity);
   if (props.isFoil) {
@@ -36,17 +37,16 @@ export default function CardPreview(props: CardPreviewProps) {
       setTimeout(() => {
         setHidden(false);
         setCardImgURL(imgUrl);
-        console.log("reveal");
         if (props.onRevealFinished) {
-          props.onRevealFinished(props.card);
+          props.onRevealFinished(card);
         }
       }, 1000 * (props.revealPauseInSeconds || 1));
     }
-  }, [props.card]);
+  }, [card]);
 
   let handleLowerHalfClick = () => {
     if (props.onChecked) {
-      props.onChecked(props.card);
+      props.onChecked(card);
     }
   };
 
@@ -56,15 +56,15 @@ export default function CardPreview(props: CardPreviewProps) {
         <img
           className="w-full"
           onClick={() => {
-            if (props.onImgClick) props.onImgClick(props.card);
+            if (props.onImgClick) props.onImgClick(card);
           }}
           src={hidden ? hiddenCardImageURL : imgUrl}
-          alt={props.card.title}
+          alt={card.title}
         ></img>
       </div>
       <div onClick={handleLowerHalfClick} className="flex justify-center">
         <h1 className="mb-4 text-xs text-center font-bold">
-          {hidden ? "???" : props.card.title}
+          {hidden ? "???" : card.title}
         </h1>
       </div>
     </div>

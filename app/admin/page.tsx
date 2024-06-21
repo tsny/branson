@@ -1,4 +1,3 @@
-import BNavbar from "../navbar";
 import {
   Avatar,
   Button,
@@ -10,13 +9,14 @@ import {
   TableHead,
   TableHeadCell,
   TableRow,
+  TextInput,
 } from "flowbite-react";
 import prisma from "@/lib/prisma";
 import {
   getSessionUser,
   giveAllUsersBoins,
-  setUserBoins,
   setUserBoinsFromForm,
+  setUserRole,
 } from "../actions";
 
 export default async function Page() {
@@ -37,12 +37,42 @@ export default async function Page() {
         <form className="flex" action={setUserBoinsFromForm}>
           <input name="boins" defaultValue={u.boins} type="number"></input>
           <input name="userid" defaultValue={u.id} hidden></input>
-          <Button color="success" className="ml-2 inline" type="submit">
+          <Button
+            color="success"
+            size={"sm"}
+            className="ml-2 inline"
+            type="submit"
+          >
             Save
           </Button>
         </form>
       </TableCell>
-      <TableCell>{u.role}</TableCell>
+      <TableCell>
+        <form
+          className="flex"
+          action={async (formData) => {
+            "use server";
+            const role = formData.get("role") as string;
+            const userid = formData.get("userid") as string;
+            await setUserRole(+userid, role);
+          }}
+        >
+          <TextInput
+            width={20}
+            name="role"
+            defaultValue={u.role ?? "user"}
+          ></TextInput>
+          <input name="userid" defaultValue={u.id} hidden></input>
+          <Button
+            color="success"
+            size={"sm"}
+            className="ml-2 inline"
+            type="submit"
+          >
+            Save
+          </Button>
+        </form>
+      </TableCell>
     </TableRow>
   ));
 
