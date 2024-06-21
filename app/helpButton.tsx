@@ -26,7 +26,7 @@ export default function HelpButton(props: HelpButtonProps) {
         </div>
       }
     >
-      <Button pill className="text-3xl self-center ">
+      <Button className="text-3xl self-center ">
         <HiQuestionMarkCircle className="h-4 w-4" />
       </Button>
     </Popover>

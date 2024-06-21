@@ -17,11 +17,12 @@ export default async function WheelSpinner(props: WheelSpinnerProps) {
   const minutesTillSpin = getMinutes(nextSpin, now);
 
   return (
-    <Card className="rounded border border-gray-800">
-      <div className="underline">Spin The Wheel</div>
+    <div className="rounded bg-white border border-gray-800 text-center p-1">
+      <div className="font-bold">Spin The Wheel</div>
+      <hr className="pb-2"></hr>
       <WheelProgress nextSpin={nextSpin}></WheelProgress>
       <form
-        className="flex justify-between"
+        className="flex justify-center gap-1 pt-6"
         action={async (formData) => {
           "use server";
           await spinTheWheel(props.maxBoins);
@@ -40,6 +41,6 @@ export default async function WheelSpinner(props: WheelSpinnerProps) {
           content="Every hour you can spin the wheel for some extra boins"
         ></HelpButton>
       </form>
-    </Card>
+    </div>
   );
 }

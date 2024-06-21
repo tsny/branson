@@ -20,6 +20,8 @@ export default function WheelProgress(props: WheelProgressProps) {
   const minutes = getMinutes(props.nextSpin, now);
 
   return (
-    <div>The next time you can spin the wheel is in {minutes} minutes</div>
+    <div className="text-sm">
+      The next time you can spin the wheel is in <b>{minutes} minutes</b>
+    </div>
   );
 }

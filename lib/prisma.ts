@@ -41,7 +41,7 @@ export async function getConfigValueWithNumberDefault(
   return val ? +val : d;
 }
 
-const userPersonalData = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
+const userWithCards = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
   include: { card: true },
 });
 
@@ -50,4 +50,6 @@ const postWithUser = Prisma.validator<Prisma.PostDefaultArgs>()({
 });
 
 export type PostExt = Prisma.PostGetPayload<typeof postWithUser>;
-export type Cord = Prisma.CardOwnershipGetPayload<typeof userPersonalData>;
+
+// A Cord is card ownership payload with the user
+export type Cord = Prisma.CardOwnershipGetPayload<typeof userWithCards>;

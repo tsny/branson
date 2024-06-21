@@ -4,7 +4,7 @@ import { authConfig } from "@/lib/auth";
 import { getRandomCard, rarityToDust } from "@/lib/cards";
 import prisma from "@/lib/prisma";
 import { Cord } from "@/lib/prisma";
-import { Card, CardOwnership, User } from "@prisma/client";
+import { Card, CardHistory, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -455,6 +455,7 @@ export async function unwrapPack(formData: FormData) {
     ownerships.push(ownership);
     cards.push(card);
     console.log("%s unwrapped %s", user.firstName, card.title);
+    await upsertCardHistory(card.id, user.id);
   }
   await prisma.user.update({
     where: {
@@ -468,6 +469,26 @@ export async function unwrapPack(formData: FormData) {
   revalidatePath("/inventory");
 
   return cards;
+}
+
+async function upsertCardHistory(cardID: number, userID: number) {
+  const cardHistory = await prisma.cardHistory.findFirst({
+    where: {
+      userId: userID,
+      cardId: cardID,
+    },
+  });
+  if (cardHistory) {
+    return;
+  }
+
+  await prisma.cardHistory.create({
+    data: {
+      action: "SEEN",
+      cardId: cardID,
+      userId: userID,
+    },
+  });
 }
 
 export interface CardStats {
@@ -488,6 +509,35 @@ export async function getCardChances(): Promise<CardStats[]> {
     id: card.id,
     card: card,
   }));
+}
+
+export async function getCardHistory(userid: number): Promise<CardHistory[]> {
+  return await prisma.cardHistory.findMany({
+    where: {
+      userId: userid,
+    },
+    include: {
+      card: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+}
+
+export async function getKnownCards(userid: number): Promise<Card[]> {
+  const cards = await prisma.cardHistory.findMany({
+    where: {
+      userId: userid,
+    },
+    include: {
+      card: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
+  return cards.map((c) => c.card);
 }
 
 export async function getCordsForUser(userid: number): Promise<Cord[]> {

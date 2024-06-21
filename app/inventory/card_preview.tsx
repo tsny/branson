@@ -1,6 +1,5 @@
 "use client";
 import { Card as BCard } from "@prisma/client";
-import { Checkbox } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { hiddenCardImageURL } from "./card";
 
@@ -22,11 +21,11 @@ export default function CardPreview(props: CardPreviewProps) {
   let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
   const card = props.card;
 
-  let cardBg = rarityToBGColor(props.card.rarity);
+  let cardBg = rarityToBGColor(card.rarity);
   if (props.isFoil) {
     cardBg += " bg-holographic";
   }
-  let imgUrl = props.card.imageURL || "";
+  let imgUrl = card.imageURL || "";
   let borderCSS = props.checked
     ? "border-4 border-blue-600"
     : "border border-gray-600";
@@ -45,7 +44,7 @@ export default function CardPreview(props: CardPreviewProps) {
   }, [card]);
 
   let handleLowerHalfClick = () => {
-    if (props.onChecked) {
+    if (!hidden && props.onChecked) {
       props.onChecked(card);
     }
   };
@@ -54,9 +53,9 @@ export default function CardPreview(props: CardPreviewProps) {
     <div className={cardBg + " rounded cursor-pointer " + borderCSS}>
       <div className="w-full mb-4">
         <img
-          className="w-full"
+          className={"w-full " + borderCSS}
           onClick={() => {
-            if (props.onImgClick) props.onImgClick(card);
+            if (props.onImgClick && !hidden) props.onImgClick(card);
           }}
           src={hidden ? hiddenCardImageURL : imgUrl}
           alt={card.title}
