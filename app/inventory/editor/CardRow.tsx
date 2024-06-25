@@ -3,7 +3,6 @@
 import { deleteCard } from "@/app/actions";
 import { Card } from "@prisma/client";
 import { TableRow, TableCell, Button } from "flowbite-react";
-import { HiPencil, HiTrash } from "react-icons/hi";
 import { rarityToBGColor } from "../card_preview";
 
 interface CardRowProps {
@@ -20,9 +19,11 @@ export default function CardEditorRow(props: CardRowProps) {
 
   return (
     <TableRow
-      className={"bg-white dark:border-gray-700 dark:bg-gray-800 " + bg}
+      className={
+        "bg-white font-bold dark:border-gray-700 dark:bg-gray-800 " + bg
+      }
     >
-      <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
+      <TableCell className="font-bold text-xs text-gray-900 dark:text-white">
         {props.card.title}
       </TableCell>
       <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
@@ -30,6 +31,9 @@ export default function CardEditorRow(props: CardRowProps) {
       </TableCell>
       <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
         {props.chance}%
+      </TableCell>
+      <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
+        {props.card.type}
       </TableCell>
       <TableCell>
         <div className={"flex flex-wrap items-start gap-1 "}>

@@ -1,5 +1,4 @@
 import { isAdmin } from "../actions";
-import BNavbar from "../navbar";
 import RuleForm from "./ruleform";
 import RuleList from "./rulelist";
 
@@ -9,7 +8,6 @@ export default async function RulesPage() {
   let isUserAdmin = await isAdmin();
   return (
     <div>
-      <BNavbar></BNavbar>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center">
         <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
           Branson Rules

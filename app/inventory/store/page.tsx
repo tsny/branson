@@ -1,4 +1,4 @@
-import { Button, Card } from "flowbite-react";
+import { Button } from "flowbite-react";
 import InvLinkHeader from "../linkHeader";
 import { convertDustToPack, getCurrentDBUser } from "@/app/actions";
 import HelpButton from "@/app/helpButton";

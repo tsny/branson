@@ -53,7 +53,7 @@ export default function CardPreview(props: CardPreviewProps) {
     <div className={cardBg + " rounded cursor-pointer " + borderCSS}>
       <div className="w-full mb-4">
         <img
-          className={"w-full " + borderCSS}
+          className={"w-full"}
           onClick={() => {
             if (props.onImgClick && !hidden) props.onImgClick(card);
           }}

@@ -23,9 +23,29 @@ export async function getConfigAsNumber(configName: string) {
   return val ? +val : -1;
 }
 
-export async function getConfigValueWithDefault(configName: string, d: string) {
+export async function getConfigWithDefault(configName: string, d: string) {
   const val = await getConfig(configName);
   return val ?? d;
+}
+
+/**
+ * Returns whether the config value is the expected value
+ */
+export async function assertConfig(configName: string, expected: string) {
+  const val = await getConfig(configName);
+  return val === expected;
+}
+
+export async function updateConfigWithValue(cfg: string, value: string) {
+  console.log("updating %s: %s", cfg, value);
+  await prisma.config.update({
+    where: {
+      name: cfg,
+    },
+    data: {
+      value: value,
+    },
+  });
 }
 
 export async function getConfigValueWithNumberDefault(

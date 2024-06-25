@@ -19,7 +19,7 @@ export default async function RuleList() {
             <div className="tracking-tight text-gray-900 dark:text-white">
               Fine: {rule.fine} boin
             </div>
-            <div className="tracking-tight text-gray-900 dark:text-white">
+            <div className="tracking-tight text-gray-900 dark:text-white mb-4">
               Author: {rule.authorName}
             </div>
             <DeleteRuleButton ruleID={rule.id}></DeleteRuleButton>

@@ -23,16 +23,13 @@ export default function SellerPanel(props: SellerPanelProps) {
     const index = selectedCards.indexOf(ownershipId);
     const selectingCard = index === -1;
     if (selectingCard) {
-      console.log("selecting %s", ownershipId);
       setDust(dust + card.dustValue);
       selectedCards.push(ownershipId);
-      setSelectedCards(selectedCards);
     } else {
-      console.log("unselecting %s", ownershipId);
       setDust(dust - card.dustValue);
       selectedCards.splice(index, 1);
-      setSelectedCards(selectedCards);
     }
+    setSelectedCards(selectedCards);
     console.log(selectedCards);
   };
 

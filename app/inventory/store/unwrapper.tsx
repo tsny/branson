@@ -15,12 +15,12 @@ interface UnwrapperProps {
 export default function Unwrapper(props: UnwrapperProps) {
   let [unwrappedCards, setUnwrappedCards] = useState<Card[]>([]);
   let [revealCards, setRevealCards] = useState(false);
-  let [revealOngoing, setRevealOngoing] = useState(false);
+  let [revealing, setRevealing] = useState(false);
   let [showModal, setShowModal] = useState(false);
   let [selectedCard, setSelectedCard] = useState<Card>();
 
   let onRevealFinished = () => {
-    setRevealOngoing(false);
+    setRevealing(false);
   };
   console.log(unwrappedCards.length);
 
@@ -33,7 +33,7 @@ export default function Unwrapper(props: UnwrapperProps) {
       ></CardModal>
       <form
         className="flex justify-center"
-        onSubmit={() => setRevealOngoing(true)}
+        onSubmit={() => setRevealing(true)}
         action={async (formData) => {
           let cards = await unwrapPack(formData);
           if (!cards) {
@@ -47,7 +47,7 @@ export default function Unwrapper(props: UnwrapperProps) {
       >
         <Button
           className="mr-2"
-          disabled={props.unpackBtnDisabled || revealOngoing}
+          disabled={props.unpackBtnDisabled || revealing}
           gradientDuoTone="pinkToOrange"
           type="submit"
         >
@@ -59,15 +59,22 @@ export default function Unwrapper(props: UnwrapperProps) {
         ></HelpButton>
       </form>
       {unwrappedCards.length > 0 && (
-        <CardRevealer
-          onRevealFinished={onRevealFinished}
-          cards={unwrappedCards}
-          start={revealCards}
-          onPreviewClick={(c) => {
-            setSelectedCard(c);
-            setShowModal(true);
-          }}
-        ></CardRevealer>
+        <div>
+          {revealing && (
+            <h1 className="mt-5 animate-pulse">
+              Revealing your cards, hold on...
+            </h1>
+          )}
+          <CardRevealer
+            onRevealFinished={onRevealFinished}
+            cards={unwrappedCards}
+            start={revealCards}
+            onPreviewClick={(c) => {
+              setSelectedCard(c);
+              setShowModal(true);
+            }}
+          ></CardRevealer>
+        </div>
       )}
     </div>
   );

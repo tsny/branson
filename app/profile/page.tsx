@@ -37,10 +37,10 @@ export default async function ProfilePage() {
             <TableCell>Upboins Given</TableCell>
             <TableCell>11</TableCell>
           </TableRow>
-          {/* <TableRow>
+          <TableRow>
             <TableCell>Packs Opened</TableCell>
             <TableCell>11</TableCell>
-          </TableRow> */}
+          </TableRow>
         </TableBody>
       </Table>
 

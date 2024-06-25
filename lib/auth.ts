@@ -10,6 +10,7 @@ export const authConfig: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (profile?.email === undefined || profile?.name === undefined) {
@@ -24,6 +25,7 @@ export const authConfig: NextAuthOptions = {
       }
       return true;
     },
+
     async session({ session, token }) {
       if (session?.user?.email) {
         let dbUser = await findUserByEmail(session.user?.email);

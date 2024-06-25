@@ -1,9 +1,12 @@
-import prisma from "@/lib/prisma";
+import prisma, { getConfigWithDefault } from "@/lib/prisma";
 import Post from "./post";
 
 export const dynamic = "force-dynamic";
 
 export default async function PostList() {
+  const anonVal = await getConfigWithDefault("compliments.anon", "false");
+  const anon = anonVal === "true";
+
   let posts = await prisma.post.findMany({
     orderBy: [{ id: "desc" }],
     include: {
@@ -11,5 +14,7 @@ export default async function PostList() {
     },
   });
 
-  return posts.map((post) => <Post key={post.id} post={post}></Post>);
+  return posts.map((post) => (
+    <Post key={post.id} anon={anon} post={post}></Post>
+  ));
 }

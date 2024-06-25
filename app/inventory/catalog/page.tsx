@@ -1,5 +1,5 @@
 import { Card } from "@prisma/client";
-import prisma from "@/lib/prisma";
+import prisma, { assertConfig, getConfigWithDefault } from "@/lib/prisma";
 import CatalogMain, { CatalogCard } from "./catalog_main";
 import InvLinkHeader from "../linkHeader";
 import { getCurrentDBUser, getKnownCards } from "@/app/actions";
@@ -21,10 +21,11 @@ export default async function CatalogPage() {
     allCards.length
   );
 
+  const allCardsKnown = await assertConfig("btg.reveal.all", "true");
   const knownIDs = knownCards.map((c) => c.id);
 
   let catalogCards: CatalogCard[] = allCards.map((c) => {
-    let known = knownIDs.includes(c.id);
+    let known = knownIDs.includes(c.id) || allCardsKnown;
     return { card: c, hidden: !known };
   });
 

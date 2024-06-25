@@ -81,8 +81,8 @@ export async function submitPost(formData: FormData) {
   if (session === undefined || session?.user === undefined) {
     return;
   }
-  let email = session.user.email?.toString();
 
+  let email = session.user.email?.toString();
   let author = await prisma.user.findFirst({
     where: {
       email: { equals: email },
@@ -91,6 +91,12 @@ export async function submitPost(formData: FormData) {
 
   if (author == null) {
     console.log("author null for " + email);
+    return;
+  }
+
+  const numPosts = await prisma.post.count({ where: { authorID: author.id } });
+  if (numPosts > 100) {
+    console.log("user %s has too many posts", author.firstName);
     return;
   }
 

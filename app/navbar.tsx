@@ -1,7 +1,5 @@
 import { authConfig } from "@/lib/auth";
 import {
-  Dropdown,
-  DropdownItem,
   Navbar,
   NavbarBrand,
   NavbarCollapse,
@@ -12,11 +10,13 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { isUserSuperAdmin } from "./actions";
+import { assertConfig } from "@/lib/prisma";
 
 export default async function BNavbar() {
   const session = await getServerSession(authConfig);
   let loggedIn = session != undefined;
   const isSuper = await isUserSuperAdmin();
+  const isBTGEnabled = await assertConfig("btg.enabled", "true");
 
   const loginSection = loggedIn ? (
     <NavbarLink as={Link} href="/api/auth/signout">
@@ -61,9 +61,9 @@ export default async function BNavbar() {
             Admin
           </NavbarLink>
         )}
-        {isSuper && (
-          <NavbarLink as={Link} href="/inventory">
-            Inventory
+        {(isSuper || isBTGEnabled) && (
+          <NavbarLink className="border" as={Link} href="/inventory">
+            Cards
           </NavbarLink>
         )}
         {isSuper && (
