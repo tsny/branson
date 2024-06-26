@@ -11,7 +11,7 @@ export default async function ProfilePage() {
         <div className="flex justify-end px-4 pt-4"></div>
         <div className="flex flex-col items-center pb-10">
           <Image
-            alt="Bonnie image"
+            alt="user image"
             height="96"
             src={user?.profilePicURL || ""}
             width="96"
@@ -30,16 +30,12 @@ export default async function ProfilePage() {
       <Table striped className="border-collapse border border-slate-500">
         <TableBody>
           <TableRow>
-            <TableCell>Account Created</TableCell>
-            <TableCell>Today</TableCell>
-          </TableRow>
-          <TableRow>
             <TableCell>Upboins Given</TableCell>
-            <TableCell>11</TableCell>
+            <TableCell>{user?.upboinsGiven}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Packs Opened</TableCell>
-            <TableCell>11</TableCell>
+            <TableCell>{user?.packsOpened}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

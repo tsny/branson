@@ -24,33 +24,26 @@ model Post {
 }
 
 model User {
-    id            Int             @id @default(sequence())
-    boins         Int             @default(0)
-    upboinsGiven  Int             @default(0)
-    dust          Int             @default(0)
-    email         String          @unique
-    lastSpin      DateTime        @default(now())
+    id            Int      @id @default(sequence())
+    email         String   @unique
+    lastSpin      DateTime @default(now())
     profilePicURL String?
     firstName     String?
     lastName      String?
-    isAdmin       Boolean         @default(false)
-    role          String?         @default("user")
-    numPacks      Int             @default(0)
+    isAdmin       Boolean  @default(false)
+    role          String?  @default("user")
+
+    boins        Int @default(0)
+    upboinsGiven Int @default(0)
+    dust         Int @default(0)
+    numPacks     Int @default(0)
+    spins        Int @default(0)
+    packsOpened  Int @default(0)
+
     posts         Post[]
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
     Businesses    Business[]
-
-    UserStats UserStats?
-}
-
-model UserStats {
-    id          Int @id @default(sequence())
-    spins       Int @default(0)
-    packsOpened Int @default(0)
-
-    user   User @relation(fields: [userId], references: [id])
-    userId Int  @unique
 }
 
 model Business {

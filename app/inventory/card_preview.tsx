@@ -14,6 +14,7 @@ interface CardPreviewProps {
   onChecked?: (c: BCard) => void;
   checked?: boolean;
   onRevealFinished?: (c: BCard) => void;
+  animate?: boolean;
 }
 
 export default function CardPreview(props: CardPreviewProps) {
@@ -25,10 +26,13 @@ export default function CardPreview(props: CardPreviewProps) {
   if (props.isFoil) {
     cardBg += " bg-holographic";
   }
+  if (props.animate) {
+    cardBg += " fade-in";
+  }
   let imgUrl = card.imageURL || "";
   let borderCSS = props.checked
     ? "border-4 border-blue-600"
-    : "border border-gray-600";
+    : "border-2 border-gray-600";
 
   useEffect(() => {
     if (props.revealSelf) {
@@ -75,14 +79,14 @@ export function rarityToBGColor(rarity: string) {
   switch (rarity.toUpperCase()) {
     case "EPIC":
       cardBg +=
-        "bg-gradient-to-r from-purple-100 to-purple-200 border-purple-500";
+        "bg-gradient-to-r from-purple-300 to-purple-200 border-purple-500";
       break;
     case "RARE":
-      cardBg += "bg-gradient-to-r from-sky-100 to-sky-200 border-blue-500";
+      cardBg += "bg-gradient-to-r from-sky-300 to-sky-200 border-blue-500";
       break;
     case "LEGENDARY":
       cardBg +=
-        "bg-gradient-to-r from-yellow-100 to-yellow-200 border-yellow-500";
+        "bg-gradient-to-r from-yellow-300 to-yellow-200 border-yellow-500";
       break;
     default:
       cardBg += "bg-gradient-to-r from-gray-100 to-gray-200 border-gray-500";

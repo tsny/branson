@@ -1,56 +1,77 @@
-import { Avatar, Button } from "flowbite-react";
-import React from "react";
+import { Avatar } from "flowbite-react";
+import React, { ReactNode } from "react";
 import DeletePostButton from "./deletePostButton";
 import UpBoins from "./upboin";
-import { getCurrentDBUser, findPostByID, isUserSuperAdmin } from "./actions";
-import { Post as BPost } from "@prisma/client";
+import { isUserSuperAdmin } from "./actions";
 import { PostExt } from "@/lib/prisma";
+import { User } from "@prisma/client";
+import { HiStar } from "react-icons/hi";
 
 export interface PostProps {
   post: PostExt;
   anon?: boolean;
+  user?: User | null;
+  upvoteCost?: number;
 }
 
 export default async function Post(props: PostProps) {
-  let dbUser = await getCurrentDBUser();
-
   const post = props.post;
-  const userHasNoBoins = dbUser?.boins ? false : true;
+  const user = props.user;
+  const cost = props.upvoteCost ?? 0;
 
-  const userOwnsPost = dbUser && dbUser.id == post.author.id ? true : false;
-  const canDeletePost = (await isUserSuperAdmin()) || userOwnsPost;
+  const userOwnsPost = user ? user.id == post.author.id : false;
+  const canDeletePost = userOwnsPost || (await isUserSuperAdmin());
+
+  const userHasEnoughBoins = user ? user.boins > cost : false;
+  const disableUpvoteButton = userOwnsPost || !userHasEnoughBoins;
+
   let avatarURL = post.author?.profilePicURL ? post.author.profilePicURL : "";
   const anon = props.anon;
   let username = props.post.author.firstName;
-  if (props.anon) {
+  if (anon) {
     avatarURL = "";
     username = "anonymous";
   }
 
+  let bg = "bg-gray-100";
+  let star: ReactNode[] = [];
+  const stars = Math.floor(post.likes / 30);
+  for (let index = 0; index < stars; index++) {
+    star.push(<HiStar key={index} className="inline" />);
+  }
+
   return (
-    <div className="w-11/12 bg-white border-black-300 rounded-lg shadow-md p-2 m-2">
+    <div
+      className={
+        bg + " w-11/12 border-gray-300 border-2 rounded-lg shadow-md p-2 m-2"
+      }
+    >
       <div className="flex items-start">
         <Avatar img={avatarURL} />
         <div className="ml-4 flex-1">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-xs text-gray-500">@{username}</span>
-              <span className="text-xs text-gray-500 ml-2">
+              <span className="text-xs text-gray-500 ml-2 pr-3">
                 {post.createdAt?.toLocaleString()}
               </span>
+              {star}
             </div>
           </div>
           <p className="mt-2 text-gray-800 text-sm">{post.content}</p>
 
           <div className="flex justify-between">
             <UpBoins
-              disabled={userOwnsPost || userHasNoBoins}
+              disabled={disableUpvoteButton}
               authorID={post.author.id}
               postID={post.id}
               upboins={post.likes}
+              cost={cost}
             ></UpBoins>
             {canDeletePost && (
-              <DeletePostButton postID={post.id}></DeletePostButton>
+              <div className="mt-3">
+                <DeletePostButton postID={post.id}></DeletePostButton>
+              </div>
             )}
           </div>
         </div>

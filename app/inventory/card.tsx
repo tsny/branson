@@ -10,6 +10,7 @@ import {
   FaRobot,
   FaBiohazard,
   FaGem,
+  FaBible,
 } from "react-icons/fa";
 import CardFormatter from "@/lib/CardFormatter";
 
@@ -66,7 +67,7 @@ export default function BransonCard(props: BrandonCardProps) {
         )}
       </div>
       <div className="flex justify-between pt-3">
-        <p className="text-left text-bold text-xs m-0">2024 The Agency©</p>
+        <p className="text-left text-bold text-xs m-0">2024 BTG©</p>
         <p className="text-right text-bold text-xs m-0">
           {hidden ? "???" : card?.rarity.toUpperCase()}
         </p>
@@ -98,6 +99,8 @@ function CardTypeToIcon(type?: string | undefined) {
     return <FaGem className="h-full mr-2" />;
   } else if (type.includes("cat")) {
     return <FaCat className="h-full mr-2" />;
+  } else if (type.includes("divine")) {
+    return <FaBible className="h-full mr-2" />;
   }
   return <FaRobot className="h-full mr-2"></FaRobot>;
 }

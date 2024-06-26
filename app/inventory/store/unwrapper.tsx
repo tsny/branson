@@ -22,7 +22,6 @@ export default function Unwrapper(props: UnwrapperProps) {
   let onRevealFinished = () => {
     setRevealing(false);
   };
-  console.log(unwrappedCards.length);
 
   return (
     <div>

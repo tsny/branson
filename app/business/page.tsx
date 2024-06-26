@@ -1,6 +1,7 @@
 import { Button } from "flowbite-react";
 import BusinessCard from "./BusinessCard";
 import prisma from "@/lib/prisma";
+import NewBusinessCard from "./NewBusinessCard";
 
 export default async function Page() {
   const users = await prisma.user.findMany();
@@ -9,9 +10,7 @@ export default async function Page() {
 
   return (
     <div className="">
-      <Button className="m-2" size={"xl"} color={"purple"}>
-        + New Business
-      </Button>
+      <NewBusinessCard users={userList} />
       <BusinessCard
         users={userList}
         id={1}

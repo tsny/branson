@@ -28,15 +28,15 @@ export const authConfig: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session?.user?.email) {
-        let dbUser = await findUserByEmail(session.user?.email);
-        if (!dbUser && session.user.name) {
-          console.log("google user is logged in but has no account!");
-          await createNewDBUser(
-            session.user.email,
-            session.user.name,
-            session?.user?.image
-          );
-        }
+        // let dbUser = await findUserByEmail(session.user?.email);
+        // if (!dbUser && session.user.name) {
+        //   console.log("google user is logged in but has no account!");
+        //   await createNewDBUser(
+        //     session.user.email,
+        //     session.user.name,
+        //     session?.user?.image
+        //   );
+        // }
       }
       return session;
     },

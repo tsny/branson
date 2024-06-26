@@ -1,5 +1,4 @@
 import { getSessionUser } from "./actions";
-import BFooter from "./footer";
 import PostForm from "./postform";
 import PostList from "./postlist";
 

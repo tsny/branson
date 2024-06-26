@@ -11,11 +11,11 @@ export default function DeletePostButton(props: DeletePostButtonProps) {
   return (
     <Button
       onClick={() => {
-        console.log(props.postID);
         deletePost(props.postID);
       }}
-      color="gray"
-      className="w-15 h-15 mr-3"
+      size={"xs"}
+      color="failure"
+      className="h-10"
     >
       <HiOutlineTrash className="h-6 w-6" />
     </Button>

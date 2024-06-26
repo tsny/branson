@@ -35,6 +35,9 @@ export default async function CatalogPage() {
       <div className="font-bold text-center text-xl">
         Seen {knownCards.length} of {allCards.length} cards
       </div>
+      <div className="text-center">
+        Go to the <b>Store</b> to get more packs!{" "}
+      </div>
 
       <CatalogMain
         showCheckboxes={false}

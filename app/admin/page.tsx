@@ -32,7 +32,7 @@ export default async function Page() {
             revalidatePath("/");
           }}
         >
-          <input name="name" value={cfg.name} hidden></input>
+          <input name="name" value={cfg.name} readOnly hidden></input>
           <input
             name={"val"}
             defaultValue={cfg.value}

@@ -24,11 +24,8 @@ export default async function Store() {
           <h1 className="text-center font-bold">Branson: The Gathering</h1>
           <hr className="pb-2"></hr>
           <div className="text-xs text-center">
-            <b>Branson: The Gathering</b> takes place in the land of Branson.
-            <br></br>
-            <br></br>
-            The organization known as <b>The Agency</b> organizes, each year, a
-            Gathering.
+            Each year in <b>Branson</b> the group known as <b>The Agency</b>{" "}
+            organizes a Gathering.
             <br></br>
             <br></br>
             Use your <b>Bitboins</b> to buy Packs and open them to get cards!

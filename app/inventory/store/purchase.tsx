@@ -17,7 +17,7 @@ export default function PurchaseCard(props: PurchaseCardProps) {
 
   return (
     <div className="bg-white rounded border border-gray-800 p-1 text-center">
-      <div className="text-center font-bold">Branson Pack</div>
+      <div className="text-center font-bold">Buy Packs</div>
       <hr className="pb-2"></hr>
       <div className="text-xs pb-2">
         Cost: <b>{props.boinCost} Bitboin</b>

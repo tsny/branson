@@ -7,13 +7,19 @@ import PersonPicker from "./PersonPicker";
 interface BusinessCardProps {
   businessName: string;
   header: string;
-  bio: string;
-  id: number;
+  bio?: string;
+  id?: number;
   users?: string[];
+  onCancel?: () => void;
+  editMode?: boolean;
 }
 
 export default function BusinessCard(props: BusinessCardProps) {
-  let [editMode, setEditMode] = useState(false);
+  let [editMode, setEditMode] = useState(props.editMode);
+
+  let titleDiv = (
+    <p className="text-2xl text-center font-bold mb-1">{props.businessName}</p>
+  );
 
   let bioDiv = <div className="text-sm  text-gray-500 mb-0">{props.bio}</div>;
   let headerDiv = (
@@ -40,6 +46,12 @@ export default function BusinessCard(props: BusinessCardProps) {
     </div>
   );
 
+  if (editMode) {
+    titleDiv = (
+      <input type="text" defaultValue={props.businessName} name="title"></input>
+    );
+  }
+
   if (editMode && props.users) {
     teamList = <PersonPicker users={props.users}></PersonPicker>;
   }
@@ -64,16 +76,29 @@ export default function BusinessCard(props: BusinessCardProps) {
 
   return (
     <form
-      className="rounded border-gray-300 border-2 bg-white p-2 m-2"
+      className="rounded border-gray-300 border-2 shadow bg-white p-2 m-2"
       action={async (formData) => {
         setEditMode(false);
       }}
     >
-      <p className="text-2xl font-bold mb-1">{props.businessName}</p>
-      {headerDiv}
-      {bioDiv}
-      <input hidden name="biz-id" value={props.id}></input>
-      <p className="text-sm  text-gray-500 mb-3">St. Louis</p>
+      <input hidden readOnly name="biz-id" value={props.id}></input>
+      {titleDiv}
+      <div className="flex justify-between">
+        <div>
+          {headerDiv}
+          {bioDiv}
+          <p className="text-sm  text-gray-500 mb-3">
+            Located in <b>Branson</b>
+          </p>
+        </div>
+
+        <img
+          height={200}
+          width={200}
+          src="https://i.imgur.com/9bXzi7g.png"
+          className="border-2 rounded "
+        ></img>
+      </div>
 
       <hr className=""></hr>
       <p className="text-xl underline text-center mt-3 mb-2">Meet the Team</p>
@@ -81,7 +106,7 @@ export default function BusinessCard(props: BusinessCardProps) {
       {!editMode && (
         <Button
           className="inline"
-          onClick={() => setEditMode(!editMode)}
+          onClick={() => setEditMode(true)}
           size={"sm"}
         >
           Edit
@@ -92,7 +117,10 @@ export default function BusinessCard(props: BusinessCardProps) {
           <Button
             className="ml-2 inline"
             color={"failure"}
-            onClick={() => setEditMode(false)}
+            onClick={() => {
+              setEditMode(false);
+              if (props.onCancel) props.onCancel();
+            }}
             size={"sm"}
           >
             Cancel

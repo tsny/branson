@@ -2,14 +2,17 @@
 
 import { authConfig } from "@/lib/auth";
 import { getRandomCard, rarityToDust } from "@/lib/cards";
-import prisma from "@/lib/prisma";
+import prisma, { getConfigAsNumber } from "@/lib/prisma";
 import { Cord } from "@/lib/prisma";
 import { Card, CardHistory, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-export async function upvote(upvoterUserID: number, postID: number) {
-  console.log(upvoterUserID);
+export async function upvote(postID: number, cost: number) {
+  let user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
   let postUpdate = await prisma.post.update({
     where: {
       id: postID,
@@ -23,18 +26,26 @@ export async function upvote(upvoterUserID: number, postID: number) {
     return;
   }
 
-  let user = await findUserByID(upvoterUserID);
-  if (!user) {
-    console.log("err getting upvoter user", upvoterUserID);
-    return;
+  if (cost > 1) {
+    await incrementBoin(user.id, -cost);
   }
 
-  await incrementBoin(upvoterUserID, -1);
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      upboinsGiven: {
+        increment: 1,
+      },
+    },
+  });
 
   revalidatePath("/");
 }
 
 export async function incrementBoin(userid: number, amt: number) {
+  console.log("incrementing %s boins for user %s", amt, userid);
   await prisma.user.update({
     where: {
       id: userid,
@@ -275,6 +286,7 @@ export async function getCurrentDBUser() {
   if (!user || !user.email) {
     return null;
   }
+  console.log("Current user is %s", user?.email);
 
   return await findUserByEmail(user.email);
 }
@@ -364,10 +376,9 @@ export async function spinTheWheel(maxNum: number) {
   console.log("%s spun a %s", user.id, randomNumber);
   await prisma.user.update({
     data: {
-      boins: {
-        increment: randomNumber,
-      },
+      boins: { increment: randomNumber },
       lastSpin: new Date(),
+      spins: { increment: 1 },
     },
     where: {
       id: user.id,
@@ -399,16 +410,10 @@ export async function convertDustToPack() {
   if (!user) return;
 
   await prisma.user.update({
-    where: {
-      id: user.id,
-    },
+    where: { id: user.id },
     data: {
-      dust: {
-        increment: -100,
-      },
-      boins: {
-        increment: 1,
-      },
+      dust: { increment: -100 },
+      boins: { increment: 1 },
     },
   });
   revalidatePath("/inventory");
@@ -468,6 +473,7 @@ export async function unwrapPack(formData: FormData) {
       id: user.id,
     },
     data: {
+      packsOpened: { increment: 1 },
       numPacks: { increment: -1 },
     },
   });

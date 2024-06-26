@@ -15,6 +15,7 @@ export default async function WheelSpinner(props: WheelSpinnerProps) {
   nextSpin.setHours(nextSpin.getHours() + 1);
   let now = new Date();
   const minutesTillSpin = getMinutes(nextSpin, now);
+  const disabled = props.spinDisabled || minutesTillSpin > 0;
 
   return (
     <div className="rounded bg-white border border-gray-800 text-center p-1">
@@ -30,9 +31,10 @@ export default async function WheelSpinner(props: WheelSpinnerProps) {
       >
         <Button
           size={"sm"}
-          disabled={props.spinDisabled || minutesTillSpin > 0}
+          disabled={disabled}
           gradientDuoTone="cyanToBlue"
           type="submit"
+          className={disabled ? "" : "animate-pulse"}
         >
           Spin
         </Button>
