@@ -5,8 +5,8 @@ import { createRule } from "../actions";
 
 export default async function RuleForm() {
   return (
-    <Card className="w-11/12 mb-2">
-      <div className="text-xl">Create Rule</div>
+    <div className="bg-white rounded shadow p-2 mb-2">
+      <div className="text-xl font-bold text-center">Create Rule</div>
       <form action={createRule} className="flex flex-col p-2 w-full">
         <Label
           htmlFor="email2"
@@ -47,6 +47,6 @@ export default async function RuleForm() {
           <HiOutlineArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </form>
-    </Card>
+    </div>
   );
 }

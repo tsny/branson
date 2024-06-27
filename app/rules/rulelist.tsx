@@ -2,30 +2,35 @@ import prisma from "@/lib/prisma";
 import { Card } from "flowbite-react";
 import DeleteRuleButton from "./deleteRuleButton";
 
-export default async function RuleList() {
+interface RuleListProps {
+  isAdmin?: boolean;
+}
+
+export default async function RuleList(props: RuleListProps) {
   const rules = await prisma.rule.findMany({
     orderBy: [{ id: "desc" }],
   });
 
   return (
-    <>
+    <div className="grid grid-cols-2 gap-1">
       {rules.map((rule) => (
-        <Card key={rule.id} className="w-11/12 mb-2">
-          <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <Card key={rule.id} className="mb-2 rounded border shadow">
+          <h5 className="font-bold tracking-tight text-gray-900 dark:text-white">
             {rule.content}
           </h5>
-          <hr></hr>
           <div className="grid justify-between">
-            <div className="tracking-tight text-gray-900 dark:text-white">
+            <div className="text-sm text-gray-900 dark:text-white">
               Fine: {rule.fine} boin
             </div>
-            <div className="tracking-tight text-gray-900 dark:text-white mb-4">
+            <div className="text-sm text-gray-900 dark:text-white mb-4">
               Author: {rule.authorName}
             </div>
-            <DeleteRuleButton ruleID={rule.id}></DeleteRuleButton>
+            {props.isAdmin && (
+              <DeleteRuleButton ruleID={rule.id}></DeleteRuleButton>
+            )}
           </div>
         </Card>
       ))}
-    </>
+    </div>
   );
 }

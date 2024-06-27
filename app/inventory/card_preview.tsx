@@ -1,54 +1,44 @@
-"use client";
 import { Card as BCard } from "@prisma/client";
-import { useEffect, useState } from "react";
 import { hiddenCardImageURL } from "./card";
 
 interface CardPreviewProps {
-  card: BCard;
+  card?: BCard;
+
   isFoil?: boolean;
   hidden?: boolean;
   revealSelf?: boolean;
   revealPauseInSeconds?: number;
-  onImgClick?: (B: BCard) => void;
 
-  onChecked?: (c: BCard) => void;
-  checked?: boolean;
+  onImgClick?: (card?: BCard) => void;
+  onChecked?: (card: BCard) => void;
   onRevealFinished?: (c: BCard) => void;
+
+  checked?: boolean;
   animate?: boolean;
 }
 
 export default function CardPreview(props: CardPreviewProps) {
-  let [hidden, setHidden] = useState(props.hidden);
-  let [cardImgURL, setCardImgURL] = useState(hiddenCardImageURL);
   const card = props.card;
+  const title = card?.title ?? "???";
 
-  let cardBg = rarityToBGColor(card.rarity);
+  let cardBg = rarityToBGColor(card?.rarity);
   if (props.isFoil) {
     cardBg += " bg-holographic";
   }
-  if (props.animate) {
-    cardBg += " fade-in";
+  if (props.animate && props.hidden && props.card) {
+    cardBg += " animate-pulse";
   }
-  let imgUrl = card.imageURL || "";
+  let imgUrl = card?.imageURL || hiddenCardImageURL;
+  if (props.hidden) {
+    imgUrl = hiddenCardImageURL;
+  }
+
   let borderCSS = props.checked
     ? "border-4 border-blue-600"
     : "border-2 border-gray-600";
 
-  useEffect(() => {
-    if (props.revealSelf) {
-      setHidden(true);
-      setTimeout(() => {
-        setHidden(false);
-        setCardImgURL(imgUrl);
-        if (props.onRevealFinished) {
-          props.onRevealFinished(card);
-        }
-      }, 1000 * (props.revealPauseInSeconds || 1));
-    }
-  }, [card]);
-
   let handleLowerHalfClick = () => {
-    if (!hidden && props.onChecked) {
+    if (!props.hidden && props.onChecked && card) {
       props.onChecked(card);
     }
   };
@@ -57,25 +47,35 @@ export default function CardPreview(props: CardPreviewProps) {
     <div className={cardBg + " rounded cursor-pointer " + borderCSS}>
       <div className="w-full mb-4">
         <img
-          className={"w-full"}
+          draggable={false}
           onClick={() => {
-            if (props.onImgClick && !hidden) props.onImgClick(card);
+            if (props.onImgClick) {
+              props.onImgClick(card);
+            }
           }}
-          src={hidden ? hiddenCardImageURL : imgUrl}
-          alt={card.title}
+          src={imgUrl}
+          alt={title}
         ></img>
       </div>
-      <div onClick={handleLowerHalfClick} className="flex justify-center">
+      <div
+        draggable={false}
+        onDragEnter={handleLowerHalfClick}
+        onClick={handleLowerHalfClick}
+        className="flex justify-center"
+      >
         <h1 className="mb-4 text-xs text-center font-bold">
-          {hidden ? "???" : card.title}
+          {props.hidden ? "???" : title}
         </h1>
       </div>
     </div>
   );
 }
 
-export function rarityToBGColor(rarity: string) {
+export function rarityToBGColor(rarity: string | undefined) {
   let cardBg = "p-0 ";
+  if (!rarity) {
+    return cardBg + " opacity-25";
+  }
   switch (rarity.toUpperCase()) {
     case "EPIC":
       cardBg +=

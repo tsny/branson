@@ -14,7 +14,7 @@ export default function DeleteRuleButton(props: IDeleteRuleButton) {
         deleteRule(props.ruleID);
       }}
       color="failure"
-      className="w-20 mr-3"
+      className="w-20"
     >
       <HiOutlineTrash className="h-6 w-6" />
     </Button>

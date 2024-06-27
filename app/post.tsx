@@ -33,7 +33,6 @@ export default async function Post(props: PostProps) {
     username = "anonymous";
   }
 
-  let bg = "bg-gray-100";
   let star: ReactNode[] = [];
   const stars = Math.floor(post.likes / 30);
   for (let index = 0; index < stars; index++) {
@@ -42,9 +41,7 @@ export default async function Post(props: PostProps) {
 
   return (
     <div
-      className={
-        bg + " w-11/12 border-gray-300 border-2 rounded-lg shadow-md p-2 m-2"
-      }
+      className={"bg-white border-gray-300 border-2 rounded-lg shadow-md p-2"}
     >
       <div className="flex items-start">
         <Avatar img={avatarURL} />
@@ -65,7 +62,7 @@ export default async function Post(props: PostProps) {
               disabled={disableUpvoteButton}
               authorID={post.author.id}
               postID={post.id}
-              upboins={post.likes}
+              votes={post.likes}
               cost={cost}
             ></UpBoins>
             {canDeletePost && (

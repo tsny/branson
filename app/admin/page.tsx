@@ -9,7 +9,6 @@ import {
 } from "flowbite-react";
 import prisma, { updateConfigWithValue } from "@/lib/prisma";
 import {
-  getSessionUser,
   giveAllUsersBoins,
   setUserBoinsFromForm,
   setUserRole,
@@ -17,8 +16,6 @@ import {
 import { revalidatePath } from "next/cache";
 
 export default async function Page() {
-  let user = await getSessionUser();
-
   let configDiv = (await prisma.config.findMany()).map((cfg) => (
     <tr key={cfg.name} className="text-sm">
       <td>{cfg.name}</td>
@@ -87,7 +84,7 @@ export default async function Page() {
           }}
         >
           <input
-            className="p-1 border rounded w-24"
+            className="p-1 border rounded w-12"
             name="role"
             defaultValue={u.role ?? "user"}
           ></input>
@@ -101,12 +98,15 @@ export default async function Page() {
             Save
           </Button>
         </form>
+        <Button className="inline" type="submit" size={"xs"} color={"failure"}>
+          Reset Cards
+        </Button>
       </TableCell>
     </TableRow>
   ));
 
   return (
-    <div>
+    <div className="p-2">
       <h1 className="text-4xl font-bold text-center text-gray-800 pt-2 mb-2">
         Admin
       </h1>
@@ -131,7 +131,7 @@ export default async function Page() {
       <h1 className="text-4xl font-bold text-center text-gray-800 pt-2 mb-3">
         Config
       </h1>
-      <table className="ml-2 border">
+      <table className="ml-2 border rounded shadow w-full">
         <tbody>{configDiv}</tbody>
       </table>
     </div>

@@ -7,14 +7,15 @@ export const dynamic = "force-dynamic";
 export default async function RulesPage() {
   let isUserAdmin = await isAdmin();
   return (
-    <div>
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-        <h1 className="text-4xl font-bold text-center text-gray-800 pt-8 mb-8">
-          Branson Rules
-        </h1>
-        {isUserAdmin && <RuleForm></RuleForm>}
-        <RuleList></RuleList>
+    <div className="p-3">
+      <h1 className="text-2xl font-bold text-center text-gray-800 pt-2">
+        Branson Rules
+      </h1>
+      <div className="text-center mb-3">
+        Rules to be specifically followed while in Branson
       </div>
+      {isUserAdmin && <RuleForm></RuleForm>}
+      <RuleList isAdmin={isUserAdmin}></RuleList>
     </div>
   );
 }

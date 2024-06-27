@@ -6,7 +6,7 @@ export default async function ProfilePage() {
   let user = await getCurrentDBUser();
 
   return (
-    <div className="p-1">
+    <div className="p-3">
       <Card className="w-full h-full border border-slate-500">
         <div className="flex justify-end px-4 pt-4"></div>
         <div className="flex flex-col items-center pb-10">
@@ -15,7 +15,7 @@ export default async function ProfilePage() {
             height="96"
             src={user?.profilePicURL || ""}
             width="96"
-            className="mb-3 rounded-full shadow-lg"
+            className="mb-3 border rounded-full shadow-lg"
           />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
             {user?.firstName}
@@ -27,7 +27,10 @@ export default async function ProfilePage() {
       </Card>
 
       <div className="text-2xl text-center mt-3 text-bold">Stats</div>
-      <Table striped className="border-collapse border border-slate-500">
+      <Table
+        striped
+        className="border-collapse border border-slate-500 text-sm text-bold"
+      >
         <TableBody>
           <TableRow>
             <TableCell>Upboins Given</TableCell>

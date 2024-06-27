@@ -2,8 +2,6 @@ import prisma, { getConfigAsNumber, getConfigWithDefault } from "@/lib/prisma";
 import Post from "./post";
 import { getCurrentDBUser } from "./actions";
 
-export const dynamic = "force-dynamic";
-
 export default async function PostList() {
   const user = await getCurrentDBUser();
   const anonVal = await getConfigWithDefault("compliments.anon", "false");
@@ -17,7 +15,7 @@ export default async function PostList() {
     },
   });
 
-  return posts.map((post) => (
+  const postList = posts.map((post) => (
     <Post
       key={post.id}
       user={user}
@@ -26,4 +24,6 @@ export default async function PostList() {
       post={post}
     ></Post>
   ));
+
+  return <div className="w-full p-2 grid grid-cols-1 gap-y-4">{postList}</div>;
 }

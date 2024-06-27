@@ -2,6 +2,8 @@ import { getCordsForUser, getCurrentDBUser } from "../actions";
 import InvLinkHeader from "./linkHeader";
 import SellerPanel from "./seller";
 
+export const dynamic = "force-dynamic";
+
 export default async function InventoryPage() {
   let user = await getCurrentDBUser();
   if (!user) {

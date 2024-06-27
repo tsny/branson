@@ -44,6 +44,23 @@ model User {
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
     Businesses    Business[]
+    CardEvent     CardEvent[]
+    WheelEvent    WheelEvent[]
+}
+
+model WheelEvent {
+    id     Int  @id @default(sequence())
+    amt    Int  @default(1)
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+}
+
+model CardEvent {
+    id     Int  @id @default(sequence())
+    card   Card @relation(fields: [cardId], references: [id])
+    cardId Int
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
 }
 
 model Business {
@@ -77,6 +94,7 @@ model Card {
     dustValue     Int             @default(10)
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
+    CardEvent     CardEvent[]
 }
 
 model Achievement {

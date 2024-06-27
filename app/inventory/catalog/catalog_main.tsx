@@ -32,11 +32,17 @@ export default function CatalogMain(props: CatalogMainProps) {
   };
 
   let body: ReactNode;
+
   if (props.catalogCards) {
-    body = props.catalogCards.map((c, i) => {
+    let cards = props.catalogCards;
+    body = cards.map((c, i) => {
       return (
         <CardPreview
-          onImgClick={() => viewCard(c.card)}
+          onImgClick={() => {
+            if (!c.hidden) {
+              viewCard(c.card);
+            }
+          }}
           key={i}
           card={c.card}
           hidden={c.hidden}
@@ -51,7 +57,8 @@ export default function CatalogMain(props: CatalogMainProps) {
   }
 
   if (props.cords) {
-    body = props.cords.map((c, i) => {
+    let cards = props.cords;
+    body = cards.map((c, i) => {
       return (
         <CardPreview
           onImgClick={() => {

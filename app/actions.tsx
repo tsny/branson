@@ -161,6 +161,12 @@ export async function giveAllUsersBoins(formData: FormData) {
   revalidatePath("/admin");
 }
 
+export async function deletePostTest(formData: FormData) {
+  const id = formData.get("id") as string;
+  await deletePost(+id);
+  revalidatePath("/");
+}
+
 export async function deletePost(postID: number) {
   await prisma.post.delete({
     where: {
@@ -313,6 +319,11 @@ export async function deleteCard(formData: FormData) {
       cardId: id,
     },
   });
+  await prisma.cardHistory.deleteMany({
+    where: {
+      cardId: id,
+    },
+  });
   const output = await prisma.card.delete({
     where: {
       id: id,
@@ -384,9 +395,27 @@ export async function spinTheWheel(maxNum: number) {
       id: user.id,
     },
   });
-  await incrementBoin(user.id, randomNumber);
+
+  await prisma.wheelEvent.create({
+    data: {
+      amt: randomNumber,
+      userId: user.id,
+    },
+  });
   revalidatePath("/");
-  revalidatePath("/inventory");
+}
+
+export async function resetPlayer(userid: number) {
+  await prisma.cardHistory.deleteMany({
+    where: { userId: userid },
+  });
+  await prisma.cardOwnership.deleteMany({
+    where: { userId: userid },
+  });
+  await prisma.user.update({
+    where: { id: userid },
+    data: { dust: 100 },
+  });
 }
 
 export async function createNewDBUser(
@@ -416,18 +445,11 @@ export async function convertDustToPack() {
       boins: { increment: 1 },
     },
   });
-  revalidatePath("/inventory");
-  revalidatePath("/inventory/store");
+  revalidatePath("/");
 }
 
-export async function buyPackFromForm(formData: FormData) {
+export async function buyPack() {
   let user = await getCurrentDBUser();
-  if (!user) return;
-  return buyPack(user.id);
-}
-
-export async function buyPack(userid: number) {
-  const user = await findUserByID(userid);
   if (!user || user.boins < 1) {
     revalidatePath("/");
     return;
@@ -439,32 +461,33 @@ export async function buyPack(userid: number) {
       numPacks: user.numPacks + 1,
     },
   });
-  revalidatePath("/");
-  revalidatePath("/inventory");
+  revalidatePath("/inventory/store");
 }
 
-export async function unwrapPack(formData: FormData) {
+export async function unwrapPack() {
   const user = await getCurrentDBUser();
   if (!user || user.numPacks <= 0) {
-    revalidatePath("/");
+    revalidatePath("/inventory/store");
     return;
   }
   let allCards: Card[] = await prisma.card.findMany();
-  let cards: Card[] = [];
 
-  let ownerships: CardOwnership[] = [];
   const numCards = 3;
   for (let index = 0; index < numCards; index++) {
     let card = getRandomCard(allCards);
-    const ownership = await prisma.cardOwnership.create({
+    await prisma.cardOwnership.create({
       data: {
         cardId: card.id,
         isFoil: false,
         userId: user.id,
       },
     });
-    ownerships.push(ownership);
-    cards.push(card);
+    await prisma.cardEvent.create({
+      data: {
+        cardId: card.id,
+        userId: user.id,
+      },
+    });
     console.log("%s unwrapped %s", user.firstName, card.title);
     await upsertCardHistory(card.id, user.id);
   }
@@ -478,9 +501,6 @@ export async function unwrapPack(formData: FormData) {
     },
   });
   revalidatePath("/inventory/store");
-  revalidatePath("/inventory");
-
-  return cards;
 }
 
 async function upsertCardHistory(cardID: number, userID: number) {

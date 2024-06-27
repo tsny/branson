@@ -1,22 +1,29 @@
 "use client";
 
 import { Button } from "flowbite-react";
-import { useRef, useState } from "react";
+import { useOptimistic, useRef, useState } from "react";
 import { upvote } from "./actions";
 
 interface UpBoinsProps {
   postID: number;
   authorID: number;
   disabled: boolean;
-  upboins: number;
+  votes: number;
   cost: number;
 }
 
 export default function UpBoins(props: UpBoinsProps) {
-  let [votes, setVotes] = useState(props.upboins);
+  let [votes, addVotes] = useOptimistic(
+    props.votes,
+    (state, newVote: number) => {
+      return state + 1;
+    }
+  );
+
   return (
     <form
       action={async (formData) => {
+        addVotes(1);
         await upvote(props.postID, props.cost);
       }}
     >
@@ -25,9 +32,8 @@ export default function UpBoins(props: UpBoinsProps) {
         gradientDuoTone="tealToLime"
         disabled={props.disabled}
         className="mt-4 hover:text-blue-500 transition duration-200 ease-in-out"
-        onClick={() => setVotes(votes + 1)}
       >
-        <span>{votes} Upboins</span>
+        {votes} Upboins
       </Button>
     </form>
   );

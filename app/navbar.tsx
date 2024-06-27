@@ -29,7 +29,7 @@ export default async function BNavbar() {
   );
 
   return (
-    <Navbar fluid rounded className="border shadow">
+    <Navbar fluid rounded className="border shadow ">
       <NavbarBrand as={Link} href="/">
         <Image
           className="mr-1"
