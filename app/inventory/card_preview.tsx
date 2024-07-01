@@ -35,7 +35,7 @@ export default function CardPreview(props: CardPreviewProps) {
 
   let borderCSS = props.checked
     ? "border-4 border-blue-600"
-    : "border-2 border-gray-600";
+    : rarityToBGColor(card?.rarity) + " border";
 
   let handleLowerHalfClick = () => {
     if (!props.hidden && props.onChecked && card) {
@@ -45,7 +45,7 @@ export default function CardPreview(props: CardPreviewProps) {
 
   return (
     <div className={cardBg + " rounded cursor-pointer " + borderCSS}>
-      <div className="w-full mb-4">
+      <div className="w-full">
         <img
           draggable={false}
           onClick={() => {
@@ -61,7 +61,7 @@ export default function CardPreview(props: CardPreviewProps) {
         draggable={false}
         onDragEnter={handleLowerHalfClick}
         onClick={handleLowerHalfClick}
-        className="flex justify-center"
+        className="flex justify-center pt-3"
       >
         <h1 className="mb-4 text-xs text-center font-bold">
           {props.hidden ? "???" : title}
@@ -72,7 +72,7 @@ export default function CardPreview(props: CardPreviewProps) {
 }
 
 export function rarityToBGColor(rarity: string | undefined) {
-  let cardBg = "p-0 ";
+  let cardBg = "p-0 shadow ";
   if (!rarity) {
     return cardBg + " opacity-25";
   }

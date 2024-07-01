@@ -2,7 +2,10 @@
 
 import { authConfig } from "@/lib/auth";
 import { getRandomCard, rarityToDust } from "@/lib/cards";
-import prisma, { getConfigAsNumber } from "@/lib/prisma";
+import prisma, {
+  getConfigAsNumber,
+  getConfigValueWithNumberDefault,
+} from "@/lib/prisma";
 import { Cord } from "@/lib/prisma";
 import { Card, CardHistory, CardOwnership, User } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -77,6 +80,32 @@ export async function findUserByID(id: number) {
   });
 }
 
+export async function deleteWager(formData: FormData) {
+  const id = getNumFromForm(formData, "id");
+  await prisma.bet.delete({
+    where: {
+      id: id,
+    },
+  });
+  revalidatePath("/wagers");
+}
+
+export async function settleWager(formData: FormData) {
+  const val = formData.get("creator-won") as string;
+  const betID = getNumFromForm(formData, "bet-id");
+  const creatorWon = val === "true";
+  await prisma.bet.update({
+    where: {
+      id: betID,
+    },
+    data: {
+      closed: true,
+      creatorWon: creatorWon,
+    },
+  });
+  revalidatePath("/wagers");
+}
+
 export async function findUserByEmail(email: string) {
   return await prisma.user.findFirst({
     where: {
@@ -123,11 +152,7 @@ export async function submitPost(formData: FormData) {
 
 function getNumFromForm(formData: FormData, val: string) {
   const str = formData.get(val) as string;
-  let numBoins = +str;
-  if (numBoins <= 0) {
-    numBoins = 1;
-  }
-  return numBoins;
+  return str ? +str : -1;
 }
 
 export async function setUserBoins(id: number, boins: number) {
@@ -342,6 +367,9 @@ export async function createOrUpdateCard(formData: FormData) {
   const quote = formData.get("quote") as string;
   const imageURL = formData.get("img") as string;
   const weight = getNumFromForm(formData, "weight");
+  const def = getNumFromForm(formData, "defense");
+  const hp = getNumFromForm(formData, "hp");
+  const cost = getNumFromForm(formData, "cost");
 
   let card = await findCardByID(id);
 
@@ -359,6 +387,9 @@ export async function createOrUpdateCard(formData: FormData) {
         quote: quote,
         imageURL: imageURL,
         weight: weight,
+        hp: hp,
+        defense: def,
+        cost: cost,
       },
     });
   } else {
@@ -372,6 +403,9 @@ export async function createOrUpdateCard(formData: FormData) {
         quote: quote,
         imageURL: imageURL,
         weight: weight,
+        cost: cost,
+        hp: hp,
+        defense: def,
       },
     });
   }
@@ -416,6 +450,49 @@ export async function resetPlayer(userid: number) {
     where: { id: userid },
     data: { dust: 100 },
   });
+  console.log("reset %s", userid);
+}
+
+export async function upsertBusiness(formData: FormData) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const name = formData.get("name") as string;
+  const header = formData.get("header") as string;
+  const bio = formData.get("bio") as string;
+  const businessId = getNumFromForm(formData, "biz-id");
+  const logo = formData.get("logo-url") as string;
+  const members = formData.getAll("user-checkbox") as string[];
+  console.log(members);
+
+  if (businessId < 0) {
+    await prisma.business.create({
+      data: {
+        name: name,
+        bio: bio,
+        header: header,
+        logoURL: logo,
+        founderUserID: user.id,
+        members: members,
+      },
+    });
+  } else {
+    await prisma.business.update({
+      where: {
+        id: +businessId,
+      },
+      data: {
+        name: name,
+        bio: bio,
+        logoURL: logo,
+        header: header,
+        members: members,
+      },
+    });
+  }
+
+  revalidatePath("/business");
 }
 
 export async function createNewDBUser(
@@ -432,6 +509,7 @@ export async function createNewDBUser(
     },
   });
   console.log("new user! ", newUser);
+  revalidatePath("/");
 }
 
 export async function convertDustToPack() {
@@ -472,23 +550,30 @@ export async function unwrapPack() {
   }
   let allCards: Card[] = await prisma.card.findMany();
 
-  const numCards = 3;
+  const numCards = await getConfigValueWithNumberDefault("btg.pack.size", 3);
   for (let index = 0; index < numCards; index++) {
     let card = getRandomCard(allCards);
+    const isFoil = Math.random() * 100 == 1;
     await prisma.cardOwnership.create({
       data: {
         cardId: card.id,
-        isFoil: false,
+        isFoil: isFoil,
         userId: user.id,
       },
     });
+
     await prisma.cardEvent.create({
       data: {
         cardId: card.id,
         userId: user.id,
       },
     });
-    console.log("%s unwrapped %s", user.firstName, card.title);
+    console.log(
+      "%s unwrapped %s (foil? %s)",
+      user.firstName,
+      card.title,
+      isFoil
+    );
     await upsertCardHistory(card.id, user.id);
   }
   await prisma.user.update({
@@ -584,4 +669,23 @@ export async function getCordsForUser(userid: number): Promise<Cord[]> {
       id: "desc",
     },
   });
+}
+
+export async function createWager(formData: FormData) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const desc = formData.get("desc") as string;
+  const bet = getNumFromForm(formData, "bet");
+  const opponentId = getNumFromForm(formData, "userid");
+  await prisma.bet.create({
+    data: {
+      amt: bet,
+      creatorId: user.id,
+      opponentId: opponentId,
+      desc: desc,
+    },
+  });
+  revalidatePath("/wagers");
 }

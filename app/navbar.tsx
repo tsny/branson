@@ -51,6 +51,9 @@ export default async function BNavbar() {
         <NavbarLink as={Link} href="/business">
           Businesses
         </NavbarLink>
+        <NavbarLink as={Link} href="/wagers">
+          Wagers
+        </NavbarLink>
         {isSuper && (
           <NavbarLink as={Link} href="/profile">
             Profile
@@ -62,7 +65,7 @@ export default async function BNavbar() {
           </NavbarLink>
         )}
         {(isSuper || isBTGEnabled) && (
-          <NavbarLink className="border" as={Link} href="/inventory">
+          <NavbarLink className="border" as={Link} href="/inventory/store">
             Cards
           </NavbarLink>
         )}

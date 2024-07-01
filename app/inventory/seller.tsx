@@ -16,9 +16,8 @@ interface SellerPanelProps {
 
 export default function SellerPanel(props: SellerPanelProps) {
   const cards = props.cords.map((c) => c.card);
-  const initialCords = props.cords;
 
-  let [cords, setCords] = useState(props.cords);
+  let [sortedCords, setSortedCords] = useState([...props.cords]);
   let [dust, setDust] = useState(0);
   let [selectedCards, setSelectedCards] = useState<number[]>([]);
   let [sortCardsByName, setSortCardsByName] = useState(false);
@@ -26,12 +25,13 @@ export default function SellerPanel(props: SellerPanelProps) {
   useEffect(() => {
     if (sortCardsByName) {
       console.log("sorting");
-      setCords(sort(cords));
+      setSortedCords(sort(props.cords));
     } else {
       console.log("not sorting");
-      setCords(initialCords);
+      setSortedCords([...props.cords]);
     }
-  }, [sortCardsByName]);
+    console.log("sorted cords: ", sortedCords[0]);
+  }, [sortCardsByName, props.cords]);
 
   const ref = useRef<HTMLFormElement>(null);
 
@@ -49,7 +49,7 @@ export default function SellerPanel(props: SellerPanelProps) {
     console.log(selectedCards);
   };
 
-  if (cords.length == 0) {
+  if (props.cords.length == 0) {
     return (
       <div className="bg-white rounded border shadow p-4 m-4">
         First, go to the <b>Store</b> and get some cards!
@@ -87,19 +87,19 @@ export default function SellerPanel(props: SellerPanelProps) {
             ></HelpButton>
           </div>
         </div>
+
         <div className="mt-3 bg-white flex justify-between font-bold">
           <RarityBlock cards={cards}></RarityBlock>
           <div className="inline">
             <Label className="inline">Sort Cards By</Label>
             <Select
               className="inline"
+              value={sortCardsByName ? "alpha" : "id"}
               onChange={(e) => {
                 setSortCardsByName(e.target.value === "alpha");
               }}
             >
-              <option defaultChecked={true} value={"id"}>
-                Date Unpacked
-              </option>
+              <option value={"id"}>Date Unpacked</option>
               <option value={"alpha"}>Name</option>
             </Select>
           </div>
@@ -109,7 +109,7 @@ export default function SellerPanel(props: SellerPanelProps) {
       <CatalogMain
         onChecked={onCardCheck}
         showCheckboxes={true}
-        cords={props.cords}
+        cords={sortedCords}
         selectedIDs={selectedCards}
       ></CatalogMain>
     </form>

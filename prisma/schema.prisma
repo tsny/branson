@@ -32,6 +32,7 @@ model User {
     lastName      String?
     isAdmin       Boolean  @default(false)
     role          String?  @default("user")
+    roles         String[]
 
     boins        Int @default(0)
     upboinsGiven Int @default(0)
@@ -40,12 +41,14 @@ model User {
     spins        Int @default(0)
     packsOpened  Int @default(0)
 
-    posts         Post[]
-    CardOwnership CardOwnership[]
-    CardHistory   CardHistory[]
-    Businesses    Business[]
-    CardEvent     CardEvent[]
-    WheelEvent    WheelEvent[]
+    posts          Post[]
+    CardOwnership  CardOwnership[]
+    CardHistory    CardHistory[]
+    Businesses     Business[]
+    CardEvent      CardEvent[]
+    WheelEvent     WheelEvent[]
+    CreatedBets    Bet[]           @relation("CreatedBets")
+    ChallengerBets Bet[]           @relation("ChallengerBets")
 }
 
 model WheelEvent {
@@ -64,15 +67,16 @@ model CardEvent {
 }
 
 model Business {
-    id       Int      @id @default(sequence())
-    name     String
-    location String   @default("branson")
-    service  String?
-    members  String[]
-    founder  User     @relation(fields: [userId], references: [id])
-    userId   Int
-    bio      String?
-    logoURL  String?
+    id            Int      @id @default(sequence())
+    name          String
+    location      String   @default("branson")
+    service       String?
+    members       String[]
+    founder       User     @relation(fields: [founderUserID], references: [id])
+    founderUserID Int
+    bio           String?
+    header        String?
+    logoURL       String?
 }
 
 model Rule {
@@ -92,6 +96,10 @@ model Card {
     imageURL      String?
     weight        Int             @default(50)
     dustValue     Int             @default(10)
+    hp            Int             @default(0)
+    defense       Int             @default(0)
+    cost          Int             @default(1)
+    cardsOpened   Int             @default(0)
     CardOwnership CardOwnership[]
     CardHistory   CardHistory[]
     CardEvent     CardEvent[]
@@ -129,4 +137,17 @@ model CardPack {
     id        Int @id @default(sequence())
     cost      Int @default(1)
     cardCount Int @default(3)
+}
+
+model Bet {
+    id         Int      @id @default(sequence())
+    amt        Int      @default(10)
+    creator    User     @relation("CreatedBets", fields: [creatorId], references: [id])
+    desc       String
+    opponent   User     @relation("ChallengerBets", fields: [opponentId], references: [id])
+    creatorId  Int
+    opponentId Int
+    closed     Boolean  @default(false)
+    createdAt  DateTime @default(now())
+    creatorWon Boolean  @default(false)
 }

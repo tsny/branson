@@ -25,6 +25,7 @@ interface CatalogMainProps {
 export default function CatalogMain(props: CatalogMainProps) {
   let [selectedCard, setSelectedCard] = useState<Card>();
   let [showModal, setShowModal] = useState(false);
+  console.log(props.cords?.length);
 
   const viewCard = (c: Card) => {
     setSelectedCard(c);

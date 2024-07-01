@@ -20,7 +20,7 @@ export default function WheelSpinner(props: WheelSpinnerProps) {
   nextSpin.setMinutes(nextSpin.getMinutes() + props.cd);
   const minRemaining = getMinutes(nextSpin, now);
 
-  const disabled = false;
+  const disabled = props.disabled || minRemaining > 0;
 
   return (
     <div className="rounded bg-white border border-gray-800 text-center p-1">
@@ -31,10 +31,13 @@ export default function WheelSpinner(props: WheelSpinnerProps) {
         minutesRemaining={minRemaining}
         nextSpin={nextSpin}
       ></WheelProgress>
-      <div className="flex fade-in justify-center mt-3">
-        {props.lastSpinAmt && props.lastSpinAmt > 0 && (
+      {props.lastSpinAmt !== undefined && props.lastSpinAmt > 0 && (
+        <div className="flex fade-in justify-center mt-3">
           <Toast>
-            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-cyan-500 dark:bg-cyan-800 dark:text-cyan-200">
+            <div
+              className="inline-flex h-8 w-8 shrink-0 items-center justify-center 
+            rounded-lg bg-cyan-100 text-cyan-500 dark:bg-cyan-800 dark:text-cyan-200"
+            >
               <HiFire className="h-5 w-5" />
             </div>
             <div className="ml-3 text-sm font-normal">
@@ -42,8 +45,8 @@ export default function WheelSpinner(props: WheelSpinnerProps) {
             </div>
             <ToastToggle />
           </Toast>
-        )}
-      </div>
+        </div>
+      )}
       <form
         className="flex justify-center gap-1 pt-4"
         action={async (formData) => {
@@ -53,9 +56,9 @@ export default function WheelSpinner(props: WheelSpinnerProps) {
       >
         <Button
           size={"sm"}
-          disabled={disabled || minRemaining > 0}
-          gradientDuoTone="cyanToBlue"
+          disabled={disabled}
           type="submit"
+          color={disabled ? "failure" : "success"}
           className={disabled ? "" : "animate-pulse"}
         >
           Spin

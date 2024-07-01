@@ -78,7 +78,7 @@ export function EditCardModal(props: EditCardModalProps) {
             </div>
             <TextInput defaultValue={card?.type} name="type" required />
           </div>
-          <div>
+          <div className="flex gap-1">
             <div className="mb-1 block">
               <Label htmlFor="weight" value="Weight" />
             </div>
@@ -89,6 +89,22 @@ export function EditCardModal(props: EditCardModalProps) {
               type="number"
               required
             />
+            <div className="mb-1 block">
+              <Label htmlFor="hp" value="HP" />
+            </div>
+            <TextInput defaultValue={card?.hp} name="hp" type="number" />
+            <div className="mb-1 block">
+              <Label htmlFor="def" value="Attack" />
+            </div>
+            <TextInput
+              defaultValue={card?.defense}
+              name="defense"
+              type="number"
+            />
+            <div className="mb-1 block">
+              <Label htmlFor="cost" value="Cost" />
+            </div>
+            <TextInput defaultValue={card?.cost} name="cost" type="number" />
           </div>
           <Button type="submit">
             {card?.title === "" ? "Update" : "Submit"}{" "}

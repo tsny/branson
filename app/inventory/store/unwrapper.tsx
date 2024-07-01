@@ -15,6 +15,7 @@ interface UnwrapperProps {
 
 export default function Unwrapper(props: UnwrapperProps) {
   const initialHiddenState = Array(props.cards.length).fill(true);
+  let [pending, setPending] = useState(false);
 
   let [showModal, setShowModal] = useState(false);
   let [selectedCard, setSelectedCard] = useState<Card>();
@@ -33,6 +34,7 @@ export default function Unwrapper(props: UnwrapperProps) {
     }
     setCards(props.cards);
     resetHidden();
+    setPending(false);
   }, [props.cards]);
 
   useEffect(() => {
@@ -58,7 +60,6 @@ export default function Unwrapper(props: UnwrapperProps) {
             setShowModal(true);
             return;
           }
-          console.log(cardHiddenStates);
           setCardHiddenStates((prevStates) => {
             const newStates = [...prevStates];
             newStates[i] = !newStates[i];
@@ -70,7 +71,7 @@ export default function Unwrapper(props: UnwrapperProps) {
   });
 
   return (
-    <div>
+    <div className="mb-96">
       <CardModal
         onClose={() => setShowModal(false)}
         show={showModal}
@@ -81,6 +82,7 @@ export default function Unwrapper(props: UnwrapperProps) {
         className="flex justify-center"
         onSubmit={() => {
           setCards([]);
+          setPending(true);
           setBusy(true);
           setCardHiddenStates(initialHiddenState);
         }}
@@ -103,13 +105,16 @@ export default function Unwrapper(props: UnwrapperProps) {
       </form>
 
       <div>
-        <div className="text-center text-xl animate-pulse mt-5">
+        <div className="text-center text-xl animate-pulse mt-2">
+          {pending && "Unwrapping pack..."}
           {!allRevealed && cards.length > 0 && "Tap each card to reveal it!"}
           {allRevealed && cards.length > 0 && "Tap a card to inspect it!"}
         </div>
       </div>
 
-      <div className="m-2 grid grid-cols-3 gap-2">{previews}</div>
+      <div className="absolute m-2 grid grid-cols-3 gap-2 justify-around">
+        {previews}
+      </div>
     </div>
   );
 }

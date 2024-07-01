@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <BNavbar></BNavbar>
         {children}
-        <BFooter></BFooter>
+        {/* <BFooter></BFooter> */}
       </body>
     </html>
   );

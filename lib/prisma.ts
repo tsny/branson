@@ -52,18 +52,14 @@ export async function getConfigValueWithNumberDefault(
   configName: string,
   d: number
 ) {
-  const val = await prisma.config.findFirst({
+  const cfg = await prisma.config.findFirst({
     where: {
       name: configName,
     },
   });
 
-  return val ? +val : d;
+  return cfg?.value ? +cfg.value : d;
 }
-
-const userWithCards = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
-  include: { card: true },
-});
 
 const postWithUser = Prisma.validator<Prisma.PostDefaultArgs>()({
   include: { author: true },
@@ -71,5 +67,16 @@ const postWithUser = Prisma.validator<Prisma.PostDefaultArgs>()({
 
 export type PostExt = Prisma.PostGetPayload<typeof postWithUser>;
 
+const userWithCards = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
+  include: { card: true },
+});
+
 // A Cord is card ownership payload with the user
 export type Cord = Prisma.CardOwnershipGetPayload<typeof userWithCards>;
+
+const betWithUsers = Prisma.validator<Prisma.BetDefaultArgs>()({
+  include: { creator: true, opponent: true },
+});
+
+// A Cord is card ownership payload with the user
+export type FullBet = Prisma.BetGetPayload<typeof betWithUsers>;

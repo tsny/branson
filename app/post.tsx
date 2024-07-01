@@ -22,7 +22,7 @@ export default async function Post(props: PostProps) {
   const userOwnsPost = user ? user.id == post.author.id : false;
   const canDeletePost = userOwnsPost || (await isUserSuperAdmin());
 
-  const userHasEnoughBoins = user ? user.boins > cost : false;
+  const userHasEnoughBoins = user ? user.boins >= cost : false;
   const disableUpvoteButton = userOwnsPost || !userHasEnoughBoins;
 
   let avatarURL = post.author?.profilePicURL ? post.author.profilePicURL : "";

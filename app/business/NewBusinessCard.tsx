@@ -1,11 +1,11 @@
 "use client";
+
 import { Button } from "flowbite-react";
 import React, { useState } from "react";
 import BusinessCard from "./BusinessCard";
-import { User } from "@prisma/client";
 
 interface NewBusinessCardProps {
-  users: string[];
+  usernames: string[];
 }
 
 export default function NewBusinessCard(props: NewBusinessCardProps) {
@@ -24,16 +24,11 @@ export default function NewBusinessCard(props: NewBusinessCardProps) {
         </Button>
       )}
       {makingNew && (
-        <div>
-          <BusinessCard
-            businessName="New Biz"
-            header="Header here"
-            bio="Bio Here"
-            editMode={true}
-            onCancel={() => setMakingNew(false)}
-            users={props.users}
-          ></BusinessCard>
-        </div>
+        <BusinessCard
+          editMode={true}
+          onCancel={() => setMakingNew(false)}
+          allUsers={props.usernames}
+        ></BusinessCard>
       )}
     </div>
   );

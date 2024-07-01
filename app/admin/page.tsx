@@ -10,6 +10,7 @@ import {
 import prisma, { updateConfigWithValue } from "@/lib/prisma";
 import {
   giveAllUsersBoins,
+  resetPlayer,
   setUserBoinsFromForm,
   setUserRole,
 } from "../actions";
@@ -98,9 +99,23 @@ export default async function Page() {
             Save
           </Button>
         </form>
-        <Button className="inline" type="submit" size={"xs"} color={"failure"}>
-          Reset Cards
-        </Button>
+      </TableCell>
+      <TableCell>
+        <form
+          action={async (formData) => {
+            "use server";
+            await resetPlayer(u.id);
+          }}
+        >
+          <Button
+            className="inline"
+            type="submit"
+            size={"xs"}
+            color={"failure"}
+          >
+            Reset Cards
+          </Button>
+        </form>
       </TableCell>
     </TableRow>
   ));

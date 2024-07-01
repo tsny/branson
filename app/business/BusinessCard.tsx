@@ -3,64 +3,85 @@
 import { Avatar, Button, TextInput, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import PersonPicker from "./PersonPicker";
+import { upsertBusiness } from "../actions";
+import { Business } from "@prisma/client";
 
 interface BusinessCardProps {
-  businessName: string;
-  header: string;
-  bio?: string;
-  id?: number;
-  users?: string[];
+  biz?: Business;
+  allUsers: string[];
   onCancel?: () => void;
   editMode?: boolean;
+  canEdit?: boolean;
 }
 
 export default function BusinessCard(props: BusinessCardProps) {
   let [editMode, setEditMode] = useState(props.editMode);
 
   let titleDiv = (
-    <p className="text-2xl text-center font-bold mb-1">{props.businessName}</p>
+    <p className="text-2xl text-center font-bold mb-1">{props?.biz?.name}</p>
   );
 
-  let bioDiv = <div className="text-sm  text-gray-500 mb-0">{props.bio}</div>;
-  let headerDiv = (
-    <div className="text-sm  text-gray-500 mb-0">{props.header}</div>
+  let bioDiv = (
+    <div className="text-sm  text-gray-500 mb-0">{props?.biz?.bio}</div>
   );
-  let teamList = (
-    <div className="grid col-1 gap-2 mb-3">
-      <Avatar
-        img="https://flowbite-react.com/images/people/profile-picture-5.jpg"
-        alt="avatar of Jese"
-      >
-        <div className="space-y-1 font-medium dark:text-white">
-          <div>Jese Leos</div>
-        </div>
-      </Avatar>
-      <Avatar
-        img="https://flowbite-react.com/images/people/profile-picture-5.jpg"
-        alt="avatar of Jese"
-      >
-        <div className="space-y-1 font-medium dark:text-white">
-          <div>Jese Leos</div>
-        </div>
-      </Avatar>
+  let headerDiv = (
+    <div className="text-sm font-bold text-gray-500 mb-2">
+      {props?.biz?.header}
     </div>
   );
 
+  let members = props.biz?.members.map((m, i) => (
+    <div className="text-center" key={i}>
+      - {m}
+    </div>
+  ));
+  let teamList = <div className="grid col-1 gap-1 mb-3">{members}</div>;
+
+  const defaultLogo = "https://i.imgur.com/9bXzi7g.png";
+  let logoDiv = (
+    <img
+      height={200}
+      width={200}
+      src={props.biz?.logoURL ?? defaultLogo}
+      className="border border-gray-800 rounded shadow-lg"
+      alt="business-logo"
+    ></img>
+  );
+
   if (editMode) {
-    titleDiv = (
-      <input type="text" defaultValue={props.businessName} name="title"></input>
+    logoDiv = (
+      <TextInput
+        defaultValue={props?.biz?.logoURL ?? ""}
+        placeholder="Logo URL"
+        name="logo-url"
+      ></TextInput>
     );
   }
 
-  if (editMode && props.users) {
-    teamList = <PersonPicker users={props.users}></PersonPicker>;
+  if (editMode) {
+    titleDiv = (
+      <TextInput
+        required
+        type="text"
+        defaultValue={props?.biz?.name}
+        name="name"
+        placeholder="Biz Name"
+      />
+    );
+  }
+
+  if (editMode && props.allUsers) {
+    teamList = <PersonPicker users={props.allUsers}></PersonPicker>;
   }
 
   if (editMode) {
     bioDiv = (
       <Textarea
-        className="text-sm text-gray-500 mb-0"
-        defaultValue={props.bio}
+        className="text-sm w-full text-gray-500 mb-0"
+        defaultValue={props?.biz?.bio ?? ""}
+        required
+        placeholder="Bio"
+        name="bio"
       ></Textarea>
     );
   }
@@ -69,41 +90,39 @@ export default function BusinessCard(props: BusinessCardProps) {
     headerDiv = (
       <TextInput
         className="text-sm text-gray-500 mb-0"
-        defaultValue={props.header}
+        defaultValue={props?.biz?.header ?? ""}
+        required
+        name="header"
+        placeholder="Header/Slogan"
       ></TextInput>
     );
   }
 
   return (
     <form
-      className="rounded border-gray-300 border-2 shadow bg-white p-2 m-2"
+      className="rounded border-gray-700 border shadow-lg bg-white p-2 m-2"
+      onSubmit={() => setEditMode(false)}
       action={async (formData) => {
-        setEditMode(false);
+        await upsertBusiness(formData);
       }}
     >
-      <input hidden readOnly name="biz-id" value={props.id}></input>
-      {titleDiv}
+      <input hidden readOnly name="biz-id" value={props?.biz?.id}></input>
       <div className="flex justify-between">
-        <div>
-          {headerDiv}
-          {bioDiv}
-          <p className="text-sm  text-gray-500 mb-3">
-            Located in <b>Branson</b>
-          </p>
-        </div>
-
-        <img
-          height={200}
-          width={200}
-          src="https://i.imgur.com/9bXzi7g.png"
-          className="border-2 rounded "
-        ></img>
+        {titleDiv}
+        {logoDiv}
+      </div>
+      <div className="">
+        {headerDiv}
+        {bioDiv}
+        <p className="text-sm  text-gray-500 mb-3">
+          Located in <b>Branson</b>
+        </p>
       </div>
 
       <hr className=""></hr>
       <p className="text-xl underline text-center mt-3 mb-2">Meet the Team</p>
       {teamList}
-      {!editMode && (
+      {!editMode && props.canEdit && (
         <Button
           className="inline"
           onClick={() => setEditMode(true)}

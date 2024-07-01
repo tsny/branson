@@ -14,6 +14,7 @@ export const authConfig: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       if (profile?.email === undefined || profile?.name === undefined) {
+        console.warn("user isn't logged in!");
         return false;
       }
       const dbUser = await findUserByEmail(profile.email);

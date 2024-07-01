@@ -10,7 +10,10 @@ interface InvLinkHeaderProps {
 export default function InvLinkHeader(props: InvLinkHeaderProps) {
   return (
     <div className="flex justify-center mt-2">
-      <ButtonGroup outline className="mb-3 self-center">
+      <ButtonGroup
+        outline
+        className="mb-3 self-center rounded-lg border border-gray-600 "
+      >
         <Button
           color={props.storeSelected ? "blue" : "gray"}
           as={Link}

@@ -21,6 +21,12 @@ export default async function Store() {
   const spinCooldown = await getConfigAsNumber("wheel.cooldown.minutes");
   const now = new Date();
 
+  const users = await prisma.user.findMany();
+  const totalPacksOpened = users.reduce(
+    (sum, current) => sum + current.packsOpened,
+    0
+  );
+
   const lastSpin = await prisma.wheelEvent.findFirst({
     where: { userId: user.id },
   });
@@ -46,7 +52,6 @@ export default async function Store() {
     let cards: Card[] = [];
     for (let index = 0; index < cardIDs.length; index++) {
       let c = await prisma.card.findFirst({ where: { id: cardIDs[index] } });
-      console.log(c);
       if (c) cards.push(c);
     }
     return cards;
@@ -89,8 +94,13 @@ export default async function Store() {
         <DustConverter packCost={packDustCost} userDust={user.dust} />
       </div>
 
+      {users && (
+        <div className="pt-3 text-xl text-center font-bold">
+          We have opened {totalPacksOpened} packs!
+        </div>
+      )}
       <div className="mt-5 p-1 bg-white text-center font-bold rounded border border-gray-800">
-        <div className="mb-4">You have {user.numPacks} packs you can open</div>
+        <div className="mb-2">You have {user.numPacks} packs you can open</div>
         <Unwrapper
           cards={cards}
           unpackBtnDisabled={user.numPacks == 0}

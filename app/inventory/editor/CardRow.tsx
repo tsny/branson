@@ -30,10 +30,16 @@ export default function CardEditorRow(props: CardRowProps) {
         {props.card.rarity}
       </TableCell>
       <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
-        {props.chance}%
+        {props.chance}% ({props.card.weight})
       </TableCell>
       <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
         {props.card.type}
+      </TableCell>
+      <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
+        {props.card.hp} / {props.card.defense}
+      </TableCell>
+      <TableCell className="font-medium text-xs text-gray-900 dark:text-white">
+        {props.card.cost} mana
       </TableCell>
       <TableCell>
         <div className={"flex flex-wrap items-start gap-1 "}>
