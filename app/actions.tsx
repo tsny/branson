@@ -80,6 +80,70 @@ export async function findUserByID(id: number) {
   });
 }
 
+export async function createWager(formData: FormData) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const desc = formData.get("desc") as string;
+  const bet = getNumFromForm(formData, "bet");
+  await prisma.bet.create({
+    data: {
+      amt: bet,
+      creatorId: user.id,
+      desc: desc,
+      team1: [user.id],
+    },
+  });
+  revalidatePath("/wagers");
+}
+
+export async function joinWager(formData: FormData) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const id = getNumFromForm(formData, "bet-id");
+  const teamNum = getNumFromForm(formData, "teamNum");
+  if (teamNum <= 0) {
+    return;
+  }
+
+  if (teamNum === 1) {
+    await prisma.bet.update({
+      where: { id: id },
+      data: {
+        team1: {
+          push: user.id,
+        },
+      },
+    });
+  } else {
+    await prisma.bet.update({
+      where: { id: id },
+      data: {
+        team2: {
+          push: user.id,
+        },
+      },
+    });
+  }
+  revalidatePath("/wagers");
+}
+
+export async function closeWager(formData: FormData) {
+  const id = getNumFromForm(formData, "bet-id");
+  await prisma.bet.update({
+    where: {
+      id: id,
+    },
+    data: {
+      duesPaid: true,
+    },
+  });
+  revalidatePath("/wagers");
+}
+
 export async function deleteWager(formData: FormData) {
   const id = getNumFromForm(formData, "id");
   await prisma.bet.delete({
@@ -91,19 +155,28 @@ export async function deleteWager(formData: FormData) {
 }
 
 export async function settleWager(formData: FormData) {
-  const val = formData.get("creator-won") as string;
   const betID = getNumFromForm(formData, "bet-id");
-  const creatorWon = val === "true";
+  const val = getNumFromForm(formData, "teamNum");
   await prisma.bet.update({
     where: {
       id: betID,
     },
     data: {
       closed: true,
-      creatorWon: creatorWon,
+      team1Won: val === 1,
     },
   });
   revalidatePath("/wagers");
+}
+
+export async function updateUser(formData: FormData) {
+  const userid = getNumFromForm(formData, "userid");
+  const profilePic = formData.get("profilePicURL") as string;
+  await prisma.user.update({
+    where: { id: userid },
+    data: { profilePicURL: profilePic },
+  });
+  revalidatePath("/");
 }
 
 export async function findUserByEmail(email: string) {
@@ -448,7 +521,10 @@ export async function resetPlayer(userid: number) {
   });
   await prisma.user.update({
     where: { id: userid },
-    data: { dust: 100 },
+    data: {
+      dust: 100,
+      packsOpened: 0,
+    },
   });
   console.log("reset %s", userid);
 }
@@ -669,23 +745,4 @@ export async function getCordsForUser(userid: number): Promise<Cord[]> {
       id: "desc",
     },
   });
-}
-
-export async function createWager(formData: FormData) {
-  const user = await getCurrentDBUser();
-  if (!user) {
-    return;
-  }
-  const desc = formData.get("desc") as string;
-  const bet = getNumFromForm(formData, "bet");
-  const opponentId = getNumFromForm(formData, "userid");
-  await prisma.bet.create({
-    data: {
-      amt: bet,
-      creatorId: user.id,
-      opponentId: opponentId,
-      desc: desc,
-    },
-  });
-  revalidatePath("/wagers");
 }

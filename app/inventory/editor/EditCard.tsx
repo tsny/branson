@@ -55,7 +55,6 @@ export function EditCardModal(props: EditCardModalProps) {
             </div>
             <TextInput
               defaultValue={card?.imageURL || ""}
-              type="url"
               name="img"
               required
             />

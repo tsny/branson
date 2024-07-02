@@ -41,14 +41,13 @@ model User {
     spins        Int @default(0)
     packsOpened  Int @default(0)
 
-    posts          Post[]
-    CardOwnership  CardOwnership[]
-    CardHistory    CardHistory[]
-    Businesses     Business[]
-    CardEvent      CardEvent[]
-    WheelEvent     WheelEvent[]
-    CreatedBets    Bet[]           @relation("CreatedBets")
-    ChallengerBets Bet[]           @relation("ChallengerBets")
+    posts         Post[]
+    CardOwnership CardOwnership[]
+    CardHistory   CardHistory[]
+    Businesses    Business[]
+    CardEvent     CardEvent[]
+    WheelEvent    WheelEvent[]
+    CreatedBets   Bet[]           @relation("CreatedBets")
 }
 
 model WheelEvent {
@@ -140,14 +139,15 @@ model CardPack {
 }
 
 model Bet {
-    id         Int      @id @default(sequence())
-    amt        Int      @default(10)
-    creator    User     @relation("CreatedBets", fields: [creatorId], references: [id])
-    desc       String
-    opponent   User     @relation("ChallengerBets", fields: [opponentId], references: [id])
-    creatorId  Int
-    opponentId Int
-    closed     Boolean  @default(false)
-    createdAt  DateTime @default(now())
-    creatorWon Boolean  @default(false)
+    id        Int      @id @default(sequence())
+    amt       Int      @default(10)
+    creator   User     @relation("CreatedBets", fields: [creatorId], references: [id])
+    desc      String
+    creatorId Int
+    team1     Int[]
+    team2     Int[]
+    duesPaid  Boolean  @default(false)
+    closed    Boolean  @default(false)
+    createdAt DateTime @default(now())
+    team1Won  Boolean  @default(false)
 }

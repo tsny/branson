@@ -5,6 +5,7 @@ interface InvLinkHeaderProps {
   storeSelected?: Boolean;
   invSelected?: Boolean;
   catalogSelected?: Boolean;
+  setsSelected?: Boolean;
 }
 
 export default function InvLinkHeader(props: InvLinkHeaderProps) {
@@ -34,6 +35,13 @@ export default function InvLinkHeader(props: InvLinkHeaderProps) {
           href="/inventory/catalog"
         >
           Catalog
+        </Button>
+        <Button
+          color={props.setsSelected ? "blue" : "gray"}
+          as={Link}
+          href="/inventory/catalog/sets"
+        >
+          Sets
         </Button>
       </ButtonGroup>
     </div>

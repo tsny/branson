@@ -18,49 +18,22 @@ import { FullBet } from "@/lib/prisma";
 interface WagerPanelProps {
   users: User[];
   bets: FullBet[];
-  userControlsBets?: boolean;
-  currentUser?: User | null;
+  currentUser?: User;
 }
 
 export default function WagerPanel({
-  userControlsBets,
-  users,
+  users: allUsers,
   bets,
   currentUser,
 }: WagerPanelProps) {
-  const usernames = users.map((u) => u.firstName ?? "unk");
-
   const wagers = bets.map((b, i) => {
-    const user = usernames.find((u) => u == "");
-
-    return <WagerCard userControlsBets={userControlsBets} key={i} bet={b} />;
+    return <WagerCard allUsers={allUsers} user={currentUser} key={i} bet={b} />;
   });
 
   return (
-    <Tabs aria-label="Full width tabs">
-      <Tabs.Item active title="Wagers" icon={HiUserCircle}>
-        {userControlsBets && (
-          <Accordion
-            className="bg-white m-2 border-gray-800 border"
-            collapseAll
-          >
-            <AccordionPanel>
-              <AccordionTitle>+ New Wager</AccordionTitle>
-              <AccordionContent>
-                <WagerForm users={users} />
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
-        )}
-        <div className="px-1 grid grid-cols-1 gap-3">{wagers}</div>
-      </Tabs.Item>
-      <Tabs.Item title="Ledger" icon={HiClipboardList}>
-        <div className="p-2">
-          <LedgerCard user="Taylor" />
-          <LedgerCard user="Frank" open={true} />
-          <LedgerCard user="Aaron" />
-        </div>
-      </Tabs.Item>
-    </Tabs>
+    <div className="p-2">
+      <WagerForm users={allUsers} />
+      <div className="mt-2 p-2 grid grid-cols-1 gap-3">{wagers}</div>
+    </div>
   );
 }

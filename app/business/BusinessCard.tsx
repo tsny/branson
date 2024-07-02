@@ -4,11 +4,11 @@ import { Avatar, Button, TextInput, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import PersonPicker from "./PersonPicker";
 import { upsertBusiness } from "../actions";
-import { Business } from "@prisma/client";
+import { Business, User } from "@prisma/client";
 
 interface BusinessCardProps {
   biz?: Business;
-  allUsers: string[];
+  allUsers: User[];
   onCancel?: () => void;
   editMode?: boolean;
   canEdit?: boolean;
@@ -71,7 +71,12 @@ export default function BusinessCard(props: BusinessCardProps) {
   }
 
   if (editMode && props.allUsers) {
-    teamList = <PersonPicker users={props.allUsers}></PersonPicker>;
+    teamList = (
+      <PersonPicker
+        checkedUsers={props.biz?.members}
+        users={props.allUsers.map((u) => u.firstName ?? "badname")}
+      ></PersonPicker>
+    );
   }
 
   if (editMode) {
@@ -116,6 +121,9 @@ export default function BusinessCard(props: BusinessCardProps) {
         {bioDiv}
         <p className="text-sm  text-gray-500 mb-3">
           Located in <b>Branson</b>
+        </p>
+        <p className="text-sm text-gra-500">
+          Status: <b className="text-green-500">ACTIVE</b>
         </p>
       </div>
 

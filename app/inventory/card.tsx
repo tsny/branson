@@ -17,6 +17,7 @@ import {
 import { LuSwords } from "react-icons/lu";
 
 import CardFormatter from "@/lib/CardFormatter";
+import Image from "next/image";
 
 interface BrandonCardProps {
   card?: BCard;
@@ -56,7 +57,11 @@ export default function BransonCard(props: BrandonCardProps) {
 
       <img
         className="shadow-lgtext-bold center border-4 text-bold border-gray-500 rounded aspect-square"
-        alt={hidden ? "???" : card?.title}
+        alt={"card"}
+        // width={0}
+        // height={0}
+        // style={{ width: "100%", height: "auto" }} // optional
+        // sizes="100vw"
         src={imgSrc}
         draggable={false}
       />

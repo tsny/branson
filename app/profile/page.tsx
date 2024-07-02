@@ -1,6 +1,15 @@
-import { Card, Table, TableBody, TableCell, TableRow } from "flowbite-react";
+import {
+  Button,
+  Card,
+  Label,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TextInput,
+} from "flowbite-react";
 import Image from "next/image";
-import { getCurrentDBUser } from "../actions";
+import { getCurrentDBUser, updateUser } from "../actions";
 
 export default async function ProfilePage() {
   let user = await getCurrentDBUser();
@@ -13,9 +22,9 @@ export default async function ProfilePage() {
           <Image
             alt="user image"
             height="96"
-            src={user?.profilePicURL || ""}
             width="96"
-            className="mb-3 border rounded-full shadow-lg"
+            src={user?.profilePicURL || ""}
+            className="mb-3 border border-gray-800 rounded-full shadow-lg"
           />
           <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
             {user?.firstName}
@@ -25,6 +34,20 @@ export default async function ProfilePage() {
           </span>
         </div>
       </Card>
+
+      <form
+        action={updateUser}
+        className="bg-white p-2 border border-gray-800 rounded"
+      >
+        <Label>Profile Pic URL</Label>
+        <TextInput
+          className="mb-2"
+          name="profilePicURL"
+          defaultValue={user?.profilePicURL ?? ""}
+        ></TextInput>
+        <input readOnly hidden name="userid" value={user?.id}></input>
+        <Button type="submit">Save</Button>
+      </form>
 
       <div className="text-2xl text-center mt-3 text-bold">Stats</div>
       <Table

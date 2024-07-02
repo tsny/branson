@@ -1,5 +1,6 @@
 import { Card as BCard } from "@prisma/client";
 import { hiddenCardImageURL } from "./card";
+import Image from "next/image";
 
 interface CardPreviewProps {
   card?: BCard;
@@ -54,8 +55,12 @@ export default function CardPreview(props: CardPreviewProps) {
             }
           }}
           src={imgUrl}
+          // width={0}
+          // height={0}
+          // sizes="100vw"
+          // style={{ width: "100%", height: "auto" }} // optional
           alt={title}
-        ></img>
+        />
       </div>
       <div
         draggable={false}
@@ -74,7 +79,7 @@ export default function CardPreview(props: CardPreviewProps) {
 export function rarityToBGColor(rarity: string | undefined) {
   let cardBg = "p-0 shadow ";
   if (!rarity) {
-    return cardBg + " opacity-25";
+    return cardBg + " bg-gray-500 opacity-25";
   }
   switch (rarity.toUpperCase()) {
     case "EPIC":
@@ -88,8 +93,11 @@ export function rarityToBGColor(rarity: string | undefined) {
       cardBg +=
         "bg-gradient-to-r from-yellow-300 to-yellow-200 border-yellow-500";
       break;
-    default:
+    case "COMMON":
       cardBg += "bg-gradient-to-r from-gray-100 to-gray-200 border-gray-500";
+      break;
+    default:
+      cardBg += "bg-gray-500 border-gray-500";
   }
   return cardBg;
 }

@@ -5,22 +5,24 @@ import { getCurrentDBUser } from "../actions";
 
 export default async function Page() {
   const allUsers = await prisma.user.findMany();
-  const allUserNames = allUsers.map((u) => u.firstName ?? "badname");
   const currUser = await getCurrentDBUser();
 
   const businesses = await prisma.business.findMany();
-  const businessList = businesses.map((b, i) => (
-    <BusinessCard
-      canEdit={b.founderUserID == currUser?.id}
-      allUsers={allUserNames}
-      key={i}
-      biz={b}
-    />
-  ));
+  const businessList = businesses.map((b, i) => {
+    let canEdit = false;
+    if (currUser?.firstName) {
+      canEdit =
+        b.founderUserID == currUser?.id ||
+        b.members.includes(currUser.firstName);
+    }
+    return (
+      <BusinessCard canEdit={canEdit} allUsers={allUsers} key={i} biz={b} />
+    );
+  });
 
   return (
     <div className="">
-      <NewBusinessCard usernames={allUserNames} />
+      {currUser && <NewBusinessCard users={allUsers} />}
       {businessList}
     </div>
   );

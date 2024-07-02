@@ -75,7 +75,7 @@ const userWithCards = Prisma.validator<Prisma.CardOwnershipDefaultArgs>()({
 export type Cord = Prisma.CardOwnershipGetPayload<typeof userWithCards>;
 
 const betWithUsers = Prisma.validator<Prisma.BetDefaultArgs>()({
-  include: { creator: true, opponent: true },
+  include: { creator: true },
 });
 
 // A Cord is card ownership payload with the user

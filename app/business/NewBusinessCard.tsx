@@ -3,9 +3,10 @@
 import { Button } from "flowbite-react";
 import React, { useState } from "react";
 import BusinessCard from "./BusinessCard";
+import { User } from "@prisma/client";
 
 interface NewBusinessCardProps {
-  usernames: string[];
+  users: User[];
 }
 
 export default function NewBusinessCard(props: NewBusinessCardProps) {
@@ -27,7 +28,7 @@ export default function NewBusinessCard(props: NewBusinessCardProps) {
         <BusinessCard
           editMode={true}
           onCancel={() => setMakingNew(false)}
-          allUsers={props.usernames}
+          allUsers={props.users}
         ></BusinessCard>
       )}
     </div>

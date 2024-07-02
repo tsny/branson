@@ -1,6 +1,5 @@
 import { Textarea, Button, TextInput, Label } from "flowbite-react";
 import { createWager } from "../actions";
-import PersonSelecter from "@/lib/PersonSelecter";
 import { User } from "@prisma/client";
 
 export interface WagerFormProps {
@@ -9,7 +8,11 @@ export interface WagerFormProps {
 
 export default function WagerForm({ users }: WagerFormProps) {
   return (
-    <form action={createWager}>
+    <form
+      className="p-3 bg-white border-gray-800 border rounded shadow-log"
+      action={createWager}
+    >
+      <div className="text-xl font-bold">Make A Wager</div>
       <Label>Criteria</Label>
       <Textarea
         required
@@ -25,9 +28,10 @@ export default function WagerForm({ users }: WagerFormProps) {
             name="bet"
             required
             min={1}
+            max={1000}
           ></TextInput>
         </div>
-        <PersonSelecter label="Select a challenger" users={users} />
+        {/* <PersonSelecter label="Select a challenger" users={users} /> */}
       </div>
       <Button className="mt-2" type="submit">
         Submit
