@@ -19,3 +19,11 @@ export function HasAtleastOneRole(u: User | null, roles: string[]): boolean {
   }
   return roles.includes(u.role);
 }
+
+export function IsAdmin(u: User | null) {
+  if (!u) {
+    return false;
+  }
+  const role = u.role?.toLowerCase();
+  return role == "admin" || role == "super";
+}

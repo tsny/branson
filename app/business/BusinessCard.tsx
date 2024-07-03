@@ -3,7 +3,7 @@
 import { Avatar, Button, TextInput, Textarea } from "flowbite-react";
 import React, { useState } from "react";
 import PersonPicker from "./PersonPicker";
-import { upsertBusiness } from "../actions";
+import { deleteBusiness, upsertBusiness } from "../actions";
 import { Business, User } from "@prisma/client";
 
 interface BusinessCardProps {
@@ -12,6 +12,7 @@ interface BusinessCardProps {
   onCancel?: () => void;
   editMode?: boolean;
   canEdit?: boolean;
+  canDelete?: boolean;
 }
 
 export default function BusinessCard(props: BusinessCardProps) {
@@ -104,64 +105,77 @@ export default function BusinessCard(props: BusinessCardProps) {
   }
 
   return (
-    <form
-      className="rounded border-gray-700 border shadow-lg bg-white p-2 m-2"
-      onSubmit={() => setEditMode(false)}
-      action={async (formData) => {
-        await upsertBusiness(formData);
-      }}
-    >
-      <input hidden readOnly name="biz-id" value={props?.biz?.id}></input>
-      <div className="flex justify-between">
-        {titleDiv}
-        {logoDiv}
-      </div>
-      <div className="">
-        {headerDiv}
-        {bioDiv}
-        <p className="text-sm  text-gray-500 mb-3">
-          Located in <b>Branson</b>
-        </p>
-        <p className="text-sm text-gra-500">
-          Status: <b className="text-green-500">ACTIVE</b>
-        </p>
-      </div>
-
-      <hr className=""></hr>
-      <p className="text-xl underline text-center mt-3 mb-2">Meet the Team</p>
-      {teamList}
-      {!editMode && props.canEdit && (
-        <Button
-          className="inline"
-          onClick={() => setEditMode(true)}
-          size={"sm"}
-        >
-          Edit
-        </Button>
-      )}
-      {editMode && (
-        <div>
-          <Button
-            className="ml-2 inline"
-            color={"failure"}
-            onClick={() => {
-              setEditMode(false);
-              if (props.onCancel) props.onCancel();
-            }}
-            size={"sm"}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="ml-2 inline"
-            color={"success"}
-            size={"sm"}
-            type="submit"
-          >
-            Save
-          </Button>
+    <div className="rounded border-gray-700 border shadow-lg bg-white p-2 m-2">
+      <form
+        onSubmit={() => setEditMode(false)}
+        action={async (formData) => {
+          await upsertBusiness(formData);
+        }}
+      >
+        <input hidden readOnly name="biz-id" value={props?.biz?.id}></input>
+        <div className="flex justify-between">
+          {titleDiv}
+          {logoDiv}
         </div>
+        <div className="">
+          {headerDiv}
+          {bioDiv}
+          <p className="text-sm  text-gray-500 mb-3">
+            Located in <b>Branson</b>
+          </p>
+          <p className="text-sm text-gra-500">
+            Status: <b className="text-green-500">ACTIVE</b>
+          </p>
+        </div>
+
+        <hr className=""></hr>
+        <p className="text-xl underline text-center mt-3 mb-2">Meet the Team</p>
+        {teamList}
+        {!editMode && props.canEdit && (
+          <Button
+            className="inline"
+            onClick={() => setEditMode(true)}
+            size={"sm"}
+          >
+            Edit
+          </Button>
+        )}
+        {editMode && (
+          <div>
+            <Button
+              className="ml-2 inline"
+              color={"failure"}
+              onClick={() => {
+                setEditMode(false);
+                if (props.onCancel) props.onCancel();
+              }}
+              size={"sm"}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="ml-2 inline"
+              color={"success"}
+              size={"sm"}
+              type="submit"
+            >
+              Save
+            </Button>
+          </div>
+        )}
+      </form>
+      {props.canDelete && (
+        <form className="mt-1" action={deleteBusiness}>
+          <Button
+            name="biz-id"
+            value={props.biz?.id}
+            type="submit"
+            color={"failure"}
+          >
+            Delete
+          </Button>
+        </form>
       )}
-    </form>
+    </div>
   );
 }

@@ -529,6 +529,17 @@ export async function resetPlayer(userid: number) {
   console.log("reset %s", userid);
 }
 
+export async function deleteBusiness(formData: FormData) {
+  const user = await getCurrentDBUser();
+  if (!user) {
+    return;
+  }
+  const id = getNumFromForm(formData, "biz-id");
+  if (!id) return;
+  await prisma.business.delete({ where: { id: id } });
+  revalidatePath("/business");
+}
+
 export async function upsertBusiness(formData: FormData) {
   const user = await getCurrentDBUser();
   if (!user) {

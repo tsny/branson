@@ -54,6 +54,9 @@ export default async function BNavbar() {
         <NavbarLink as={Link} href="/wagers">
           Wagers
         </NavbarLink>
+        <NavbarLink as={Link} href="/iceberg">
+          Iceberg
+        </NavbarLink>
         {isSuper && (
           <NavbarLink as={Link} href="/profile">
             Profile

@@ -12,12 +12,10 @@ import {
   FaGem,
   FaBible,
   FaHeart,
-  FaShieldAlt,
 } from "react-icons/fa";
 import { LuSwords } from "react-icons/lu";
 
 import CardFormatter from "@/lib/CardFormatter";
-import Image from "next/image";
 
 interface BrandonCardProps {
   card?: BCard;
@@ -40,7 +38,7 @@ export default function BransonCard(props: BrandonCardProps) {
   }
 
   let icon = CardTypeToIcon(card?.type);
-  const quotePadding = card && card?.defense > 0 ? "mb-5" : "";
+  const quotePadding = card && card?.defense > 0 ? "w-3/4" : "";
 
   return (
     <div
@@ -58,10 +56,6 @@ export default function BransonCard(props: BrandonCardProps) {
       <img
         className="shadow-lgtext-bold center border-4 text-bold border-gray-500 rounded aspect-square"
         alt={"card"}
-        // width={0}
-        // height={0}
-        // style={{ width: "100%", height: "auto" }} // optional
-        // sizes="100vw"
         src={imgSrc}
         draggable={false}
       />
@@ -82,9 +76,10 @@ export default function BransonCard(props: BrandonCardProps) {
           </div>
         )}
         {card?.quote && (
-          <span className="text-xs text-gray-500 dark:text-gray-400">
+          <span className="text-xs text-gray-500 dark:text-gray-400 w-1/2">
             <hr className="bg-gray-600 text-gray-600 border-6 dark:bg-gray-700" />
-            <span className={"flex pt-2" + quotePadding}>
+            {/* <span className={"flex pt-2 " + quotePadding}> */}
+            <span className={"flex pt-2 " + quotePadding}>
               <span>{hidden ? "???" : card?.quote}</span>
             </span>
           </span>

@@ -1,17 +1,8 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionPanel,
-  AccordionTitle,
-  Tabs,
-} from "flowbite-react";
-import { HiClipboardList, HiUserCircle } from "react-icons/hi";
 import React from "react";
 import WagerCard from "./WagerCard";
-import LedgerCard from "./LedgerCard";
-import { Bet, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import WagerForm from "./WagerForm";
 import { FullBet } from "@/lib/prisma";
 

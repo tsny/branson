@@ -23,7 +23,7 @@ export default function PurchaseCard(props: PurchaseCardProps) {
         Cost: <b>{props.boinCost} Bitboin</b>
       </div>
       <div className="text-xs">
-        You have {props.numPacks} packs and {props.userBoins} boins
+        You have {props.numPacks} packs and {props.userBoins} Bitboins
       </div>
 
       <form
