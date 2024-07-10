@@ -592,6 +592,7 @@ export async function createNewDBUser(
       email: email,
       firstName: name,
       boins: 5,
+      canPost: false,
       profilePicURL: profilePicURL,
     },
   });

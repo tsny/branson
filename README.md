@@ -1,6 +1,6 @@
 # Branson
 
-branson.mom is a `next.js` app I wrote for some friends as we went to Branson, MO in 2024.
+[branson.mom](https://branson.mom/inventory/store) is a `next.js` app I wrote for some friends as we went to Branson, MO in 2024.
 
 The `Cards` portion of the website is a tiny `Hearthstone` clone in which you can unwrap playing cards that reperesent people, places, and memories from previous years at Branson.
 

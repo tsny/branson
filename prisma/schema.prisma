@@ -43,6 +43,7 @@ model User {
     isAdmin       Boolean  @default(false)
     role          String?  @default("user")
     roles         String[]
+    canPost       Boolean  @default(true)
 
     boins        Int @default(0)
     upboinsGiven Int @default(0)
